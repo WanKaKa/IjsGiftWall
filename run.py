@@ -1,5 +1,5 @@
-from data import entity
+import giftdata
 
 if __name__ == '__main__':
-    entity = entity.OverallGiftEntity()
-    print(entity)
+    var = giftdata.gift_entity_list[giftdata.urls.XML_NAME_LIST[0]]
+    print(var.item_list[0].title)
