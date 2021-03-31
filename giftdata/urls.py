@@ -14,3 +14,17 @@ XML_NAME_LIST = [
     "giftListGeneral.xml",
     "giftListVEditor.xml"
 ]
+# 地区
+LANGUAGE_LIST = [
+    "default",
+    "africa",
+    "brazil",
+    "eastasia",
+    "europeanunion",
+    "india",
+    "indonesia",
+    "middleeast",
+    "russia",
+    "southamerica",
+    "southeastasia"
+]
