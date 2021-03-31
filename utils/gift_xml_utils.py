@@ -1,3 +1,4 @@
+import os
 import xml.dom.minidom
 from giftdata import entity
 
@@ -32,6 +33,8 @@ TAG_PROJECT_NAME = "projectName"
 
 
 def analysis_overall_gift_xml(path):
+    if not os.path.exists(path):
+        return None
     dom = xml.dom.minidom.parse(path)
     root = dom.documentElement
     overall_gift_entity = entity.OverallGiftEntity()
@@ -54,6 +57,8 @@ def analysis_overall_gift_xml(path):
 
 
 def analysis_gift_xml(path):
+    if not os.path.exists(path):
+        return None
     dom = xml.dom.minidom.parse(path)
     root = dom.documentElement
     gift_entity = entity.GiftEntity()
@@ -87,6 +92,6 @@ def analysis_gift_xml(path):
 def analysis_xml_item(content, name):
     items = content.getElementsByTagName(name)
     if not items or len(items) == 0:
-        return ""
+        return None
     # print(items[0].nodeName, ":", items[0].childNodes[0].data)
     return items[0].childNodes[0].data
