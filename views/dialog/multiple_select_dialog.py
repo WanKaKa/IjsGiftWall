@@ -14,86 +14,107 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(300, 640)
-        self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
-        self.buttonBox.setGeometry(QtCore.QRect(20, 600, 260, 30))
-        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
-        self.buttonBox.setObjectName("buttonBox")
+        Dialog.resize(300, 700)
+        Dialog.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.checkBox = QtWidgets.QCheckBox(Dialog)
-        self.checkBox.setGeometry(QtCore.QRect(20, 10, 260, 30))
+        self.checkBox.setGeometry(QtCore.QRect(20, 0, 260, 40))
         self.checkBox.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox.setObjectName("checkBox")
         self.checkBox_2 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_2.setGeometry(QtCore.QRect(20, 50, 260, 30))
+        self.checkBox_2.setGeometry(QtCore.QRect(20, 40, 260, 40))
         self.checkBox_2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_2.setObjectName("checkBox_2")
         self.checkBox_3 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_3.setGeometry(QtCore.QRect(20, 90, 260, 30))
+        self.checkBox_3.setGeometry(QtCore.QRect(20, 80, 260, 40))
         self.checkBox_3.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_3.setObjectName("checkBox_3")
         self.checkBox_4 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_4.setGeometry(QtCore.QRect(20, 130, 260, 30))
+        self.checkBox_4.setGeometry(QtCore.QRect(20, 120, 260, 40))
         self.checkBox_4.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_4.setObjectName("checkBox_4")
         self.checkBox_5 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_5.setGeometry(QtCore.QRect(20, 170, 260, 30))
+        self.checkBox_5.setGeometry(QtCore.QRect(20, 160, 260, 40))
         self.checkBox_5.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_5.setObjectName("checkBox_5")
         self.checkBox_6 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_6.setGeometry(QtCore.QRect(20, 210, 260, 30))
+        self.checkBox_6.setGeometry(QtCore.QRect(20, 200, 260, 40))
         self.checkBox_6.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_6.setObjectName("checkBox_6")
         self.checkBox_7 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_7.setGeometry(QtCore.QRect(20, 250, 260, 30))
+        self.checkBox_7.setGeometry(QtCore.QRect(20, 240, 260, 40))
         self.checkBox_7.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_7.setObjectName("checkBox_7")
         self.checkBox_8 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_8.setGeometry(QtCore.QRect(20, 290, 260, 30))
+        self.checkBox_8.setGeometry(QtCore.QRect(20, 280, 260, 40))
         self.checkBox_8.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_8.setObjectName("checkBox_8")
         self.checkBox_9 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_9.setGeometry(QtCore.QRect(20, 330, 260, 30))
+        self.checkBox_9.setGeometry(QtCore.QRect(20, 320, 260, 40))
         self.checkBox_9.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_9.setObjectName("checkBox_9")
         self.checkBox_10 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_10.setGeometry(QtCore.QRect(20, 370, 260, 30))
+        self.checkBox_10.setGeometry(QtCore.QRect(20, 360, 260, 40))
         self.checkBox_10.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_10.setObjectName("checkBox_10")
         self.checkBox_11 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_11.setGeometry(QtCore.QRect(20, 410, 260, 30))
+        self.checkBox_11.setGeometry(QtCore.QRect(20, 400, 260, 40))
         self.checkBox_11.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_11.setObjectName("checkBox_11")
         self.checkBox_12 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_12.setGeometry(QtCore.QRect(20, 450, 260, 30))
+        self.checkBox_12.setGeometry(QtCore.QRect(20, 440, 260, 40))
         self.checkBox_12.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_12.setObjectName("checkBox_12")
         self.checkBox_13 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_13.setGeometry(QtCore.QRect(20, 490, 260, 30))
+        self.checkBox_13.setGeometry(QtCore.QRect(20, 480, 260, 40))
         self.checkBox_13.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_13.setObjectName("checkBox_13")
         self.checkBox_14 = QtWidgets.QCheckBox(Dialog)
-        self.checkBox_14.setGeometry(QtCore.QRect(20, 530, 260, 30))
+        self.checkBox_14.setGeometry(QtCore.QRect(20, 520, 260, 40))
         self.checkBox_14.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.checkBox_14.setObjectName("checkBox_14")
+        self.checkBox_15 = QtWidgets.QCheckBox(Dialog)
+        self.checkBox_15.setGeometry(QtCore.QRect(20, 560, 260, 40))
+        self.checkBox_15.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 12pt \"微软雅黑\";")
+        self.checkBox_15.setObjectName("checkBox_15")
+        self.checkBox_16 = QtWidgets.QCheckBox(Dialog)
+        self.checkBox_16.setGeometry(QtCore.QRect(20, 600, 260, 40))
+        self.checkBox_16.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 12pt \"微软雅黑\";")
+        self.checkBox_16.setObjectName("checkBox_16")
+        self.frame = QtWidgets.QFrame(Dialog)
+        self.frame.setGeometry(QtCore.QRect(20, 650, 260, 40))
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.deselect_all = QtWidgets.QPushButton(self.frame)
+        self.deselect_all.setGeometry(QtCore.QRect(0, 0, 120, 40))
+        self.deselect_all.setStyleSheet("background-color: rgb(85, 85, 255);\n"
+"color: rgb(255, 255, 255);\n"
+"font: 12pt \"微软雅黑\";")
+        self.deselect_all.setObjectName("deselect_all")
+        self.select_all = QtWidgets.QPushButton(self.frame)
+        self.select_all.setGeometry(QtCore.QRect(140, 0, 120, 40))
+        self.select_all.setStyleSheet("background-color: rgb(85, 85, 255);\n"
+"color: rgb(255, 255, 255);\n"
+"font: 12pt \"微软雅黑\";")
+        self.select_all.setObjectName("select_all")
 
         self.retranslateUi(Dialog)
-        self.buttonBox.accepted.connect(Dialog.accept)
-        self.buttonBox.rejected.connect(Dialog.reject)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -113,3 +134,7 @@ class Ui_Dialog(object):
         self.checkBox_12.setText(_translate("Dialog", "CheckBox"))
         self.checkBox_13.setText(_translate("Dialog", "CheckBox"))
         self.checkBox_14.setText(_translate("Dialog", "CheckBox"))
+        self.checkBox_15.setText(_translate("Dialog", "CheckBox"))
+        self.checkBox_16.setText(_translate("Dialog", "CheckBox"))
+        self.deselect_all.setText(_translate("Dialog", "取消全选"))
+        self.select_all.setText(_translate("Dialog", "全选"))

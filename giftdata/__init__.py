@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 
 from giftdata import download, urls
-from utils import gift_xml_utils, path_utils
+from utils import gift_xml_utils, path_utils, ico_utils
 from views import dialog
 
 gift_entity_list = {}
@@ -11,11 +11,11 @@ progress_dialog = None
 progress_value = 0
 
 
-def init_gift_data(edit_gift):
+def init_gift_data(edit_gift_view):
     global progress_dialog
-    progress_dialog = dialog.ProgressDialog(edit_gift)
+    progress_dialog = dialog.ProgressDialog(edit_gift_view)
     progress_dialog.setWindowTitle("为便捷而生")
-    progress_dialog.setWindowIcon(QIcon('../favicon.ico'))
+    progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
     # 下载数据
     download.load_config()
     analysis_gift_data()
