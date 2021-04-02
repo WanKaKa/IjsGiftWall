@@ -1,6 +1,8 @@
 import os
 import xml.dom.minidom
 from giftdata import entity
+from giftdata import urls
+from utils import path_utils
 
 TAG_GIFT_LIST = "giftList"
 
@@ -70,7 +72,7 @@ def analysis_gift_xml(path):
         gift_config.index = config.getAttribute(ATTRIBUTE_START_INDEX)
         gift_config.count = config.getAttribute(ATTRIBUTE_COUNT)
         gift_config.limit = config.getAttribute(ATTRIBUTE_LIMIT)
-        gift_entity.config_list.append(gift_config)
+        gift_entity.config_list[gift_config.target] = gift_config
     # 解析gift数据
     gift_item_list = root.getElementsByTagName(TAG_GIFT)
     for item in gift_item_list:
@@ -95,3 +97,56 @@ def analysis_xml_item(content, name):
         return None
     # print(items[0].nodeName, ":", items[0].childNodes[0].data)
     return items[0].childNodes[0].data
+
+
+def create_gift_wall_files(file_name, language_list, config_list, entity_list):
+    for language in language_list:
+        dir_path = path_utils.get_outputs_path() + (language + "\\" if urls.LANGUAGE_LIST[0] != language else "")
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+        file = open(dir_path + file_name, mode='w', encoding='utf-8')
+        file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+        file.write("\n")
+        file.write("<" + TAG_GIFT_LIST + ">")
+        file.write("\n")
+
+        write_config_item(file, config_list[TARGET_RATE])
+        write_config_item(file, config_list[TARGET_INTERSTITIAL])
+        write_config_item(file, config_list[TARGET_LIST])
+        write_config_item(file, config_list[TARGET_DIALOG])
+        write_config_item(file, config_list[TARGET_CAROUSEL])
+        write_config_item(file, config_list[TARGET_SIDEBAR])
+        write_config_item(file, config_list[TARGET_WALL])
+
+        for entity_value in entity_list:
+            write_entity_item(file, entity_value)
+
+        file.write("</" + TAG_GIFT_LIST + ">")
+        file.write("\n")
+        file.close()
+
+
+def write_config_item(file, config):
+    if config.target:
+        value = "    <" + TAG_CONFIG
+        value += " " + ATTRIBUTE_TARGET + "=\"" + config.target + "\""
+        if config.index:
+            value += " " + ATTRIBUTE_START_INDEX + "=\"" + config.index + "\""
+        if config.count:
+            value += " " + ATTRIBUTE_COUNT + "=\"" + config.count + "\""
+        if config.limit:
+            value += " " + ATTRIBUTE_LIMIT + "=\"" + config.limit + "\""
+        value = value + "/>"
+        file.write(value)
+        file.write("\n")
+
+
+def write_entity_item(file, entity_value):
+    value = "    <" + TAG_GIFT + " " + ATTRIBUTE_ID + "=\"" + entity_value.id + "\">"
+    value += "\n"
+    if entity_value.title:
+        value += "        <" + TAG_TITLE + ">" + entity_value.title + "</" + TAG_TITLE + ">"
+        value += "\n"
+    value += "    </" + TAG_GIFT + ">"
+    file.write(value)
+    file.write("\n")

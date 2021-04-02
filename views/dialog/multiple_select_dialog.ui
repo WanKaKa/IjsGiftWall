@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>700</height>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
   <widget class="QCheckBox" name="checkBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>0</y>
+     <x>10</x>
+     <y>60</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -36,8 +36,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_2">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>40</y>
+     <x>10</x>
+     <y>100</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -53,8 +53,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_3">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>80</y>
+     <x>10</x>
+     <y>140</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -70,8 +70,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_4">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>120</y>
+     <x>10</x>
+     <y>180</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -87,8 +87,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_5">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>160</y>
+     <x>10</x>
+     <y>220</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -104,8 +104,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_6">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>200</y>
+     <x>10</x>
+     <y>260</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -121,8 +121,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_7">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>240</y>
+     <x>10</x>
+     <y>300</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -138,8 +138,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_8">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>280</y>
+     <x>10</x>
+     <y>340</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -155,8 +155,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_9">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>320</y>
+     <x>10</x>
+     <y>380</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -172,8 +172,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_10">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>360</y>
+     <x>10</x>
+     <y>420</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -189,8 +189,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_11">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>400</y>
+     <x>10</x>
+     <y>460</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -206,8 +206,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_12">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>440</y>
+     <x>10</x>
+     <y>500</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -223,8 +223,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_13">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>480</y>
+     <x>10</x>
+     <y>540</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -240,8 +240,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_14">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>520</y>
+     <x>10</x>
+     <y>580</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -257,8 +257,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_15">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>560</y>
+     <x>10</x>
+     <y>620</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -274,8 +274,8 @@ font: 12pt &quot;微软雅黑&quot;;</string>
   <widget class="QCheckBox" name="checkBox_16">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>600</y>
+     <x>10</x>
+     <y>660</y>
      <width>260</width>
      <height>40</height>
     </rect>
@@ -288,57 +288,59 @@ font: 12pt &quot;微软雅黑&quot;;</string>
     <string>CheckBox</string>
    </property>
   </widget>
-  <widget class="QFrame" name="frame">
+  <widget class="QPushButton" name="select_all">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>650</y>
-     <width>260</width>
+     <x>160</x>
+     <y>10</y>
+     <width>120</width>
      <height>40</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QPushButton" name="deselect_all">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>120</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(85, 85, 255);
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 85, 255);
 color: rgb(255, 255, 255);
 font: 12pt &quot;微软雅黑&quot;;</string>
-    </property>
-    <property name="text">
-     <string>取消全选</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="select_all">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>0</y>
-      <width>120</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(85, 85, 255);
+   </property>
+   <property name="text">
+    <string>全选</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="deselect_all">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>120</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 85, 255);
 color: rgb(255, 255, 255);
 font: 12pt &quot;微软雅黑&quot;;</string>
-    </property>
-    <property name="text">
-     <string>全选</string>
-    </property>
-   </widget>
+   </property>
+   <property name="text">
+    <string>取消全选</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ok">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>710</y>
+     <width>120</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 85, 255);
+color: rgb(255, 255, 255);
+font: 12pt &quot;微软雅黑&quot;;</string>
+   </property>
+   <property name="text">
+    <string>确定</string>
+   </property>
   </widget>
  </widget>
  <resources/>

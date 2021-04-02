@@ -1,9 +1,9 @@
 class GiftConfig:
     def __init__(self, **kwargs):
         self.target = kwargs["target"] if "target" in kwargs else None
-        self.index = kwargs["index"] if "index" in kwargs else None
-        self.count = kwargs["count"] if "count" in kwargs else None
-        self.limit = kwargs["limit"] if "limit" in kwargs else None
+        self.index = kwargs["index"] if "index" in kwargs else "0"
+        self.count = kwargs["count"] if "count" in kwargs else "5"
+        self.limit = kwargs["limit"] if "limit" in kwargs else "10"
 
     def __str__(self):
         return "GiftConfig = {\n" \
@@ -41,7 +41,7 @@ class GiftItem:
 
 class GiftEntity:
     def __init__(self, **kwargs):
-        self.config_list = kwargs["config_list"] if "config_list" in kwargs else []
+        self.config_list = kwargs["config_list"] if "config_list" in kwargs else {}
         self.item_list = kwargs["item_list"] if "item_list" in kwargs else []
 
 
