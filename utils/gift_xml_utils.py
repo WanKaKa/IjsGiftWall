@@ -109,6 +109,7 @@ def create_gift_wall_files(file_name, language_list, config_list, entity_list):
         file.write("\n")
         file.write("<" + TAG_GIFT_LIST + ">")
         file.write("\n")
+        file.write("\n")
 
         write_config_item(file, config_list[TARGET_RATE])
         write_config_item(file, config_list[TARGET_INTERSTITIAL])
@@ -117,6 +118,7 @@ def create_gift_wall_files(file_name, language_list, config_list, entity_list):
         write_config_item(file, config_list[TARGET_CAROUSEL])
         write_config_item(file, config_list[TARGET_SIDEBAR])
         write_config_item(file, config_list[TARGET_WALL])
+        file.write("\n")
 
         for entity_value in entity_list:
             write_entity_item(file, entity_value)
@@ -147,6 +149,25 @@ def write_entity_item(file, entity_value):
     if entity_value.title:
         value += "        <" + TAG_TITLE + ">" + entity_value.title + "</" + TAG_TITLE + ">"
         value += "\n"
+    if entity_value.detailed:
+        value += "        <" + TAG_DETAILED + ">" + entity_value.detailed + "</" + TAG_DETAILED + ">"
+        value += "\n"
+    if entity_value.icon_image_path:
+        value += "        <" + TAG_ICON_PATH + ">" + entity_value.icon_image_path + "</" + TAG_ICON_PATH + ">"
+        value += "\n"
+    if entity_value.package_name:
+        value += "        <" + TAG_PACKAGE_NAME + ">" + entity_value.package_name + "</" + TAG_PACKAGE_NAME + ">"
+        value += "\n"
+    if entity_value.poster_path:
+        value += "        <" + TAG_POSTER_PATH + ">" + entity_value.poster_path + "</" + TAG_POSTER_PATH + ">"
+        value += "\n"
+    if entity_value.app_type:
+        value += "        <" + TAG_APP_TYPE + ">" + entity_value.app_type + "</" + TAG_APP_TYPE + ">"
+        value += "\n"
+    if entity_value.market_url:
+        value += "        <" + TAG_MARKET_URL + ">" + entity_value.market_url + "</" + TAG_MARKET_URL + ">"
+        value += "\n"
     value += "    </" + TAG_GIFT + ">"
+    value += "\n"
     file.write(value)
     file.write("\n")

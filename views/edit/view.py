@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
@@ -6,7 +7,7 @@ from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessa
 from PyQt5 import QtCore
 
 from database import database_json
-from utils import path_utils, ico_utils, gift_xml_utils
+from utils import path_utils, ico_utils, gift_xml_utils, kevin_utils
 from views.edit import edit_gift_ui, add_gift
 import giftdata
 from views import dialog
@@ -43,6 +44,8 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.reload_data.clicked.connect(lambda: click_reload_data(self))
         self.add_gift_wall.clicked.connect(lambda: click_add_gift_wall(self))
         self.create_gift_wall_file.clicked.connect(self.click_create_gift_wall_file)
+        self.open_outputs.clicked.connect(lambda: os.system("start " + path_utils.get_outputs_path()))
+        self.clear_outputs.clicked.connect(self.delete_dir)
 
     def init_view(self):
         self.init_table_widget()
@@ -78,7 +81,8 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 30))
         item.setForeground(QBrush(QColor(85, 85, 255)))
-        item.setText(str(index + 1))
+        entity.id = str(index + 1)
+        item.setText(entity.id)
         item.setTextAlignment(Qt.AlignCenter)
         self.tableWidget.setItem(index, 0, item)
 
@@ -266,6 +270,13 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
             if not gift_config_input.text() or not gift_config_input.text().isdigit():
                 return False
         return True
+
+    def delete_dir(self):
+        reply = QMessageBox.question(
+            self, '清空Outputs', '确定清空Outputs吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            kevin_utils.delete_dir(path_utils.get_outputs_path())
+            QMessageBox.information(self, '提示', 'Outputs已清空!')
 
 
 class AddGiftView(QDialog, add_gift.Ui_Dialog):
