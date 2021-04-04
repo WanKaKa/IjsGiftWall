@@ -15,6 +15,8 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(300, 760)
+        Dialog.setMinimumSize(QtCore.QSize(300, 760))
+        Dialog.setMaximumSize(QtCore.QSize(300, 760))
         Dialog.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.checkBox = QtWidgets.QCheckBox(Dialog)
         self.checkBox.setGeometry(QtCore.QRect(10, 60, 260, 40))

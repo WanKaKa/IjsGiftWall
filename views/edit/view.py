@@ -313,8 +313,8 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
         self.tableWidget.setIconSize(QSize(36, 36))
         self.tableWidget.setColumnWidth(0, 60)
         self.tableWidget.setColumnWidth(1, 60)
-        self.tableWidget.setColumnWidth(2, 200)
-        self.tableWidget.setColumnWidth(3, 200)
+        self.tableWidget.setColumnWidth(2, 240)
+        self.tableWidget.setColumnWidth(3, 270)
         self.tableWidget.setColumnWidth(4, 320)
         self.tableWidget.setColumnWidth(5, 60)
         self.tableWidget.setColumnWidth(6, 120)
@@ -491,7 +491,6 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
 
 def click_set_out_file(edit_gift_view):
     out_file_dialog = dialog.SelectDialog(edit_gift_view)
-    out_file_dialog.show()
     out_file_dialog.setWindowTitle("选择文件名-为便捷而生")
     out_file_dialog.setWindowIcon(ico_utils.get_favicon_icon())
 
@@ -538,7 +537,6 @@ def click_get_out_file(edit_gift_view, out_file_dialog, out_file_radio_button_li
 
 def click_set_language(edit_gift_view):
     language_dialog = dialog.MultipleSelectDialog(edit_gift_view)
-    language_dialog.show()
     language_dialog.setWindowTitle("选择地区-为便捷而生")
     language_dialog.setWindowIcon(ico_utils.get_favicon_icon())
 
@@ -621,6 +619,6 @@ def compare_entity(entity1, entity2):
 
 def click_add_gift_wall(edit_gift_view):
     add_gift_view = AddGiftView(edit_gift_view)
-    add_gift_view.show()
     add_gift_view.setWindowTitle("添加GiftWall-为便捷而生")
     add_gift_view.setWindowIcon(ico_utils.get_favicon_icon())
+    add_gift_view.exec()

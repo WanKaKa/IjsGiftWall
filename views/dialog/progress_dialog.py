@@ -15,6 +15,8 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 240)
+        Dialog.setMinimumSize(QtCore.QSize(400, 240))
+        Dialog.setMaximumSize(QtCore.QSize(400, 240))
         self.progressBar = QtWidgets.QProgressBar(Dialog)
         self.progressBar.setGeometry(QtCore.QRect(50, 120, 300, 20))
         self.progressBar.setProperty("value", 0)

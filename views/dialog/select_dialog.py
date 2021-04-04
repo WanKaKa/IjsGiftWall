@@ -15,6 +15,8 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(300, 640)
+        Form.setMinimumSize(QtCore.QSize(300, 640))
+        Form.setMaximumSize(QtCore.QSize(300, 640))
         Form.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.radioButton = QtWidgets.QRadioButton(Form)
         self.radioButton.setGeometry(QtCore.QRect(20, 0, 260, 40))
