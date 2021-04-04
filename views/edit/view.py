@@ -150,7 +150,7 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.wall_index.setText(value.index)
 
     def key_press_event(self, event):
-        if event.key() == QtCore.Qt.Key_Delete:
+        if event.key() == QtCore.Qt.Key_Delete or event.key() == QtCore.Qt.Key_D:
             while self.tableWidget.selectedItems():
                 row = self.tableWidget.selectedItems()[0].row()
                 self.tableWidget.removeRow(row)
@@ -401,7 +401,7 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
     def key_press_event(self, event):
         if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_A:
             self.tableWidget.selectAll()
-        elif event.key() == QtCore.Qt.Key_Delete:
+        elif event.key() == QtCore.Qt.Key_Delete or event.key() == QtCore.Qt.Key_D:
             selected_rows = []
             for item in self.tableWidget.selectedItems():
                 if item.row() not in selected_rows:
