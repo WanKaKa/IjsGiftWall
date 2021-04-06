@@ -1,9 +1,9 @@
 import os
-import shutil
+from copy import deepcopy
 
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
-from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QDialog
+from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QDialog, QFileDialog
 from PyQt5 import QtCore
 
 from database import database_json
@@ -14,8 +14,10 @@ from views import dialog
 from giftdata import urls
 from giftdata.entity import GiftConfig
 
+# 0: 编辑模式 1: 查看模式
+select_mode_type = 0
 add_gift_item_list = []
-add_gift_config_list = {
+DEFAULT_GIFT_CONFIG_LIST = {
     gift_xml_utils.TARGET_RATE: GiftConfig(target=gift_xml_utils.TARGET_RATE),
     gift_xml_utils.TARGET_INTERSTITIAL: GiftConfig(target=gift_xml_utils.TARGET_INTERSTITIAL),
     gift_xml_utils.TARGET_LIST: GiftConfig(target=gift_xml_utils.TARGET_LIST),
@@ -24,6 +26,8 @@ add_gift_config_list = {
     gift_xml_utils.TARGET_SIDEBAR: GiftConfig(target=gift_xml_utils.TARGET_SIDEBAR),
     gift_xml_utils.TARGET_WALL: GiftConfig(target=gift_xml_utils.TARGET_WALL, count=None, limit=None),
 }
+add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
+outputs_dir_list = []
 
 
 class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
@@ -34,23 +38,87 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.setWindowTitle("广告配置编辑-为便捷而生")
         self.setWindowIcon(ico_utils.get_favicon_icon())
 
+        self.file_name_radio_list = [
+            self.file_name_radio_1,
+            self.file_name_radio_2,
+            self.file_name_radio_3,
+            self.file_name_radio_4,
+            self.file_name_radio_5,
+            self.file_name_radio_6,
+            self.file_name_radio_7,
+            self.file_name_radio_8,
+            self.file_name_radio_9,
+            self.file_name_radio_10,
+            self.file_name_radio_11,
+            self.file_name_radio_12,
+        ]
+        self.language_radio_list = [
+            self.language_radio_1,
+            self.language_radio_2,
+            self.language_radio_3,
+            self.language_radio_4,
+            self.language_radio_5,
+            self.language_radio_6,
+            self.language_radio_7,
+            self.language_radio_8,
+            self.language_radio_9,
+            self.language_radio_10,
+            self.language_radio_11,
+            self.language_radio_12,
+        ]
+
         pix_map = QPixmap(ico_utils.resource_path(os.path.join("ico", "logo.png")))
         self.ijoysoft_icon.setPixmap(pix_map)
 
         self.tableWidget.keyPressEvent = self.key_press_event
-        self.pushButton.clicked.connect(lambda: click_set_out_file(self))
+        self.pushButton.clicked.connect(lambda: click_set_select_string(self, urls.XML_NAME_LIST, self.file_name))
         self.pushButton_2.clicked.connect(lambda: click_set_language(self))
-        self.refresh_ui.clicked.connect(self.init_view)
+
+        self.edit_gift_wall_mode.toggled.connect(lambda: click_switch_mode(self))
+        self.check_outputs_mode.toggled.connect(lambda: click_switch_mode(self))
+
         self.reload_data.clicked.connect(lambda: click_reload_data(self))
+        self.refresh_ui.clicked.connect(lambda: click_refresh_ui(self))
+        self.reset_ui.clicked.connect(lambda: click_reset_ui(self))
+
         self.add_gift_wall.clicked.connect(lambda: click_add_gift_wall(self))
+        self.import_gift_wall.clicked.connect(lambda: click_import_gift_wall(self))
         self.create_gift_wall_file.clicked.connect(self.click_create_gift_wall_file)
+
         self.open_outputs.clicked.connect(lambda: os.system("start " + path_utils.get_outputs_path()))
         self.clear_outputs.clicked.connect(self.delete_dir)
 
+        self.save.clicked.connect(self.fun_create_gift_wall_file)
+        self.add_gift_wall_2.clicked.connect(lambda: click_add_gift_wall(self))
+        self.cancel_save.clicked.connect(lambda: click_cancel_save(self))
+
     def init_view(self):
+        self.init_radio_button(self.file_name, self.file_name_radio_list, urls.XML_NAME_LIST)
+        self.init_radio_button(self.language, self.language_radio_list, urls.LANGUAGE_LIST)
         self.init_table_widget()
         self.set_table_widget()
+        if select_mode_type == 0:
+            self.edit_gift_wall_mode.setChecked(True)
+            self.check_outputs_mode.setChecked(False)
+        else:
+            self.edit_gift_wall_mode.setChecked(False)
+            self.check_outputs_mode.setChecked(True)
+        self.set_select_mode()
         self.set_gift_config_view()
+
+    def init_radio_button(self, label, radio_list, string_list):
+        _translate = QtCore.QCoreApplication.translate
+        for i in range(len(string_list)):
+            radio_list[i].setText(_translate("Form", string_list[i]))
+            if radio_list[i].isChecked():
+                label.setText(radio_list[i].text())
+            radio_list[i].toggled.connect(
+                lambda: click_edit_view_radio_button(self, label, radio_list))
+        # 隐藏多出来的按钮
+        if len(radio_list) > len(string_list):
+            for i in range(len(radio_list)):
+                if i >= len(string_list):
+                    radio_list[i].hide()
 
     def init_table_widget(self):
         self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
@@ -59,13 +127,31 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.tableWidget.setColumnCount(6)
         self.tableWidget.setHorizontalHeaderLabels(['序号', '图标', '项目名', '产品名 类型', '包名', '推广图'])
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.tableWidget.setIconSize(QSize(72, 72))
-        self.tableWidget.setColumnWidth(0, 80)
-        self.tableWidget.setColumnWidth(1, 80)
-        self.tableWidget.setColumnWidth(2, 240)
-        self.tableWidget.setColumnWidth(3, 240)
-        self.tableWidget.setColumnWidth(4, 360)
-        self.tableWidget.setColumnWidth(5, 80)
+        self.tableWidget.setIconSize(QSize(48, 48))
+        self.tableWidget.setColumnWidth(0, 60)
+        self.tableWidget.setColumnWidth(1, 60)
+        self.tableWidget.setColumnWidth(2, 200)
+        self.tableWidget.setColumnWidth(3, 200)
+        self.tableWidget.setColumnWidth(4, 270)
+        self.tableWidget.setColumnWidth(5, 60)
+
+    def set_radio_button_color(self):
+        for radio in self.language_radio_list:
+            if radio.isChecked():
+                self.language.setText(radio.text())
+            if radio.text() in outputs_dir_list:
+                radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(0, 0, 0);")
+            else:
+                radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(255, 0, 0);")
+        for radio in self.file_name_radio_list:
+            if radio.isChecked():
+                self.file_name.setText(radio.text())
+            if not self.language.text() or os.path.exists(path_utils.get_outputs_path() + (
+                    self.language.text() if self.language.text() != urls.LANGUAGE_LIST[
+                        0] else "") + "\\" + radio.text()):
+                radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(0, 0, 0);")
+            else:
+                radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(255, 0, 0);")
 
     def set_table_widget(self):
         if add_gift_item_list:
@@ -75,11 +161,50 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         else:
             self.tableWidget.setRowCount(0)
 
+    def set_select_mode(self):
+        if select_mode_type == 0:
+            self.file_name_title.show()
+            self.file_name.show()
+            self.pushButton.show()
+            self.language_title.show()
+            self.language.show()
+            self.pushButton_2.show()
+            self.layout_check_mode_file_name.hide()
+            self.layout_check_mode_language.hide()
+            self.file_name_title.setText("选择输出文件名")
+            self.language_title.setText("选择输出地区")
+            self.mode_frame.setStyleSheet("background-color: rgb(85, 85, 255);")
+            self.edit_menu_frame.show()
+            self.check_menu_frame.hide()
+        else:
+            self.file_name_title.hide()
+            self.file_name.hide()
+            self.pushButton.hide()
+            self.language_title.hide()
+            self.language.hide()
+            self.pushButton_2.hide()
+            self.layout_check_mode_file_name.show()
+            self.layout_check_mode_language.show()
+            self.file_name_title.setText("文件名")
+            self.language_title.setText("地区")
+            self.mode_frame.setStyleSheet("background-color: rgb(0, 170, 0);")
+            self.edit_menu_frame.hide()
+            self.check_menu_frame.show()
+
+            for radio in self.language_radio_list:
+                if radio.isChecked():
+                    self.language.setText(radio.text())
+            for radio in self.file_name_radio_list:
+                if radio.isChecked():
+                    self.file_name.setText(radio.text())
+            get_outputs_dir_list()
+            self.set_radio_button_color()
+
     def set_table_widget_item(self, index, entity):
-        self.tableWidget.setRowHeight(index, 80)
+        self.tableWidget.setRowHeight(index, 50)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 30))
+        item.setFont(QFont('微软雅黑', 18))
         item.setForeground(QBrush(QColor(85, 85, 255)))
         entity.id = str(index + 1)
         item.setText(entity.id)
@@ -98,13 +223,13 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.tableWidget.setItem(index, 2, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 12))
+        item.setFont(QFont('微软雅黑', 8))
         item.setText("产品名: " + (entity.title if entity.title else "") +
                      "\n类   型: " + (entity.app_type if entity.app_type else ""))
         self.tableWidget.setItem(index, 3, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 12))
+        item.setFont(QFont('微软雅黑', 8))
         item.setText(entity.package_name)
         self.tableWidget.setItem(index, 4, item)
 
@@ -155,7 +280,7 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
                 row = self.tableWidget.selectedItems()[0].row()
                 self.tableWidget.removeRow(row)
                 add_gift_item_list.remove(add_gift_item_list[row])
-            self.init_view()
+            self.set_table_widget()
         elif event.key() == QtCore.Qt.Key_Up:
             self.move_table_widget_item(True)
         elif event.key() == QtCore.Qt.Key_Down:
@@ -184,21 +309,27 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         reply = QMessageBox.question(
             self, '生成GiftWall配置表', '确定生成GiftWall配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            if not self.file_name.text():
-                QMessageBox.information(self, '提示', '输出文件名为空!')
-                return
-            if not self.language.text():
-                QMessageBox.information(self, '提示', '输出地区为空!')
-                return
-            if not add_gift_item_list:
-                QMessageBox.information(self, '提示', '数据为空!')
-                return
-            if not self.set_gift_config_list():
-                QMessageBox.information(self, '提示', 'GiftWall配置输入不正确!')
-                return
-            gift_xml_utils.create_gift_wall_files(
-                self.file_name.text(), self.language.text().split(","), add_gift_config_list, add_gift_item_list)
-            QMessageBox.information(self, '提示', '生成GiftWall配置表成功!')
+            self.fun_create_gift_wall_file()
+
+    def fun_create_gift_wall_file(self):
+        if not self.file_name.text():
+            QMessageBox.information(self, '提示', '输出文件名为空!')
+            return
+        if not self.language.text():
+            QMessageBox.information(self, '提示', '输出地区为空!')
+            return
+        if not add_gift_item_list:
+            QMessageBox.information(self, '提示', '数据为空!')
+            return
+        if not self.set_gift_config_list():
+            QMessageBox.information(self, '提示', 'GiftWall配置输入不正确!')
+            return
+        gift_xml_utils.create_gift_wall_files(
+            self.file_name.text(), self.language.text().split(","), add_gift_config_list, add_gift_item_list)
+        # 每次生成文件后，更新输出文件夹中的文件夹集合
+        get_outputs_dir_list()
+        self.set_radio_button_color()
+        QMessageBox.information(self, '提示', '生成GiftWall配置表成功!')
 
     def set_gift_config_list(self):
         if not self.is_gift_config_valid():
@@ -345,7 +476,7 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
         self.tableWidget.setRowHeight(index, 40)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 20))
+        item.setFont(QFont('微软雅黑', 18))
         item.setForeground(QBrush(QColor(85, 85, 255)))
         item.setText(str(index + 1))
         item.setTextAlignment(Qt.AlignCenter)
@@ -384,7 +515,7 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
 
     def set_table_widget_item_state(self, index, state):
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 16))
+        item.setFont(QFont('微软雅黑', 12))
         item.setForeground(QBrush(QColor(255, 0, 0)))
         item.setText("已添加" if state else "")
         item.setTextAlignment(Qt.AlignCenter)
@@ -489,9 +620,29 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
                     server_file_dialog.hide()
 
 
-def click_set_out_file(edit_gift_view):
+def click_edit_view_radio_button(edit_gift_view, label, radio_button_list):
+    if radio_button_list:
+        for radio_button in radio_button_list:
+            if radio_button.isChecked():
+                if label.text() == radio_button.text():
+                    return
+                label.setText(radio_button.text())
+    get_outputs_dir_list()
+    edit_gift_view.set_radio_button_color()
+    # 检查模式时，选取了文件名或者地区后，加载对应的配置文件
+    global select_mode_type
+    if select_mode_type == 1:
+        name = edit_gift_view.file_name.text()
+        language = edit_gift_view.language.text()
+        if name and language:
+            path = path_utils.get_outputs_path() + \
+                   (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
+            load_signal_xml_file(edit_gift_view, path, tip_enable=False)
+
+
+def click_set_select_string(edit_gift_view, string_list, label):
     out_file_dialog = dialog.SelectDialog(edit_gift_view)
-    out_file_dialog.setWindowTitle("选择文件名-为便捷而生")
+    out_file_dialog.setWindowTitle("选择字符-为便捷而生")
     out_file_dialog.setWindowIcon(ico_utils.get_favicon_icon())
 
     out_file_radio_button_list = [
@@ -514,25 +665,36 @@ def click_set_out_file(edit_gift_view):
     ]
     # 设置按钮状态和点击事件
     _translate = QtCore.QCoreApplication.translate
-    for i in range(len(urls.XML_NAME_LIST)):
-        out_file_radio_button_list[i].setText(_translate("Form", urls.XML_NAME_LIST[i]))
-        out_file_radio_button_list[i].setChecked(edit_gift_view.file_name.text() == urls.XML_NAME_LIST[i])
+    for i in range(len(string_list)):
+        out_file_radio_button_list[i].setText(_translate("Form", string_list[i]))
+        out_file_radio_button_list[i].setChecked(label.text() == string_list[i])
         out_file_radio_button_list[i].toggled.connect(
-            lambda: click_get_out_file(edit_gift_view, out_file_dialog, out_file_radio_button_list))
+            lambda: click_get_out_file(edit_gift_view, label, out_file_dialog, out_file_radio_button_list))
     # 隐藏多出来的按钮
-    if len(out_file_radio_button_list) > len(urls.XML_NAME_LIST):
+    if len(out_file_radio_button_list) > len(string_list):
         for i in range(len(out_file_radio_button_list)):
-            if i >= len(urls.XML_NAME_LIST):
+            if i >= len(string_list):
                 out_file_radio_button_list[i].hide()
     out_file_dialog.exec()
 
 
-def click_get_out_file(edit_gift_view, out_file_dialog, out_file_radio_button_list):
+def click_get_out_file(edit_gift_view, label, out_file_dialog, out_file_radio_button_list):
     if out_file_radio_button_list:
         for radio_button in out_file_radio_button_list:
             if radio_button.isChecked():
-                edit_gift_view.file_name.setText(radio_button.text())
+                if label.text() == radio_button.text():
+                    return
+                label.setText(radio_button.text())
                 out_file_dialog.hide()
+    # 检查模式时，选取了文件名或者地区后，加载对应的配置文件
+    global select_mode_type
+    if select_mode_type == 1:
+        name = edit_gift_view.file_name.text()
+        language = edit_gift_view.language.text()
+        if name and language:
+            path = path_utils.get_outputs_path() + \
+                   (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
+            load_signal_xml_file(edit_gift_view, path)
 
 
 def click_set_language(edit_gift_view):
@@ -589,13 +751,49 @@ def click_select_all_language(language_check_box_list, enable):
         language_check_box_list[i].setChecked(enable)
 
 
+def click_switch_mode(edit_gift_view):
+    reset_ui(edit_gift_view)
+    global select_mode_type
+    select_mode_type = 0 if edit_gift_view.edit_gift_wall_mode.isChecked() else 1
+    edit_gift_view.set_select_mode()
+
+
 def click_reload_data(edit_gift_view):
-    reply = QMessageBox.question(edit_gift_view, '重新下载', '确认重新下载服务器数据吗?', QMessageBox.No | QMessageBox.Yes,
-                                 QMessageBox.No)
+    reply = QMessageBox.question(
+        edit_gift_view, '重新下载', '确认重新下载服务器数据吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
     if reply == QMessageBox.Yes:
         database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, 0)
         database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, 0)
         giftdata.download.load_config()
+
+
+def click_refresh_ui(edit_gift_view):
+    edit_gift_view.set_table_widget()
+    if select_mode_type == 0:
+        edit_gift_view.edit_gift_wall_mode.setChecked(True)
+        edit_gift_view.check_outputs_mode.setChecked(False)
+    else:
+        edit_gift_view.edit_gift_wall_mode.setChecked(False)
+        edit_gift_view.check_outputs_mode.setChecked(True)
+    edit_gift_view.set_select_mode()
+    edit_gift_view.set_gift_config_view()
+
+
+def click_reset_ui(edit_gift_view):
+    reply = QMessageBox.question(
+        edit_gift_view, '重置界面', '确认重置界面吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
+    if reply == QMessageBox.Yes:
+        reset_ui(edit_gift_view)
+
+
+def reset_ui(edit_gift_view):
+    edit_gift_view.file_name.setText("")
+    edit_gift_view.language.setText("")
+    add_gift_item_list.clear()
+    global add_gift_config_list
+    add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
+    edit_gift_view.set_table_widget()
+    edit_gift_view.set_gift_config_view()
 
 
 def is_entity_added(entity):
@@ -622,3 +820,53 @@ def click_add_gift_wall(edit_gift_view):
     add_gift_view.setWindowTitle("添加GiftWall-为便捷而生")
     add_gift_view.setWindowIcon(ico_utils.get_favicon_icon())
     add_gift_view.exec()
+
+
+def click_import_gift_wall(edit_gift_view):
+    fileName, fileType = QFileDialog.getOpenFileName(edit_gift_view, "选取文件", path_utils.get_outputs_path())
+    load_signal_xml_file(edit_gift_view, fileName)
+
+
+def load_signal_xml_file(edit_gift_view, path, tip_enable=True):
+    if path:
+        gift_entity = gift_xml_utils.analysis_gift_xml(path)
+        global add_gift_item_list
+        global add_gift_config_list
+        add_gift_item_list.clear()
+        add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
+        if gift_entity:
+            if gift_entity.item_list:
+                for item1 in gift_entity.item_list:
+                    for item2 in giftdata.overall_gift_entity.item_list:
+                        if compare_entity(item1, item2):
+                            add_gift_item_list.append(item2)
+            if gift_entity.config_list:
+                add_gift_config_list = deepcopy(gift_entity.config_list)
+            edit_gift_view.set_table_widget()
+            edit_gift_view.set_gift_config_view()
+        else:
+            edit_gift_view.set_table_widget()
+            edit_gift_view.set_gift_config_view()
+            if tip_enable:
+                QMessageBox.information(edit_gift_view, '提示', '加载GiftWall失败\n1.文件不存在\n2.解析失败\n3.空白文件')
+
+
+def click_cancel_save(edit_gift_view):
+    reply = QMessageBox.question(
+        edit_gift_view, '放弃修改', '确定放弃修改吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
+    if reply == QMessageBox.Yes:
+        name = edit_gift_view.file_name.text()
+        language = edit_gift_view.language.text()
+        if name and language:
+            path = path_utils.get_outputs_path() + \
+                   (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
+            load_signal_xml_file(edit_gift_view, path)
+
+
+def get_outputs_dir_list():
+    outputs_dir_list.clear()
+    outputs_dir_list.append(urls.LANGUAGE_LIST[0])
+    file_list = os.listdir(path_utils.get_outputs_path())
+    for file_name in file_list:
+        if os.path.isdir(path_utils.get_outputs_path() + file_name):
+            outputs_dir_list.append(file_name)

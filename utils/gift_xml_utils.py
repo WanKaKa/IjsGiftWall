@@ -61,34 +61,37 @@ def analysis_overall_gift_xml(path):
 def analysis_gift_xml(path):
     if not os.path.exists(path):
         return None
-    dom = xml.dom.minidom.parse(path)
-    root = dom.documentElement
-    gift_entity = entity.GiftEntity()
-    # 解析gift配置参数
-    gift_config_list = root.getElementsByTagName(TAG_CONFIG)
-    for config in gift_config_list:
-        gift_config = entity.GiftConfig()
-        gift_config.target = config.getAttribute(ATTRIBUTE_TARGET)
-        gift_config.index = config.getAttribute(ATTRIBUTE_START_INDEX)
-        gift_config.count = config.getAttribute(ATTRIBUTE_COUNT)
-        gift_config.limit = config.getAttribute(ATTRIBUTE_LIMIT)
-        gift_entity.config_list[gift_config.target] = gift_config
-    # 解析gift数据
-    gift_item_list = root.getElementsByTagName(TAG_GIFT)
-    for item in gift_item_list:
-        gift_item = entity.GiftItem()
-        gift_item.id = item.getAttribute(ATTRIBUTE_ID)
-        # 元素
-        gift_item.title = analysis_xml_item(item, TAG_TITLE)
-        gift_item.detailed = analysis_xml_item(item, TAG_DETAILED)
-        gift_item.icon_image_path = analysis_xml_item(item, TAG_ICON_PATH)
-        gift_item.package_name = analysis_xml_item(item, TAG_PACKAGE_NAME)
-        gift_item.market_url = analysis_xml_item(item, TAG_MARKET_URL)
-        gift_item.poster_path = analysis_xml_item(item, TAG_POSTER_PATH)
-        gift_item.app_type = analysis_xml_item(item, TAG_APP_TYPE)
-        gift_entity.item_list.append(gift_item)
-
-    return gift_entity
+    try:
+        gift_entity = entity.GiftEntity()
+        dom = xml.dom.minidom.parse(path)
+        root = dom.documentElement
+        # 解析gift配置参数
+        gift_config_list = root.getElementsByTagName(TAG_CONFIG)
+        for config in gift_config_list:
+            gift_config = entity.GiftConfig()
+            gift_config.target = config.getAttribute(ATTRIBUTE_TARGET)
+            gift_config.index = config.getAttribute(ATTRIBUTE_START_INDEX)
+            gift_config.count = config.getAttribute(ATTRIBUTE_COUNT)
+            gift_config.limit = config.getAttribute(ATTRIBUTE_LIMIT)
+            gift_entity.config_list[gift_config.target] = gift_config
+        # 解析gift数据
+        gift_item_list = root.getElementsByTagName(TAG_GIFT)
+        for item in gift_item_list:
+            gift_item = entity.GiftItem()
+            gift_item.id = item.getAttribute(ATTRIBUTE_ID)
+            # 元素
+            gift_item.title = analysis_xml_item(item, TAG_TITLE)
+            gift_item.detailed = analysis_xml_item(item, TAG_DETAILED)
+            gift_item.icon_image_path = analysis_xml_item(item, TAG_ICON_PATH)
+            gift_item.package_name = analysis_xml_item(item, TAG_PACKAGE_NAME)
+            gift_item.market_url = analysis_xml_item(item, TAG_MARKET_URL)
+            gift_item.poster_path = analysis_xml_item(item, TAG_POSTER_PATH)
+            gift_item.app_type = analysis_xml_item(item, TAG_APP_TYPE)
+            gift_entity.item_list.append(gift_item)
+        return gift_entity
+    except Exception as e:
+        print(e)
+    return None
 
 
 def analysis_xml_item(content, name):
@@ -147,7 +150,10 @@ def write_entity_item(file, entity_value):
     value = "    <" + TAG_GIFT + " " + ATTRIBUTE_ID + "=\"" + entity_value.id + "\">"
     value += "\n"
     if entity_value.title:
-        value += "        <" + TAG_TITLE + ">" + entity_value.title + "</" + TAG_TITLE + ">"
+        title = entity_value.title
+        if isinstance(title, str):
+            title = title.replace("&", "&amp;")
+        value += "        <" + TAG_TITLE + ">" + title + "</" + TAG_TITLE + ">"
         value += "\n"
     if entity_value.detailed:
         value += "        <" + TAG_DETAILED + ">" + entity_value.detailed + "</" + TAG_DETAILED + ">"
@@ -161,11 +167,11 @@ def write_entity_item(file, entity_value):
     if entity_value.poster_path:
         value += "        <" + TAG_POSTER_PATH + ">" + entity_value.poster_path + "</" + TAG_POSTER_PATH + ">"
         value += "\n"
-    if entity_value.app_type:
-        value += "        <" + TAG_APP_TYPE + ">" + entity_value.app_type + "</" + TAG_APP_TYPE + ">"
-        value += "\n"
     if entity_value.market_url:
         value += "        <" + TAG_MARKET_URL + ">" + entity_value.market_url + "</" + TAG_MARKET_URL + ">"
+        value += "\n"
+    if entity_value.app_type:
+        value += "        <" + TAG_APP_TYPE + ">" + entity_value.app_type + "</" + TAG_APP_TYPE + ">"
         value += "\n"
     value += "    </" + TAG_GIFT + ">"
     value += "\n"

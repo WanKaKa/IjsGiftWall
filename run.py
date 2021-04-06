@@ -1,9 +1,13 @@
 import sys
+
+from PyQt5.QtCore import QCoreApplication, Qt
+
 import giftdata
 from PyQt5.QtWidgets import QApplication
 from views import edit
 
 if __name__ == '__main__':
+    QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)
     desktop = app.desktop()
     edit_gift_view = edit.view.EditGiftView()
