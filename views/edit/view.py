@@ -751,7 +751,7 @@ def click_reload_data(edit_gift_view):
     if reply == QMessageBox.Yes:
         database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, 0)
         database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, 0)
-        giftdata.download.load_config()
+        giftdata.init_gift_data(edit_gift_view)
 
 
 def click_refresh_ui(edit_gift_view):
