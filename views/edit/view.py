@@ -67,7 +67,7 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
             self.language_radio_12,
         ]
 
-        pix_map = QPixmap(ico_utils.resource_path(os.path.join("ico", "logo.png")))
+        pix_map = QPixmap(ico_utils.resource_path(os.path.join("ico", "logo_big.png")))
         self.ijoysoft_icon.setPixmap(pix_map)
 
         self.tableWidget.keyPressEvent = self.key_press_event
@@ -86,7 +86,9 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.create_gift_wall_file.clicked.connect(self.click_create_gift_wall_file)
 
         self.open_outputs.clicked.connect(lambda: os.system("start " + path_utils.get_outputs_path()))
+        self.open_outputs_2.clicked.connect(lambda: os.system("start " + path_utils.get_outputs_path()))
         self.clear_outputs.clicked.connect(self.delete_dir)
+        self.clear_outputs_2.clicked.connect(self.delete_dir)
 
         self.save.clicked.connect(self.fun_create_gift_wall_file)
         self.add_gift_wall_2.clicked.connect(lambda: click_add_gift_wall(self))
@@ -136,16 +138,13 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.tableWidget.setColumnWidth(5, 60)
 
     def set_radio_button_color(self):
+        get_outputs_dir_list()
         for radio in self.language_radio_list:
-            if radio.isChecked():
-                self.language.setText(radio.text())
             if radio.text() in outputs_dir_list:
                 radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(0, 0, 0);")
             else:
                 radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(255, 0, 0);")
         for radio in self.file_name_radio_list:
-            if radio.isChecked():
-                self.file_name.setText(radio.text())
             if not self.language.text() or os.path.exists(path_utils.get_outputs_path() + (
                     self.language.text() if self.language.text() != urls.LANGUAGE_LIST[
                         0] else "") + "\\" + radio.text()):
@@ -197,7 +196,6 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
             for radio in self.file_name_radio_list:
                 if radio.isChecked():
                     self.file_name.setText(radio.text())
-            get_outputs_dir_list()
             self.set_radio_button_color()
 
     def set_table_widget_item(self, index, entity):
@@ -327,7 +325,6 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         gift_xml_utils.create_gift_wall_files(
             self.file_name.text(), self.language.text().split(","), add_gift_config_list, add_gift_item_list)
         # 每次生成文件后，更新输出文件夹中的文件夹集合
-        get_outputs_dir_list()
         self.set_radio_button_color()
         QMessageBox.information(self, '提示', '生成GiftWall配置表成功!')
 
@@ -407,6 +404,8 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
             self, '清空Outputs', '确定清空Outputs吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
             kevin_utils.delete_dir(path_utils.get_outputs_path())
+            self.set_radio_button_color()
+            load_outputs_xml_file(self)
             QMessageBox.information(self, '提示', 'Outputs已清空!')
 
 
@@ -627,17 +626,11 @@ def click_edit_view_radio_button(edit_gift_view, label, radio_button_list):
                 if label.text() == radio_button.text():
                     return
                 label.setText(radio_button.text())
-    get_outputs_dir_list()
     edit_gift_view.set_radio_button_color()
     # 检查模式时，选取了文件名或者地区后，加载对应的配置文件
     global select_mode_type
     if select_mode_type == 1:
-        name = edit_gift_view.file_name.text()
-        language = edit_gift_view.language.text()
-        if name and language:
-            path = path_utils.get_outputs_path() + \
-                   (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
-            load_signal_xml_file(edit_gift_view, path, tip_enable=False)
+        load_outputs_xml_file(edit_gift_view)
 
 
 def click_set_select_string(edit_gift_view, string_list, label):
@@ -669,7 +662,7 @@ def click_set_select_string(edit_gift_view, string_list, label):
         out_file_radio_button_list[i].setText(_translate("Form", string_list[i]))
         out_file_radio_button_list[i].setChecked(label.text() == string_list[i])
         out_file_radio_button_list[i].toggled.connect(
-            lambda: click_get_out_file(edit_gift_view, label, out_file_dialog, out_file_radio_button_list))
+            lambda: click_get_out_file(label, out_file_dialog, out_file_radio_button_list))
     # 隐藏多出来的按钮
     if len(out_file_radio_button_list) > len(string_list):
         for i in range(len(out_file_radio_button_list)):
@@ -678,7 +671,7 @@ def click_set_select_string(edit_gift_view, string_list, label):
     out_file_dialog.exec()
 
 
-def click_get_out_file(edit_gift_view, label, out_file_dialog, out_file_radio_button_list):
+def click_get_out_file(label, out_file_dialog, out_file_radio_button_list):
     if out_file_radio_button_list:
         for radio_button in out_file_radio_button_list:
             if radio_button.isChecked():
@@ -686,15 +679,6 @@ def click_get_out_file(edit_gift_view, label, out_file_dialog, out_file_radio_bu
                     return
                 label.setText(radio_button.text())
                 out_file_dialog.hide()
-    # 检查模式时，选取了文件名或者地区后，加载对应的配置文件
-    global select_mode_type
-    if select_mode_type == 1:
-        name = edit_gift_view.file_name.text()
-        language = edit_gift_view.language.text()
-        if name and language:
-            path = path_utils.get_outputs_path() + \
-                   (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
-            load_signal_xml_file(edit_gift_view, path)
 
 
 def click_set_language(edit_gift_view):
@@ -756,6 +740,9 @@ def click_switch_mode(edit_gift_view):
     global select_mode_type
     select_mode_type = 0 if edit_gift_view.edit_gift_wall_mode.isChecked() else 1
     edit_gift_view.set_select_mode()
+    # 切换到检查模式时，如果有选中文件，则加载
+    if select_mode_type == 1:
+        load_outputs_xml_file(edit_gift_view)
 
 
 def click_reload_data(edit_gift_view):
@@ -827,6 +814,15 @@ def click_import_gift_wall(edit_gift_view):
     load_signal_xml_file(edit_gift_view, fileName)
 
 
+def load_outputs_xml_file(edit_gift_view):
+    name = edit_gift_view.file_name.text()
+    language = edit_gift_view.language.text()
+    if name and language:
+        path = path_utils.get_outputs_path() + \
+               (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
+        load_signal_xml_file(edit_gift_view, path, tip_enable=False)
+
+
 def load_signal_xml_file(edit_gift_view, path, tip_enable=True):
     if path:
         gift_entity = gift_xml_utils.analysis_gift_xml(path)
@@ -834,33 +830,33 @@ def load_signal_xml_file(edit_gift_view, path, tip_enable=True):
         global add_gift_config_list
         add_gift_item_list.clear()
         add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
-        if gift_entity:
-            if gift_entity.item_list:
-                for item1 in gift_entity.item_list:
-                    for item2 in giftdata.overall_gift_entity.item_list:
-                        if compare_entity(item1, item2):
-                            add_gift_item_list.append(item2)
-            if gift_entity.config_list:
-                add_gift_config_list = deepcopy(gift_entity.config_list)
-            edit_gift_view.set_table_widget()
-            edit_gift_view.set_gift_config_view()
+        if giftdata.overall_gift_entity and giftdata.overall_gift_entity.item_list:
+            if gift_entity:
+                if gift_entity.item_list:
+                    for item1 in gift_entity.item_list:
+                        for item2 in giftdata.overall_gift_entity.item_list:
+                            if compare_entity(item1, item2):
+                                add_gift_item_list.append(item2)
+                if gift_entity.config_list:
+                    add_gift_config_list = deepcopy(gift_entity.config_list)
+                edit_gift_view.set_table_widget()
+                edit_gift_view.set_gift_config_view()
+            else:
+                edit_gift_view.set_table_widget()
+                edit_gift_view.set_gift_config_view()
+                if tip_enable:
+                    QMessageBox.information(edit_gift_view, '提示', '加载GiftWall失败\n1.文件不存在\n2.解析失败\n3.空白文件')
         else:
             edit_gift_view.set_table_widget()
             edit_gift_view.set_gift_config_view()
-            if tip_enable:
-                QMessageBox.information(edit_gift_view, '提示', '加载GiftWall失败\n1.文件不存在\n2.解析失败\n3.空白文件')
+            QMessageBox.information(edit_gift_view, '提示', '总表数据为空!')
 
 
 def click_cancel_save(edit_gift_view):
     reply = QMessageBox.question(
         edit_gift_view, '放弃修改', '确定放弃修改吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
     if reply == QMessageBox.Yes:
-        name = edit_gift_view.file_name.text()
-        language = edit_gift_view.language.text()
-        if name and language:
-            path = path_utils.get_outputs_path() + \
-                   (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
-            load_signal_xml_file(edit_gift_view, path)
+        load_outputs_xml_file(edit_gift_view)
 
 
 def get_outputs_dir_list():
