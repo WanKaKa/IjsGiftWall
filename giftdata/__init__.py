@@ -17,8 +17,7 @@ class LoadConfig:
         self.edit_gift_view = edit_gift_view
         if get_gift_data_update_time():
             analysis_gift_data()
-            if not get_gift_icon_update_time():
-                LoadIcon(edit_gift_view)
+            LoadIcon(edit_gift_view)
             return
         self.progress_dialog = dialog.ProgressDialog(edit_gift_view)
         self.progress_dialog.setWindowTitle("为便捷而生")
@@ -35,16 +34,20 @@ class LoadConfig:
     def progress_config_callback(self, value):
         self.progress_dialog.progressBar.setProperty("value", value)
 
-    def end_config_callback(self):
-        database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, time.time())
-        analysis_gift_data()
+    def end_config_callback(self, success=True):
+        if success:
+            database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, time.time())
+            analysis_gift_data()
         LoadIcon(self.edit_gift_view, progress_dialog=self.progress_dialog)
 
 
 class LoadIcon:
 
     def __init__(self, edit_gift_view, progress_dialog=None):
+        self.edit_gift_view = edit_gift_view
         if get_gift_icon_update_time() or not overall_gift_entity or not overall_gift_entity.item_list:
+            if progress_dialog:
+                progress_dialog.hide()
             return
         if progress_dialog:
             self.progress_dialog = progress_dialog
@@ -72,9 +75,10 @@ class LoadIcon:
     def progress_icon_callback(self, value):
         self.progress_dialog.progressBar.setProperty("value", value)
 
-    def end_icon_callback(self):
+    def end_icon_callback(self, success=True):
         self.progress_dialog.hide()
-        database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, time.time())
+        if success:
+            database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, time.time())
 
 
 def init_gift_data(edit_gift_view):

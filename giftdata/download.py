@@ -11,18 +11,24 @@ class Downloader:
         self.progress_callback = progress_callback
         self.downloaded_callback = downloaded_callback
 
+        self.downloaded_success = True
         self.downloaded_count = 0
 
     def down(self, file_path):
-        file_url = self.server_url + file_path
-        r = requests.get(file_url)
-        with open(path_utils.get_download_path() + file_path, "wb+") as fp:
-            fp.write(r.content)
-            value = self.downloaded_count / len(self.file_path_list) * 100
-            self.progress_callback(value)
-            self.downloaded_count = self.downloaded_count + 1
-            if self.downloaded_count == len(self.file_path_list):
-                self.downloaded_callback()
+        self.downloaded_count = self.downloaded_count + 1
+        try:
+            file_url = self.server_url + file_path
+            r = requests.get(file_url)
+            with open(path_utils.get_download_path() + file_path, "wb+") as fp:
+                fp.write(r.content)
+                value = self.downloaded_count / len(self.file_path_list) * 100
+                self.progress_callback(value)
+        except Exception as e:
+            self.downloaded_success = False
+            print("下载出错 URL = %s" % (self.server_url + file_path))
+            print(e)
+        if self.downloaded_count == len(self.file_path_list):
+            self.downloaded_callback(success=self.downloaded_success)
 
     def run(self):
         self.downloaded_count = 0

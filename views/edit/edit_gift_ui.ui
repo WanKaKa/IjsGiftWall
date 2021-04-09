@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1800</width>
-    <height>910</height>
+    <height>915</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1649,10 +1649,10 @@ font: 10pt &quot;微软雅黑&quot;;</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QPushButton" name="refresh_ui">
+       <widget class="QPushButton" name="reload_data_config">
         <property name="geometry">
          <rect>
-          <x>170</x>
+          <x>15</x>
           <y>10</y>
           <width>140</width>
           <height>40</height>
@@ -1664,7 +1664,7 @@ color: rgb(255, 255, 255);
 font: 10pt &quot;微软雅黑&quot;;</string>
         </property>
         <property name="text">
-         <string>刷新界面</string>
+         <string>重下载服务器配置表</string>
         </property>
        </widget>
        <widget class="QPushButton" name="add_gift_wall">
@@ -1688,7 +1688,7 @@ font: 10pt &quot;微软雅黑&quot;;</string>
        <widget class="QPushButton" name="reload_data">
         <property name="geometry">
          <rect>
-          <x>15</x>
+          <x>170</x>
           <y>10</y>
           <width>140</width>
           <height>40</height>
@@ -1700,7 +1700,7 @@ color: rgb(255, 255, 255);
 font: 10pt &quot;微软雅黑&quot;;</string>
         </property>
         <property name="text">
-         <string>重新下载服务器数据</string>
+         <string>重下载服务器数据</string>
         </property>
        </widget>
        <widget class="QPushButton" name="create_gift_wall_file">

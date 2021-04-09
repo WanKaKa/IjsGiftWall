@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(1800, 910)
+        Form.resize(1800, 915)
         Form.setStyleSheet("background-color: rgb(247, 247, 247);")
         self.horizontalLayout = QtWidgets.QHBoxLayout(Form)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -555,12 +555,12 @@ class Ui_Form(object):
         self.edit_menu_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.edit_menu_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.edit_menu_frame.setObjectName("edit_menu_frame")
-        self.refresh_ui = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.refresh_ui.setGeometry(QtCore.QRect(170, 10, 140, 40))
-        self.refresh_ui.setStyleSheet("background-color: rgb(85, 85, 255);\n"
+        self.reload_data_config = QtWidgets.QPushButton(self.edit_menu_frame)
+        self.reload_data_config.setGeometry(QtCore.QRect(15, 10, 140, 40))
+        self.reload_data_config.setStyleSheet("background-color: rgb(85, 85, 255);\n"
 "color: rgb(255, 255, 255);\n"
 "font: 10pt \"微软雅黑\";")
-        self.refresh_ui.setObjectName("refresh_ui")
+        self.reload_data_config.setObjectName("reload_data_config")
         self.add_gift_wall = QtWidgets.QPushButton(self.edit_menu_frame)
         self.add_gift_wall.setGeometry(QtCore.QRect(15, 60, 140, 40))
         self.add_gift_wall.setStyleSheet("background-color: rgb(85, 85, 255);\n"
@@ -568,7 +568,7 @@ class Ui_Form(object):
 "font: 10pt \"微软雅黑\";")
         self.add_gift_wall.setObjectName("add_gift_wall")
         self.reload_data = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.reload_data.setGeometry(QtCore.QRect(15, 10, 140, 40))
+        self.reload_data.setGeometry(QtCore.QRect(170, 10, 140, 40))
         self.reload_data.setStyleSheet("background-color: rgb(85, 85, 255);\n"
 "color: rgb(255, 255, 255);\n"
 "font: 10pt \"微软雅黑\";")
@@ -666,9 +666,9 @@ class Ui_Form(object):
         self.add_gift_wall_2.setText(_translate("Form", "添加GiftWall"))
         self.open_outputs_2.setText(_translate("Form", "查看Outputs"))
         self.clear_outputs_2.setText(_translate("Form", "清空Outputs"))
-        self.refresh_ui.setText(_translate("Form", "刷新界面"))
+        self.reload_data_config.setText(_translate("Form", "重下载服务器配置表"))
         self.add_gift_wall.setText(_translate("Form", "添加GiftWall"))
-        self.reload_data.setText(_translate("Form", "重新下载服务器数据"))
+        self.reload_data.setText(_translate("Form", "重下载服务器数据"))
         self.create_gift_wall_file.setText(_translate("Form", "生成GiftWall"))
         self.open_outputs.setText(_translate("Form", "查看Outputs"))
         self.clear_outputs.setText(_translate("Form", "清空Outputs"))

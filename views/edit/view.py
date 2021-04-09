@@ -77,8 +77,8 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.edit_gift_wall_mode.toggled.connect(lambda: click_switch_mode(self))
         self.check_outputs_mode.toggled.connect(lambda: click_switch_mode(self))
 
+        self.reload_data_config.clicked.connect(lambda: click_reload_data_config(self))
         self.reload_data.clicked.connect(lambda: click_reload_data(self))
-        self.refresh_ui.clicked.connect(lambda: click_refresh_ui(self))
         self.reset_ui.clicked.connect(lambda: click_reset_ui(self))
 
         self.add_gift_wall.clicked.connect(lambda: click_add_gift_wall(self))
@@ -743,6 +743,14 @@ def click_switch_mode(edit_gift_view):
     # 切换到检查模式时，如果有选中文件，则加载
     if select_mode_type == 1:
         load_outputs_xml_file(edit_gift_view)
+
+
+def click_reload_data_config(edit_gift_view):
+    reply = QMessageBox.question(
+        edit_gift_view, '重新下载', '确认重新下载服务器配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
+    if reply == QMessageBox.Yes:
+        database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, 0)
+        giftdata.init_gift_data(edit_gift_view)
 
 
 def click_reload_data(edit_gift_view):

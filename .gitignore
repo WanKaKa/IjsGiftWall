@@ -38,3 +38,5 @@ captures/
 venv/
 
 __pycache__/
+
+*.exe
