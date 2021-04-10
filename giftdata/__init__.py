@@ -1,5 +1,4 @@
 import os
-import time
 
 from database import database_json
 from giftdata import download, urls
@@ -7,7 +6,19 @@ from giftdata.download import Downloader
 from utils import gift_xml_utils, path_utils, ico_utils
 from views import dialog
 
-gift_entity_list = {}
+gift_entity_list = {
+    urls.LANGUAGE_LIST[0]: {},
+    urls.LANGUAGE_LIST[1]: {},
+    urls.LANGUAGE_LIST[2]: {},
+    urls.LANGUAGE_LIST[3]: {},
+    urls.LANGUAGE_LIST[4]: {},
+    urls.LANGUAGE_LIST[5]: {},
+    urls.LANGUAGE_LIST[6]: {},
+    urls.LANGUAGE_LIST[7]: {},
+    urls.LANGUAGE_LIST[8]: {},
+    urls.LANGUAGE_LIST[9]: {},
+    urls.LANGUAGE_LIST[10]: {},
+}
 overall_gift_entity = None
 
 
@@ -26,8 +37,12 @@ class LoadConfig:
         edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
         edit_gift_view.progress_dialog.show()
         file_path_list = [urls.OVERALL_XML_NAME]
-        for name in urls.XML_NAME_LIST:
-            file_path_list.append(name)
+        for language in urls.LANGUAGE_LIST:
+            language = language + '/' if language != urls.LANGUAGE_LIST[0] else ""
+            if not os.path.exists(path_utils.get_download_path() + language):
+                os.makedirs(path_utils.get_download_path() + language)
+            for name in urls.XML_NAME_LIST:
+                file_path_list.append(language + name)
         downloader = Downloader(urls.BASE_URL, file_path_list, download_type="config")
         downloader.my_signal.connect(self.edit_gift_view.progress_callback)
         downloader.run()
@@ -81,12 +96,15 @@ def analysis_gift_data():
         if overall_gift_entity:
             print("OverallGiftItem Count = %d" % len(overall_gift_entity.item_list))
         # 各项目数据
-        gift_entity_list.clear()
-        for path in urls.XML_NAME_LIST:
-            gift_entity = gift_xml_utils.analysis_gift_xml(path_utils.get_download_path() + path)
-            if gift_entity:
-                gift_entity_list[path] = gift_entity
-        print("GiftEntity Count = %d" % len(gift_entity_list))
+        for i in range(len(gift_entity_list)):
+            gift_entity_list[urls.LANGUAGE_LIST[i]].clear()
+            language = urls.LANGUAGE_LIST[i] + '\\' if urls.LANGUAGE_LIST[i] != urls.LANGUAGE_LIST[0] else ""
+            for path in urls.XML_NAME_LIST:
+                gift_entity = gift_xml_utils.analysis_gift_xml(path_utils.get_download_path() + language + path)
+                if gift_entity:
+                    gift_entity_list[urls.LANGUAGE_LIST[i]][path] = gift_entity
+            print("地区 = %s GiftEntity Count = %d" % (
+                urls.LANGUAGE_LIST[i].ljust(20, " "), len(gift_entity_list[urls.LANGUAGE_LIST[i]])))
 
 
 def get_gift_data_update_time():

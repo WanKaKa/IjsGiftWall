@@ -5,12 +5,12 @@ from copy import deepcopy
 
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
-from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QDialog, QFileDialog
+from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog
 from PyQt5 import QtCore
 
 from database import database_json
 from utils import path_utils, ico_utils, gift_xml_utils, kevin_utils
-from views.edit import edit_gift_ui, add_gift
+from views.edit import edit_gift_ui, add_gift_window
 import giftdata
 from views import dialog
 from giftdata import urls
@@ -443,216 +443,6 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
                         database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, time.time())
 
 
-class AddGiftView(QDialog, add_gift.Ui_Dialog):
-    OVERALL_GIFT_WALL_FILE_NAME = "总表"
-
-    def __init__(self, parent=None):
-        super(AddGiftView, self).__init__(parent)
-        self.setupUi(self)
-
-        self.server_gift_wall_file = [self.OVERALL_GIFT_WALL_FILE_NAME]
-        for file in urls.XML_NAME_LIST:
-            self.server_gift_wall_file.append(file)
-        self.item_list = []
-        self.init_view()
-
-        self.tableWidget.keyPressEvent = self.key_press_event
-        self.tableWidget.itemClicked.connect(self.click_table_item)
-        self.tableWidget.itemDoubleClicked.connect(self.click_table_item_double)
-        self.pushButton.clicked.connect(self.click_get_gift_wall_file)
-        self.pushButton_2.clicked.connect(self.click_add_gift_wall)
-
-    def init_view(self):
-        self.label_2.setText(self.OVERALL_GIFT_WALL_FILE_NAME)
-        self.init_table_widget()
-        self.set_table_widget()
-
-    def init_table_widget(self):
-        self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
-
-        self.tableWidget.setColumnCount(7)
-        self.tableWidget.setHorizontalHeaderLabels(['序号', '图标', '项目名', '产品名 类型', '包名', '推广图', "添加状态"])
-        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.tableWidget.setIconSize(QSize(36, 36))
-        self.tableWidget.setColumnWidth(0, 60)
-        self.tableWidget.setColumnWidth(1, 60)
-        self.tableWidget.setColumnWidth(2, 240)
-        self.tableWidget.setColumnWidth(3, 270)
-        self.tableWidget.setColumnWidth(4, 320)
-        self.tableWidget.setColumnWidth(5, 60)
-        self.tableWidget.setColumnWidth(6, 120)
-
-    def set_table_widget(self):
-        if self.item_list:
-            self.item_list.clear()
-        if giftdata.overall_gift_entity and giftdata.overall_gift_entity.item_list:
-            if self.OVERALL_GIFT_WALL_FILE_NAME == self.label_2.text():
-                self.item_list = giftdata.overall_gift_entity.item_list[:]
-            else:
-                if giftdata.gift_entity_list and self.label_2.text() in giftdata.gift_entity_list:
-                    gift_entity = giftdata.gift_entity_list[self.label_2.text()]
-                    if gift_entity and gift_entity.item_list:
-                        for item1 in gift_entity.item_list:
-                            for item2 in giftdata.overall_gift_entity.item_list:
-                                if compare_entity(item1, item2):
-                                    self.item_list.append(item2)
-                                    break
-        if self.item_list:
-            self.tableWidget.setRowCount(len(self.item_list))
-            for i in range(len(self.item_list)):
-                self.set_table_widget_item(i, self.item_list[i])
-        else:
-            self.tableWidget.setRowCount(0)
-
-    def set_table_widget_item(self, index, entity):
-        self.tableWidget.setRowHeight(index, 40)
-
-        item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 18))
-        item.setForeground(QBrush(QColor(85, 85, 255)))
-        item.setText(str(index + 1))
-        item.setTextAlignment(Qt.AlignCenter)
-        self.tableWidget.setItem(index, 0, item)
-
-        item = QTableWidgetItem()
-        icon = QIcon(path_utils.get_download_path() + entity.icon_image_path)
-        item.setIcon(icon)
-        self.tableWidget.setItem(index, 1, item)
-
-        item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 10))
-        item.setForeground(QBrush(QColor(85, 85, 255)))
-        item.setText(entity.project_name)
-        self.tableWidget.setItem(index, 2, item)
-
-        item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 10))
-        item.setText("产品名: " + (entity.title if entity.title else "") +
-                     "\n类   型: " + (entity.app_type if entity.app_type else ""))
-        self.tableWidget.setItem(index, 3, item)
-
-        item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 10))
-        item.setText(entity.package_name)
-        self.tableWidget.setItem(index, 4, item)
-
-        item = None
-        if entity.poster_path:
-            item = QTableWidgetItem()
-            icon = QIcon(path_utils.get_download_path() + entity.poster_path)
-            item.setIcon(QIcon(icon))
-        self.tableWidget.setItem(index, 5, item)
-
-        self.set_table_widget_item_state(index, is_entity_added(entity))
-
-    def set_table_widget_item_state(self, index, state):
-        item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 12))
-        item.setForeground(QBrush(QColor(255, 0, 0)))
-        item.setText("已添加" if state else "")
-        item.setTextAlignment(Qt.AlignCenter)
-        self.tableWidget.setItem(index, 6, item)
-
-    def click_table_item(self):
-        print(self.tableWidget.currentItem().text())
-
-    def click_table_item_double(self):
-        row = self.tableWidget.currentItem().row()
-        if 0 <= row < len(self.item_list):
-            self.add_gift_item(row)
-
-    def key_press_event(self, event):
-        if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_A:
-            self.tableWidget.selectAll()
-        elif event.key() == QtCore.Qt.Key_Delete or event.key() == QtCore.Qt.Key_D:
-            selected_rows = []
-            for item in self.tableWidget.selectedItems():
-                if item.row() not in selected_rows:
-                    selected_rows.append(item.row())
-            for row in selected_rows:
-                if self.tableWidget.item(row, 6).text():
-                    delete_entity = None
-                    for entity in add_gift_item_list:
-                        if compare_entity(entity, self.item_list[row]):
-                            delete_entity = entity
-                            break
-                    add_gift_item_list.remove(delete_entity)
-                    self.set_table_widget_item_state(row, False)
-            self.parent().set_table_widget()
-            self.tableWidget.clearSelection()
-        elif event.key() == QtCore.Qt.Key_Enter or event.key() == QtCore.Qt.Key_Return:
-            self.click_add_gift_wall()
-        else:
-            super().keyPressEvent(event)
-
-    def click_add_gift_wall(self):
-        selected_rows = []
-        for item in self.tableWidget.selectedItems():
-            if item.row() not in selected_rows:
-                selected_rows.append(item.row())
-        for row in selected_rows:
-            self.add_gift_item(row)
-        self.tableWidget.clearSelection()
-
-    def add_gift_item(self, row):
-        index = len(add_gift_item_list)
-        entity = self.item_list[row]
-        if is_entity_added(entity):
-            return
-        add_gift_item_list.append(entity)
-        self.parent().tableWidget.setRowCount(len(add_gift_item_list))
-        self.parent().set_table_widget_item(index, entity)
-        self.parent().tableWidget.selectRow(index)
-        self.set_table_widget_item_state(row, True)
-
-    def click_get_gift_wall_file(self):
-        server_file_dialog = dialog.SelectDialog(self)
-        server_file_dialog.show()
-        server_file_dialog.setWindowTitle("选择服务器配置表-为便捷而生")
-        server_file_dialog.setWindowIcon(ico_utils.get_favicon_icon())
-
-        server_file_radio_button_list = [
-            server_file_dialog.radioButton,
-            server_file_dialog.radioButton_2,
-            server_file_dialog.radioButton_3,
-            server_file_dialog.radioButton_4,
-            server_file_dialog.radioButton_5,
-            server_file_dialog.radioButton_6,
-            server_file_dialog.radioButton_7,
-            server_file_dialog.radioButton_8,
-            server_file_dialog.radioButton_9,
-            server_file_dialog.radioButton_10,
-            server_file_dialog.radioButton_11,
-            server_file_dialog.radioButton_12,
-            server_file_dialog.radioButton_13,
-            server_file_dialog.radioButton_14,
-            server_file_dialog.radioButton_15,
-            server_file_dialog.radioButton_16
-        ]
-        # 设置按钮状态和点击事件
-        _translate = QtCore.QCoreApplication.translate
-        for i in range(len(self.server_gift_wall_file)):
-            server_file_radio_button_list[i].setText(_translate("Form", self.server_gift_wall_file[i]))
-            server_file_radio_button_list[i].setChecked(self.label_2.text() == self.server_gift_wall_file[i])
-            server_file_radio_button_list[i].toggled.connect(
-                lambda: self.set_gift_wall_file(server_file_dialog, server_file_radio_button_list))
-        # 隐藏多出来的按钮
-        if len(server_file_radio_button_list) > len(self.server_gift_wall_file):
-            for i in range(len(server_file_radio_button_list)):
-                if i >= len(self.server_gift_wall_file):
-                    server_file_radio_button_list[i].hide()
-        server_file_dialog.exec()
-
-    def set_gift_wall_file(self, server_file_dialog, server_file_radio_button_list):
-        if server_file_radio_button_list:
-            for radio_button in server_file_radio_button_list:
-                if radio_button.isChecked():
-                    self.label_2.setText(radio_button.text())
-                    self.set_table_widget()
-                    server_file_dialog.hide()
-
-
 def click_edit_view_radio_button(edit_gift_view, label, radio_button_list):
     if radio_button_list:
         for radio_button in radio_button_list:
@@ -823,15 +613,15 @@ def compare_entity(entity1, entity2):
 
 
 def click_add_gift_wall(edit_gift_view):
-    add_gift_view = AddGiftView(edit_gift_view)
+    add_gift_view = add_gift_window.AddGiftView(edit_gift_view)
     add_gift_view.setWindowTitle("添加GiftWall-为便捷而生")
     add_gift_view.setWindowIcon(ico_utils.get_favicon_icon())
     add_gift_view.exec()
 
 
 def click_import_gift_wall(edit_gift_view):
-    fileName, fileType = QFileDialog.getOpenFileName(edit_gift_view, "选取文件", path_utils.get_outputs_path())
-    load_signal_xml_file(edit_gift_view, fileName)
+    file_name, file_type = QFileDialog.getOpenFileName(edit_gift_view, "选取文件", path_utils.get_outputs_path())
+    load_signal_xml_file(edit_gift_view, file_name)
 
 
 def load_outputs_xml_file(edit_gift_view):
