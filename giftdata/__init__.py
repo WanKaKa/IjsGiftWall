@@ -19,26 +19,18 @@ class LoadConfig:
             analysis_gift_data()
             LoadIcon(edit_gift_view)
             return
-        self.progress_dialog = dialog.ProgressDialog(edit_gift_view)
-        self.progress_dialog.setWindowTitle("为便捷而生")
-        self.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
-        self.progress_dialog.label.setText("正在下载配置文件，请稍等...")
-        self.progress_dialog.progressBar.setProperty("value", 0)
-        self.progress_dialog.show()
+        edit_gift_view.progress_dialog = dialog.ProgressDialog(edit_gift_view)
+        edit_gift_view.progress_dialog.setWindowTitle("为便捷而生")
+        edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+        edit_gift_view.progress_dialog.label.setText("正在下载配置文件，请稍等...")
+        edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
+        edit_gift_view.progress_dialog.show()
         file_path_list = [urls.OVERALL_XML_NAME]
         for name in urls.XML_NAME_LIST:
             file_path_list.append(name)
-        downloader = Downloader(urls.BASE_URL, file_path_list, self.progress_config_callback, self.end_config_callback)
+        downloader = Downloader(urls.BASE_URL, file_path_list, download_type="config")
+        downloader.my_signal.connect(self.edit_gift_view.progress_callback)
         downloader.run()
-
-    def progress_config_callback(self, value):
-        self.progress_dialog.progressBar.setProperty("value", value)
-
-    def end_config_callback(self, success=True):
-        if success:
-            database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, time.time())
-            analysis_gift_data()
-        LoadIcon(self.edit_gift_view, progress_dialog=self.progress_dialog)
 
 
 class LoadIcon:
@@ -50,14 +42,14 @@ class LoadIcon:
                 progress_dialog.hide()
             return
         if progress_dialog:
-            self.progress_dialog = progress_dialog
+            edit_gift_view.progress_dialog = progress_dialog
         else:
-            self.progress_dialog = dialog.ProgressDialog(edit_gift_view)
-        self.progress_dialog.setWindowTitle("为便捷而生")
-        self.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
-        self.progress_dialog.label.setText("正在下载图片资源，请稍等...")
-        self.progress_dialog.progressBar.setProperty("value", 0)
-        self.progress_dialog.show()
+            edit_gift_view.progress_dialog = dialog.ProgressDialog(edit_gift_view)
+        edit_gift_view.progress_dialog.setWindowTitle("为便捷而生")
+        edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+        edit_gift_view.progress_dialog.label.setText("正在下载图片资源，请稍等...")
+        edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
+        edit_gift_view.progress_dialog.show()
         if overall_gift_entity:
             file_path_list = []
             for item in overall_gift_entity.item_list:
@@ -69,16 +61,9 @@ class LoadIcon:
                 os.makedirs(path_utils.get_download_path() + 'icons')
             if not os.path.exists(path_utils.get_download_path() + 'posters'):
                 os.makedirs(path_utils.get_download_path() + 'posters')
-            downloader = Downloader(urls.BASE_URL, file_path_list, self.progress_icon_callback, self.end_icon_callback)
+            downloader = Downloader(urls.BASE_URL, file_path_list, download_type="icon")
+            downloader.my_signal.connect(self.edit_gift_view.progress_callback)
             downloader.run()
-
-    def progress_icon_callback(self, value):
-        self.progress_dialog.progressBar.setProperty("value", value)
-
-    def end_icon_callback(self, success=True):
-        self.progress_dialog.hide()
-        if success:
-            database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, time.time())
 
 
 def init_gift_data(edit_gift_view):

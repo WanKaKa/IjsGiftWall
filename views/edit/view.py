@@ -1,4 +1,6 @@
 import os
+import threading
+import time
 from copy import deepcopy
 
 from PyQt5.QtCore import QSize, Qt
@@ -407,6 +409,25 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
             self.set_radio_button_color()
             load_outputs_xml_file(self)
             QMessageBox.information(self, '提示', 'Outputs已清空!')
+
+    def progress_callback(self, value):
+        if self.progress_dialog:
+            # print("正在刷新下载进度条 线程名称 = %s" % threading.currentThread().name)
+            self.progress_dialog.progressBar.setProperty("value", value["value"])
+            if value["value"] == 100:
+                # 配置表下载完成
+                if value["type"] == "config":
+                    if value["success"]:
+                        print("配置表下载完成 线程名称 = %s" % threading.currentThread().name)
+                        database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, time.time())
+                        giftdata.analysis_gift_data()
+                    giftdata.LoadIcon(self, progress_dialog=self.progress_dialog)
+                # 图标下载完成
+                if value["type"] == "icon":
+                    self.progress_dialog.hide()
+                    if value["success"]:
+                        print("图标下载完成 线程名称 = %s" % threading.currentThread().name)
+                        database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, time.time())
 
 
 class AddGiftView(QDialog, add_gift.Ui_Dialog):
