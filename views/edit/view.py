@@ -76,8 +76,8 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.pushButton.clicked.connect(lambda: click_set_select_string(self, urls.XML_NAME_LIST, self.file_name))
         self.pushButton_2.clicked.connect(lambda: click_set_language(self))
 
-        self.edit_gift_wall_mode.toggled.connect(lambda: click_switch_mode(self))
-        self.check_outputs_mode.toggled.connect(lambda: click_switch_mode(self))
+        self.edit_gift_wall_mode.toggled.connect(lambda: self.click_switch_mode())
+        self.check_outputs_mode.toggled.connect(lambda: self.click_switch_mode())
 
         self.reload_data_config.clicked.connect(lambda: click_reload_data_config(self))
         self.reload_data.clicked.connect(lambda: click_reload_data(self))
@@ -410,6 +410,19 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
             load_outputs_xml_file(self)
             QMessageBox.information(self, '提示', 'Outputs已清空!')
 
+    def click_switch_mode(self):
+        global select_mode_type
+        mode = 0 if self.edit_gift_wall_mode.isChecked() else 1
+        if select_mode_type == mode:
+            return
+        select_mode_type = mode
+        reset_ui(self)
+        self.set_select_mode()
+        # 切换到检查模式时，如果有选中文件，则加载
+        if select_mode_type == 1:
+            load_outputs_xml_file(self)
+
+    # 下载弹框进度条更新UI
     def progress_callback(self, value):
         if self.progress_dialog:
             # print("正在刷新下载进度条 线程名称 = %s" % threading.currentThread().name)
@@ -756,16 +769,6 @@ def click_select_all_language(language_check_box_list, enable):
         language_check_box_list[i].setChecked(enable)
 
 
-def click_switch_mode(edit_gift_view):
-    reset_ui(edit_gift_view)
-    global select_mode_type
-    select_mode_type = 0 if edit_gift_view.edit_gift_wall_mode.isChecked() else 1
-    edit_gift_view.set_select_mode()
-    # 切换到检查模式时，如果有选中文件，则加载
-    if select_mode_type == 1:
-        load_outputs_xml_file(edit_gift_view)
-
-
 def click_reload_data_config(edit_gift_view):
     reply = QMessageBox.question(
         edit_gift_view, '重新下载', '确认重新下载服务器配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
@@ -781,18 +784,6 @@ def click_reload_data(edit_gift_view):
         database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, 0)
         database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, 0)
         giftdata.init_gift_data(edit_gift_view)
-
-
-def click_refresh_ui(edit_gift_view):
-    edit_gift_view.set_table_widget()
-    if select_mode_type == 0:
-        edit_gift_view.edit_gift_wall_mode.setChecked(True)
-        edit_gift_view.check_outputs_mode.setChecked(False)
-    else:
-        edit_gift_view.edit_gift_wall_mode.setChecked(False)
-        edit_gift_view.check_outputs_mode.setChecked(True)
-    edit_gift_view.set_select_mode()
-    edit_gift_view.set_gift_config_view()
 
 
 def click_reset_ui(edit_gift_view):

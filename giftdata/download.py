@@ -1,5 +1,3 @@
-import threading
-
 import requests
 from utils import path_utils
 from multiprocessing.pool import ThreadPool
