@@ -5,7 +5,7 @@ from copy import deepcopy
 
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
-from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog, QApplication, QStyle
 from PyQt5 import QtCore
 
 from database import database_json
@@ -449,8 +449,10 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
                 image_dialog.poster.setPixmap(pix_map)
         image_dialog.show()
         rect = self.frameGeometry()
-        image_dialog.move(rect.right() - image_dialog.width() - 20,
-                          int((rect.top() + rect.bottom() - image_dialog.frameGeometry().height()) / 2))
+        x = rect.right() - image_dialog.width() - 10
+        title_bar_height = image_dialog.style().pixelMetric(QStyle.PM_TitleBarHeight)
+        y = int((rect.top() + rect.bottom() - image_dialog.height() - title_bar_height) / 2)
+        image_dialog.move(x, y)
 
     # 下载弹框进度条更新UI
     def progress_callback(self, value):
@@ -646,6 +648,11 @@ def click_add_gift_wall(edit_gift_view):
     add_gift_view = add_gift_window.AddGiftView(edit_gift_view)
     add_gift_view.setWindowTitle("添加GiftWall-为便捷而生")
     add_gift_view.setWindowIcon(ico_utils.get_favicon_icon())
+    rect = edit_gift_view.frameGeometry()
+    x = rect.right() - add_gift_view.width() - 10
+    title_bar_height = add_gift_view.style().pixelMetric(QStyle.PM_TitleBarHeight)
+    y = int((rect.top() + rect.bottom() - add_gift_view.height() - title_bar_height) / 2)
+    add_gift_view.move(x, y)
     add_gift_view.exec()
 
 

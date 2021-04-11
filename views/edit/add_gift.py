@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(1200, 915)
-        Dialog.setMinimumSize(QtCore.QSize(1200, 915))
-        Dialog.setMaximumSize(QtCore.QSize(1200, 915))
+        Dialog.resize(1200, 900)
+        Dialog.setMinimumSize(QtCore.QSize(1200, 900))
+        Dialog.setMaximumSize(QtCore.QSize(1200, 900))
         self.formLayout = QtWidgets.QFormLayout(Dialog)
         self.formLayout.setObjectName("formLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()

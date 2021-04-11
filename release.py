@@ -1,6 +1,6 @@
 import os
 
-release_version = "广告工具1.0.6"
+release_version = "广告工具1.0.7"
 
 if __name__ == '__main__':
     os.system("pyinstaller -F --onefile -w -i .\\ico\\favicon.ico --add-data \".\\ico;ico\" .\\run.py")
