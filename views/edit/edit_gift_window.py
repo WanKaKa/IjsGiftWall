@@ -449,7 +449,7 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
                 image_dialog.poster.setPixmap(pix_map)
         image_dialog.show()
         rect = self.frameGeometry()
-        image_dialog.move(rect.right() - image_dialog.width(),
+        image_dialog.move(rect.right() - image_dialog.width() - 20,
                           int((rect.top() + rect.bottom() - image_dialog.frameGeometry().height()) / 2))
 
     # 下载弹框进度条更新UI
