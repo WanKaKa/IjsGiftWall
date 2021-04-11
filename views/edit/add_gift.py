@@ -165,8 +165,15 @@ class Ui_Dialog(object):
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
+        self.add_all = QtWidgets.QPushButton(self.frame)
+        self.add_all.setGeometry(QtCore.QRect(1010, 10, 160, 40))
+        self.add_all.setMinimumSize(QtCore.QSize(0, 0))
+        self.add_all.setStyleSheet("font: 12pt \"微软雅黑\";\n"
+"color: rgb(255, 255, 255);\n"
+"background-color: rgb(85, 85, 255);")
+        self.add_all.setObjectName("add_all")
         self.add = QtWidgets.QPushButton(self.frame)
-        self.add.setGeometry(QtCore.QRect(1010, 10, 160, 40))
+        self.add.setGeometry(QtCore.QRect(840, 10, 160, 40))
         self.add.setMinimumSize(QtCore.QSize(0, 0))
         self.add.setStyleSheet("font: 12pt \"微软雅黑\";\n"
 "color: rgb(255, 255, 255);\n"
@@ -207,4 +214,5 @@ class Ui_Dialog(object):
         self.file_name_radio_3.setText(_translate("Dialog", "RadioButton"))
         self.file_name_radio_12.setText(_translate("Dialog", "RadioButton"))
         self.file_name_radio_10.setText(_translate("Dialog", "RadioButton"))
+        self.add_all.setText(_translate("Dialog", "一键全选添加"))
         self.add.setText(_translate("Dialog", "添加"))

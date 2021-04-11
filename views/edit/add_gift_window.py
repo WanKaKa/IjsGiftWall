@@ -57,6 +57,7 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
         self.tableWidget.itemClicked.connect(self.click_table_item)
         self.tableWidget.itemDoubleClicked.connect(self.click_table_item_double)
         self.add.clicked.connect(self.click_add_gift_wall)
+        self.add_all.clicked.connect(self.click_select_all_add)
 
     def init_view(self):
         self.init_radio_button(0, self.language_radio_list, urls.LANGUAGE_LIST)
@@ -221,6 +222,10 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
         self.parent().set_table_widget_item(index, entity)
         self.parent().tableWidget.selectRow(index)
         self.set_table_widget_item_state(row, True)
+
+    def click_select_all_add(self):
+        self.tableWidget.selectAll()
+        self.click_add_gift_wall()
 
 
 def click_edit_view_radio_button(add_gift_view, type_value, radio_button_list):
