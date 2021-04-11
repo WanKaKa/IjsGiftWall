@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QDialog
 from views.dialog import progress_dialog
 from views.dialog import select_dialog
 from views.dialog import multiple_select_dialog
+from views.dialog import see_image_ui
 
 
 class ProgressDialog(QDialog, progress_dialog.Ui_Dialog):
@@ -20,4 +21,10 @@ class SelectDialog(QDialog, select_dialog.Ui_Form):
 class MultipleSelectDialog(QDialog, multiple_select_dialog.Ui_Dialog):
     def __init__(self, parent=None):
         super(MultipleSelectDialog, self).__init__(parent)
+        self.setupUi(self)
+
+
+class SeeImageDialog(QDialog, see_image_ui.Ui_Form):
+    def __init__(self, parent=None):
+        super(SeeImageDialog, self).__init__(parent)
         self.setupUi(self)

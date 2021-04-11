@@ -96,6 +96,9 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.add_gift_wall_2.clicked.connect(lambda: click_add_gift_wall(self))
         self.cancel_save.clicked.connect(lambda: click_cancel_save(self))
 
+        self.tableWidget.itemClicked.connect(self.click_table_item)
+        self.tableWidget.itemDoubleClicked.connect(self.click_table_item_double)
+
     def init_view(self):
         self.init_radio_button(self.file_name, self.file_name_radio_list, urls.XML_NAME_LIST)
         self.init_radio_button(self.language, self.language_radio_list, urls.LANGUAGE_LIST)
@@ -421,6 +424,31 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         # 切换到检查模式时，如果有选中文件，则加载
         if select_mode_type == 1:
             load_outputs_xml_file(self)
+
+    def click_table_item(self):
+        print(self.tableWidget.currentItem().text())
+
+    def click_table_item_double(self):
+        row = self.tableWidget.currentItem().row()
+        progress_dialog = dialog.SeeImageDialog(self)
+        progress_dialog.setWindowTitle("为便捷而生")
+        progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+        progress_dialog.show()
+
+        if add_gift_item_list[row].icon_image_path:
+            icon_image_path = path_utils.get_download_path() + add_gift_item_list[row].icon_image_path
+            if os.path.exists(icon_image_path):
+                pix_map = QPixmap(icon_image_path)
+                if pix_map.width() >= 180:
+                    pix_map = pix_map.scaled(160, 160, Qt.KeepAspectRatio | Qt.SmoothTransformation)
+                progress_dialog.icon.setPixmap(pix_map)
+        if add_gift_item_list[row].poster_path:
+            poster_path = path_utils.get_download_path() + add_gift_item_list[row].poster_path
+            if os.path.exists(poster_path):
+                pix_map = QPixmap(poster_path)
+                if pix_map.height() >= 800:
+                    pix_map = pix_map.scaled(720, 720, Qt.KeepAspectRatio | Qt.SmoothTransformation)
+                progress_dialog.poster.setPixmap(pix_map)
 
     # 下载弹框进度条更新UI
     def progress_callback(self, value):
