@@ -430,25 +430,27 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
 
     def click_table_item_double(self):
         row = self.tableWidget.currentItem().row()
-        progress_dialog = dialog.SeeImageDialog(self)
-        progress_dialog.setWindowTitle("为便捷而生")
-        progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
-        progress_dialog.show()
-
+        image_dialog = dialog.SeeImageDialog(self)
+        image_dialog.setWindowTitle("为便捷而生")
+        image_dialog.setWindowIcon(ico_utils.get_favicon_icon())
         if add_gift_item_list[row].icon_image_path:
             icon_image_path = path_utils.get_download_path() + add_gift_item_list[row].icon_image_path
             if os.path.exists(icon_image_path):
                 pix_map = QPixmap(icon_image_path)
                 if pix_map.width() >= 180:
                     pix_map = pix_map.scaled(160, 160, Qt.KeepAspectRatio | Qt.SmoothTransformation)
-                progress_dialog.icon.setPixmap(pix_map)
+                image_dialog.icon.setPixmap(pix_map)
         if add_gift_item_list[row].poster_path:
             poster_path = path_utils.get_download_path() + add_gift_item_list[row].poster_path
             if os.path.exists(poster_path):
                 pix_map = QPixmap(poster_path)
                 if pix_map.height() >= 800:
                     pix_map = pix_map.scaled(720, 720, Qt.KeepAspectRatio | Qt.SmoothTransformation)
-                progress_dialog.poster.setPixmap(pix_map)
+                image_dialog.poster.setPixmap(pix_map)
+        image_dialog.show()
+        rect = self.frameGeometry()
+        image_dialog.move(rect.right() - image_dialog.width(),
+                          int((rect.top() + rect.bottom() - image_dialog.frameGeometry().height()) / 2))
 
     # 下载弹框进度条更新UI
     def progress_callback(self, value):
