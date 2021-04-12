@@ -33,4 +33,4 @@ class Downloader(QObject):
 
     def run(self):
         self.downloaded_count = 0
-        ThreadPool(8).imap_unordered(self.down, self.file_path_list)
+        ThreadPool(32).imap_unordered(self.down, self.file_path_list)

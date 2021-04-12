@@ -1,4 +1,5 @@
 import os
+import time
 
 from database import database_json
 from giftdata import download, urls
@@ -26,16 +27,17 @@ class LoadConfig:
 
     def __init__(self, edit_gift_view):
         self.edit_gift_view = edit_gift_view
+        self.edit_gift_view.download_start_time = time.time()
         if get_gift_data_update_time():
             analysis_gift_data()
-            LoadIcon(edit_gift_view)
+            LoadIcon(self.edit_gift_view)
             return
-        edit_gift_view.progress_dialog = dialog.ProgressDialog(edit_gift_view)
-        edit_gift_view.progress_dialog.setWindowTitle("为便捷而生")
-        edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
-        edit_gift_view.progress_dialog.label.setText("正在下载配置文件，请稍等...")
-        edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
-        edit_gift_view.progress_dialog.show()
+        self.edit_gift_view.progress_dialog = dialog.ProgressDialog(self.edit_gift_view)
+        self.edit_gift_view.progress_dialog.setWindowTitle("为便捷而生")
+        self.edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+        self.edit_gift_view.progress_dialog.label.setText("正在下载配置文件，请稍等...")
+        self.edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
+        self.edit_gift_view.progress_dialog.show()
         file_path_list = [urls.OVERALL_XML_NAME]
         for language in urls.LANGUAGE_LIST:
             language = language + '/' if language != urls.LANGUAGE_LIST[0] else ""
@@ -57,14 +59,14 @@ class LoadIcon:
                 progress_dialog.hide()
             return
         if progress_dialog:
-            edit_gift_view.progress_dialog = progress_dialog
+            self.edit_gift_view.progress_dialog = progress_dialog
         else:
-            edit_gift_view.progress_dialog = dialog.ProgressDialog(edit_gift_view)
-        edit_gift_view.progress_dialog.setWindowTitle("为便捷而生")
-        edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
-        edit_gift_view.progress_dialog.label.setText("正在下载图片资源，请稍等...")
-        edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
-        edit_gift_view.progress_dialog.show()
+            self.edit_gift_view.progress_dialog = dialog.ProgressDialog(self.edit_gift_view)
+        self.edit_gift_view.progress_dialog.setWindowTitle("为便捷而生")
+        self.edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+        self.edit_gift_view.progress_dialog.label.setText("正在下载图片资源，请稍等...")
+        self.edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
+        self.edit_gift_view.progress_dialog.show()
         if overall_gift_entity:
             file_path_list = []
             for item in overall_gift_entity.item_list:

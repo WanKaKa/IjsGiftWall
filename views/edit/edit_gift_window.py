@@ -463,7 +463,8 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
                 # 配置表下载完成
                 if value["type"] == "config":
                     if value["success"]:
-                        print("配置表下载完成 线程名称 = %s" % threading.currentThread().name)
+                        print("配置表下载完成 线程名称 = %s 时间 = %f" %
+                              (threading.currentThread().name, time.time() - self.download_start_time))
                         database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, time.time())
                         giftdata.analysis_gift_data()
                     giftdata.LoadIcon(self, progress_dialog=self.progress_dialog)
@@ -471,7 +472,8 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
                 if value["type"] == "icon":
                     self.progress_dialog.hide()
                     if value["success"]:
-                        print("图标下载完成 线程名称 = %s" % threading.currentThread().name)
+                        print("图标下载完成 线程名称 = %s 时间 = %f" %
+                              (threading.currentThread().name, time.time() - self.download_start_time))
                         database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, time.time())
 
 
