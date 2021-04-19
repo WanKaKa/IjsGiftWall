@@ -12,7 +12,8 @@ XML_NAME_LIST = [
     "giftListCamera.xml",
     "giftListBrowser.xml",
     "giftListGeneral.xml",
-    "giftListVEditor.xml"
+    "giftListVEditor.xml",
+    "giftListGame.xml"
 ]
 # 地区
 LANGUAGE_LIST = [
