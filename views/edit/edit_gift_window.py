@@ -20,12 +20,12 @@ from giftdata.entity import GiftConfig
 select_mode_type = 0
 add_gift_item_list = []
 DEFAULT_GIFT_CONFIG_LIST = {
-    gift_xml_utils.TARGET_RATE: GiftConfig(target=gift_xml_utils.TARGET_RATE),
-    gift_xml_utils.TARGET_INTERSTITIAL: GiftConfig(target=gift_xml_utils.TARGET_INTERSTITIAL),
+    gift_xml_utils.TARGET_RATE: GiftConfig(target=gift_xml_utils.TARGET_RATE, limit='5'),
+    gift_xml_utils.TARGET_INTERSTITIAL: GiftConfig(target=gift_xml_utils.TARGET_INTERSTITIAL, count='3'),
     gift_xml_utils.TARGET_LIST: GiftConfig(target=gift_xml_utils.TARGET_LIST),
-    gift_xml_utils.TARGET_DIALOG: GiftConfig(target=gift_xml_utils.TARGET_DIALOG),
+    gift_xml_utils.TARGET_DIALOG: GiftConfig(target=gift_xml_utils.TARGET_DIALOG, limit='2'),
     gift_xml_utils.TARGET_CAROUSEL: GiftConfig(target=gift_xml_utils.TARGET_CAROUSEL, count='10000'),
-    gift_xml_utils.TARGET_SIDEBAR: GiftConfig(target=gift_xml_utils.TARGET_SIDEBAR),
+    gift_xml_utils.TARGET_SIDEBAR: GiftConfig(target=gift_xml_utils.TARGET_SIDEBAR, count='3'),
     gift_xml_utils.TARGET_WALL: GiftConfig(target=gift_xml_utils.TARGET_WALL, count=None, limit=None),
 }
 add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
