@@ -38,7 +38,7 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         self.setupUi(self)
 
         self.setWindowTitle("广告配置编辑-为便捷而生")
-        self.setWindowIcon(ico_utils.get_favicon_icon())
+        self.setWindowIcon(ico_utils.get_logo_icon())
 
         self.file_name_radio_list = [
             self.file_name_radio_1,
@@ -432,7 +432,7 @@ class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
         row = self.tableWidget.currentItem().row()
         image_dialog = dialog.SeeImageDialog(self)
         image_dialog.setWindowTitle("为便捷而生")
-        image_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+        image_dialog.setWindowIcon(ico_utils.get_logo_icon())
         if add_gift_item_list[row].icon_image_path:
             icon_image_path = path_utils.get_download_path() + add_gift_item_list[row].icon_image_path
             if os.path.exists(icon_image_path):
@@ -494,7 +494,7 @@ def click_edit_view_radio_button(edit_gift_view, label, radio_button_list):
 def click_set_select_string(edit_gift_view, string_list, label):
     out_file_dialog = dialog.SelectDialog(edit_gift_view)
     out_file_dialog.setWindowTitle("选择字符-为便捷而生")
-    out_file_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+    out_file_dialog.setWindowIcon(ico_utils.get_logo_icon())
 
     out_file_radio_button_list = [
         out_file_dialog.radioButton,
@@ -542,7 +542,7 @@ def click_get_out_file(label, out_file_dialog, out_file_radio_button_list):
 def click_set_language(edit_gift_view):
     language_dialog = dialog.MultipleSelectDialog(edit_gift_view)
     language_dialog.setWindowTitle("选择地区-为便捷而生")
-    language_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+    language_dialog.setWindowIcon(ico_utils.get_logo_icon())
 
     language_check_box_list = [
         language_dialog.checkBox,
@@ -649,7 +649,7 @@ def compare_entity(entity1, entity2):
 def click_add_gift_wall(edit_gift_view):
     add_gift_view = add_gift_window.AddGiftView(edit_gift_view)
     add_gift_view.setWindowTitle("添加GiftWall-为便捷而生")
-    add_gift_view.setWindowIcon(ico_utils.get_favicon_icon())
+    add_gift_view.setWindowIcon(ico_utils.get_logo_icon())
     rect = edit_gift_view.frameGeometry()
     x = rect.right() - add_gift_view.width() - 10
     title_bar_height = add_gift_view.style().pixelMetric(QStyle.PM_TitleBarHeight)

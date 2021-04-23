@@ -11,8 +11,8 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-def get_favicon_icon():
-    filename = resource_path(os.path.join("ico", "favicon.ico"))
+def get_logo_icon():
+    filename = resource_path(os.path.join("ico", "logo.ico"))
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(filename))
     return icon

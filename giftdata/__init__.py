@@ -34,7 +34,7 @@ class LoadConfig:
             return
         self.edit_gift_view.progress_dialog = dialog.ProgressDialog(self.edit_gift_view)
         self.edit_gift_view.progress_dialog.setWindowTitle("为便捷而生")
-        self.edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+        self.edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_logo_icon())
         self.edit_gift_view.progress_dialog.label.setText("正在下载配置文件，请稍等...")
         self.edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
         self.edit_gift_view.progress_dialog.show()
@@ -63,7 +63,7 @@ class LoadIcon:
         else:
             self.edit_gift_view.progress_dialog = dialog.ProgressDialog(self.edit_gift_view)
         self.edit_gift_view.progress_dialog.setWindowTitle("为便捷而生")
-        self.edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_favicon_icon())
+        self.edit_gift_view.progress_dialog.setWindowIcon(ico_utils.get_logo_icon())
         self.edit_gift_view.progress_dialog.label.setText("正在下载图片资源，请稍等...")
         self.edit_gift_view.progress_dialog.progressBar.setProperty("value", 0)
         self.edit_gift_view.progress_dialog.show()
