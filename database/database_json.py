@@ -24,5 +24,5 @@ def save(key, value):
     temp_data = temp_data if temp_data else {}
     temp_data[key] = value
     file = open(path_utils.get_database_path() + normal_json_name, mode='w', encoding='utf-8')
-    json.dump(temp_data, file, ensure_ascii=False)
+    json.dump(temp_data, file, indent=4, ensure_ascii=False)
     file.close()
