@@ -14,7 +14,7 @@ if __name__ == '__main__':
     height = desktop.height()
     view_ = view.edit.view.EditGiftView()
     view_.show()
-    view_.move(int((width - view_.width()) / 2), int((height - view_.height() - 100) / 2))
+    view_.move(int((width - view_.width()) / 2), int((height - view_.height()) / 2 - 30))
 
     # 初始化服务器GiftWall数据
     gift.download.init_gift_data(view_)
