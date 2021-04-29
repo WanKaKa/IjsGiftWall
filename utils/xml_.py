@@ -1,8 +1,9 @@
 import os
 import xml.dom.minidom
-from giftdata import entity
-from giftdata import urls
-from utils import path_utils
+
+import gift.entity
+import gift.urls
+import utils.path_
 
 TAG_GIFT_LIST = "giftList"
 
@@ -39,11 +40,11 @@ def analysis_overall_gift_xml(path):
         return None
     dom = xml.dom.minidom.parse(path)
     root = dom.documentElement
-    overall_gift_entity = entity.OverallGiftEntity()
+    overall_gift_entity = gift.entity.OverallGiftEntity()
 
     overall_gift_item_list = root.getElementsByTagName(TAG_GIFT)
     for item in overall_gift_item_list:
-        overall_gift_item = entity.OverallGiftItem()
+        overall_gift_item = gift.entity.OverallGiftItem()
         overall_gift_item.id = item.getAttribute(ATTRIBUTE_ID)
         # 元素
         overall_gift_item.title = analysis_xml_item(item, TAG_TITLE)
@@ -62,13 +63,13 @@ def analysis_gift_xml(path):
     if not os.path.exists(path):
         return None
     try:
-        gift_entity = entity.GiftEntity()
+        gift_entity = gift.entity.GiftEntity()
         dom = xml.dom.minidom.parse(path)
         root = dom.documentElement
         # 解析gift配置参数
         gift_config_list = root.getElementsByTagName(TAG_CONFIG)
         for config in gift_config_list:
-            gift_config = entity.GiftConfig()
+            gift_config = gift.entity.GiftConfig()
             gift_config.target = config.getAttribute(ATTRIBUTE_TARGET)
             gift_config.index = config.getAttribute(ATTRIBUTE_START_INDEX)
             gift_config.count = config.getAttribute(ATTRIBUTE_COUNT)
@@ -77,7 +78,7 @@ def analysis_gift_xml(path):
         # 解析gift数据
         gift_item_list = root.getElementsByTagName(TAG_GIFT)
         for item in gift_item_list:
-            gift_item = entity.GiftItem()
+            gift_item = gift.entity.GiftItem()
             gift_item.id = item.getAttribute(ATTRIBUTE_ID)
             # 元素
             gift_item.title = analysis_xml_item(item, TAG_TITLE)
@@ -104,7 +105,7 @@ def analysis_xml_item(content, name):
 
 def create_gift_wall_files(file_name, language_list, config_list, entity_list):
     for language in language_list:
-        dir_path = path_utils.get_outputs_path() + (language + "\\" if urls.LANGUAGE_LIST[0] != language else "")
+        dir_path = utils.path_.get_outputs() + (language + "\\" if gift.urls.LANGUAGE_LIST[0] != language else "")
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
         file = open(dir_path + file_name, mode='w', encoding='utf-8')

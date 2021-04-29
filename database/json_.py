@@ -1,16 +1,16 @@
 import os
-
-from utils import path_utils
 import json
+
+import utils.path_
 
 normal_json_name = "normal_json_name.json"
 
-KEY_GIFT_DATA_UPDATE_TIME = "key_gift_data_update_time"
-KEY_GIFT_ICON_UPDATE_TIME = "key_gift_icon_update_time"
+KEY_CONFIG_TIME = "key_config_time"
+KEY_ICON_TIME = "key_icon_time"
 
 
 def get():
-    path = path_utils.get_database_path() + normal_json_name
+    path = utils.path_.get_database() + normal_json_name
     if not os.path.exists(path):
         return None
     file = open(path, mode='r', encoding='utf-8')
@@ -23,6 +23,6 @@ def save(key, value):
     temp_data = get()
     temp_data = temp_data if temp_data else {}
     temp_data[key] = value
-    file = open(path_utils.get_database_path() + normal_json_name, mode='w', encoding='utf-8')
+    file = open(utils.path_.get_database() + normal_json_name, mode='w', encoding='utf-8')
     json.dump(temp_data, file, indent=4, ensure_ascii=False)
     file.close()

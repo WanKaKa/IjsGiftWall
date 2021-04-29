@@ -3,16 +3,16 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog
 from PyQt5 import QtCore
 
-from utils import path_utils
-from view.edit import view
-from view.add import ui
-from giftdata import download
-from giftdata import urls
+import gift.urls
+import gift.download
+import utils.path_
+import view.add.ui
+import view.edit.view
 
 
-class AddGiftView(QDialog, ui.Ui_Dialog):
+class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
     OVERALL_GIFT_WALL_FILE_NAME = "总表"
-    select_language = urls.LANGUAGE_LIST[0]
+    select_language = gift.urls.LANGUAGE_LIST[0]
     select_gift_name = OVERALL_GIFT_WALL_FILE_NAME
 
     def __init__(self, parent=None):
@@ -20,7 +20,7 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
         self.setupUi(self)
 
         self.server_gift_wall_file = [self.OVERALL_GIFT_WALL_FILE_NAME]
-        for file in urls.XML_NAME_LIST:
+        for file in gift.urls.XML_NAME_LIST:
             self.server_gift_wall_file.append(file)
         self.item_list = []
 
@@ -61,7 +61,7 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
         self.add_all.clicked.connect(self.click_select_all_add)
 
     def init_view(self):
-        self.init_radio_button(0, self.language_radio_list, urls.LANGUAGE_LIST)
+        self.init_radio_button(0, self.language_radio_list, gift.urls.LANGUAGE_LIST)
         self.init_radio_button(1, self.file_name_radio_list, self.server_gift_wall_file)
 
         self.init_table_widget()
@@ -104,16 +104,16 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
     def set_table_widget(self):
         if self.item_list:
             self.item_list.clear()
-        if download.overall_gift_entity and download.overall_gift_entity.item_list:
+        if gift.download.overall_gift_entity and gift.download.overall_gift_entity.item_list:
             if self.OVERALL_GIFT_WALL_FILE_NAME == self.select_gift_name:
-                self.item_list = download.overall_gift_entity.item_list[:]
+                self.item_list = gift.download.overall_gift_entity.item_list[:]
             else:
-                if self.select_gift_name in download.gift_entity_list[self.select_language]:
-                    gift_entity = download.gift_entity_list[self.select_language][self.select_gift_name]
+                if self.select_gift_name in gift.download.gift_entity_list[self.select_language]:
+                    gift_entity = gift.download.gift_entity_list[self.select_language][self.select_gift_name]
                     if gift_entity and gift_entity.item_list:
                         for item1 in gift_entity.item_list:
-                            for item2 in download.overall_gift_entity.item_list:
-                                if view.compare_entity(item1, item2):
+                            for item2 in gift.download.overall_gift_entity.item_list:
+                                if utils.compare_entity(item1, item2):
                                     self.item_list.append(item2)
                                     break
         if self.item_list:
@@ -134,7 +134,7 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
         self.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon = QIcon(path_utils.get_download_path() + entity.icon_image_path)
+        icon = QIcon(utils.path_.get_download() + entity.icon_image_path)
         item.setIcon(icon)
         self.tableWidget.setItem(index, 1, item)
 
@@ -158,11 +158,11 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
         item = None
         if entity.poster_path:
             item = QTableWidgetItem()
-            icon = QIcon(path_utils.get_download_path() + entity.poster_path)
+            icon = QIcon(utils.path_.get_download() + entity.poster_path)
             item.setIcon(QIcon(icon))
         self.tableWidget.setItem(index, 5, item)
 
-        self.set_table_widget_item_state(index, view.is_entity_added(entity))
+        self.set_table_widget_item_state(index, view.edit.view.is_entity_added(entity))
 
     def set_table_widget_item_state(self, index, state):
         item = QTableWidgetItem()
@@ -191,11 +191,11 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
             for row in selected_rows:
                 if self.tableWidget.item(row, 6).text():
                     delete_entity = None
-                    for entity in view.add_gift_item_list:
-                        if view.compare_entity(entity, self.item_list[row]):
+                    for entity in view.edit.view.add_gift_item_list:
+                        if utils.compare_entity(entity, self.item_list[row]):
                             delete_entity = entity
                             break
-                    view.add_gift_item_list.remove(delete_entity)
+                    view.edit.view.add_gift_item_list.remove(delete_entity)
                     self.set_table_widget_item_state(row, False)
             self.parent().set_table_widget()
             self.tableWidget.clearSelection()
@@ -214,12 +214,12 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
         self.tableWidget.clearSelection()
 
     def add_gift_item(self, row):
-        index = len(view.add_gift_item_list)
+        index = len(view.edit.view.add_gift_item_list)
         entity = self.item_list[row]
-        if view.is_entity_added(entity):
+        if view.edit.view.is_entity_added(entity):
             return
-        view.add_gift_item_list.append(entity)
-        self.parent().tableWidget.setRowCount(len(view.add_gift_item_list))
+        view.edit.view.add_gift_item_list.append(entity)
+        self.parent().tableWidget.setRowCount(len(view.edit.view.add_gift_item_list))
         self.parent().set_table_widget_item(index, entity)
         self.parent().tableWidget.selectRow(index)
         self.set_table_widget_item_state(row, True)
@@ -229,17 +229,17 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
         self.click_add_gift_wall()
 
 
-def click_edit_view_radio_button(add_gift_view, type_value, radio_button_list):
+def click_edit_view_radio_button(view_, type_value, radio_button_list):
     if radio_button_list:
         for radio_button in radio_button_list:
             if radio_button.isChecked():
                 if type_value == 0:
-                    if add_gift_view.select_language == radio_button.text():
+                    if view_.select_language == radio_button.text():
                         return
-                    add_gift_view.select_language = radio_button.text()
+                    view_.select_language = radio_button.text()
                 else:
-                    if add_gift_view.select_gift_name == radio_button.text():
+                    if view_.select_gift_name == radio_button.text():
                         return
-                    add_gift_view.select_gift_name = radio_button.text()
-        print("选择 文件夹 = %s 文件名 = %s" % (add_gift_view.select_language, add_gift_view.select_gift_name))
-        add_gift_view.set_table_widget()
+                    view_.select_gift_name = radio_button.text()
+        print("选择 文件夹 = %s 文件名 = %s" % (view_.select_language, view_.select_gift_name))
+        view_.set_table_widget()

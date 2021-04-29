@@ -1,7 +1,9 @@
 import requests
-from utils import path_utils
+
 from multiprocessing.pool import ThreadPool
 from PyQt5.QtCore import QObject, pyqtSignal
+
+import utils.path_
 
 
 class Downloader(QObject):
@@ -21,7 +23,7 @@ class Downloader(QObject):
         try:
             file_url = self.server_url + file_path
             r = requests.get(file_url)
-            with open(path_utils.get_download_path() + file_path, "wb+") as fp:
+            with open(utils.path_.get_download() + file_path, "wb+") as fp:
                 fp.write(r.content)
         except Exception as e:
             self.downloaded_success = False
