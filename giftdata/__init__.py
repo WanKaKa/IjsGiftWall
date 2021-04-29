@@ -5,7 +5,7 @@ from database import database_json
 from giftdata import download, urls
 from giftdata.download import Downloader
 from utils import gift_xml_utils, path_utils, ico_utils
-from views import dialog
+from view import dialog
 
 gift_entity_list = {
     urls.LANGUAGE_LIST[0]: {},

@@ -4,7 +4,7 @@ from PyQt5.QtCore import QCoreApplication, Qt
 
 import giftdata
 from PyQt5.QtWidgets import QApplication
-from views import edit
+from view import edit
 
 if __name__ == '__main__':
     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)

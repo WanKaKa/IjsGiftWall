@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog
 from PyQt5 import QtCore
 
 from utils import path_utils
-from views.edit import add_gift, edit_gift_window
+from view.edit import add_gift, edit_gift_window
 import giftdata
 from giftdata import urls
 

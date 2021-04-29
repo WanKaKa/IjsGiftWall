@@ -1,10 +1,10 @@
 from PyQt5.QtCore import QEvent
 from PyQt5.QtWidgets import QDialog, QApplication
 
-from views.dialog import progress_dialog
-from views.dialog import select_dialog
-from views.dialog import multiple_select_dialog
-from views.dialog import see_image_ui
+from view.dialog import progress_dialog
+from view.dialog import select_dialog
+from view.dialog import multiple_select_dialog
+from view.dialog import see_image_ui
 
 
 class ProgressDialog(QDialog, progress_dialog.Ui_Dialog):

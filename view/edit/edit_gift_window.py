@@ -10,9 +10,9 @@ from PyQt5 import QtCore
 
 from database import database_json
 from utils import path_utils, ico_utils, gift_xml_utils, kevin_utils
-from views.edit import edit_gift_ui, add_gift_window
+from view.edit import edit_gift_ui, add_gift_window
 import giftdata
-from views import dialog
+from view import dialog
 from giftdata import urls
 from giftdata.entity import GiftConfig
 
