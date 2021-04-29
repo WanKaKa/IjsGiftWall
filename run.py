@@ -10,7 +10,7 @@ if __name__ == '__main__':
     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)
     desktop = app.desktop()
-    edit_gift_view = edit.edit_gift_window.EditGiftView()
+    edit_gift_view = edit.view.EditGiftView()
     edit_gift_view.show()
 
     # 初始化服务器GiftWall数据

@@ -5,14 +5,15 @@ from copy import deepcopy
 
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
-from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog, QApplication, QStyle
+from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog, QStyle
 from PyQt5 import QtCore
 
 from database import database_json
 from utils import path_utils, ico_utils, gift_xml_utils, kevin_utils
-from view.edit import edit_gift_ui, add_gift_window
-import giftdata
+from view.edit import ui
+from view.add import view
 from view import dialog
+import giftdata
 from giftdata import urls
 from giftdata.entity import GiftConfig
 
@@ -32,7 +33,7 @@ add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
 outputs_dir_list = []
 
 
-class EditGiftView(QWidget, edit_gift_ui.Ui_Form):
+class EditGiftView(QWidget, ui.Ui_Form):
     def __init__(self, parent=None):
         super(EditGiftView, self).__init__(parent)
         self.setupUi(self)
@@ -492,7 +493,7 @@ def click_edit_view_radio_button(edit_gift_view, label, radio_button_list):
 
 
 def click_set_select_string(edit_gift_view, string_list, label):
-    out_file_dialog = dialog.SelectDialog(edit_gift_view)
+    out_file_dialog = dialog.SingleSelectDialog(edit_gift_view)
     out_file_dialog.setWindowTitle("选择字符-为便捷而生")
     out_file_dialog.setWindowIcon(ico_utils.get_logo_icon())
 
@@ -647,7 +648,7 @@ def compare_entity(entity1, entity2):
 
 
 def click_add_gift_wall(edit_gift_view):
-    add_gift_view = add_gift_window.AddGiftView(edit_gift_view)
+    add_gift_view = view.AddGiftView(edit_gift_view)
     add_gift_view.setWindowTitle("添加GiftWall-为便捷而生")
     add_gift_view.setWindowIcon(ico_utils.get_logo_icon())
     rect = edit_gift_view.frameGeometry()

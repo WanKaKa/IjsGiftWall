@@ -4,12 +4,13 @@ from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog
 from PyQt5 import QtCore
 
 from utils import path_utils
-from view.edit import add_gift, edit_gift_window
+from view.edit import view
+from view.add import ui
 import giftdata
 from giftdata import urls
 
 
-class AddGiftView(QDialog, add_gift.Ui_Dialog):
+class AddGiftView(QDialog, ui.Ui_Dialog):
     OVERALL_GIFT_WALL_FILE_NAME = "总表"
     select_language = urls.LANGUAGE_LIST[0]
     select_gift_name = OVERALL_GIFT_WALL_FILE_NAME
@@ -112,7 +113,7 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
                     if gift_entity and gift_entity.item_list:
                         for item1 in gift_entity.item_list:
                             for item2 in giftdata.overall_gift_entity.item_list:
-                                if edit_gift_window.compare_entity(item1, item2):
+                                if view.compare_entity(item1, item2):
                                     self.item_list.append(item2)
                                     break
         if self.item_list:
@@ -161,7 +162,7 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
             item.setIcon(QIcon(icon))
         self.tableWidget.setItem(index, 5, item)
 
-        self.set_table_widget_item_state(index, edit_gift_window.is_entity_added(entity))
+        self.set_table_widget_item_state(index, view.is_entity_added(entity))
 
     def set_table_widget_item_state(self, index, state):
         item = QTableWidgetItem()
@@ -190,11 +191,11 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
             for row in selected_rows:
                 if self.tableWidget.item(row, 6).text():
                     delete_entity = None
-                    for entity in edit_gift_window.add_gift_item_list:
-                        if edit_gift_window.compare_entity(entity, self.item_list[row]):
+                    for entity in view.add_gift_item_list:
+                        if view.compare_entity(entity, self.item_list[row]):
                             delete_entity = entity
                             break
-                    edit_gift_window.add_gift_item_list.remove(delete_entity)
+                    view.add_gift_item_list.remove(delete_entity)
                     self.set_table_widget_item_state(row, False)
             self.parent().set_table_widget()
             self.tableWidget.clearSelection()
@@ -213,12 +214,12 @@ class AddGiftView(QDialog, add_gift.Ui_Dialog):
         self.tableWidget.clearSelection()
 
     def add_gift_item(self, row):
-        index = len(edit_gift_window.add_gift_item_list)
+        index = len(view.add_gift_item_list)
         entity = self.item_list[row]
-        if edit_gift_window.is_entity_added(entity):
+        if view.is_entity_added(entity):
             return
-        edit_gift_window.add_gift_item_list.append(entity)
-        self.parent().tableWidget.setRowCount(len(edit_gift_window.add_gift_item_list))
+        view.add_gift_item_list.append(entity)
+        self.parent().tableWidget.setRowCount(len(view.add_gift_item_list))
         self.parent().set_table_widget_item(index, entity)
         self.parent().tableWidget.selectRow(index)
         self.set_table_widget_item_state(row, True)

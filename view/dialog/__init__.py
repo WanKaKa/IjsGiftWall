@@ -2,9 +2,9 @@ from PyQt5.QtCore import QEvent
 from PyQt5.QtWidgets import QDialog, QApplication
 
 from view.dialog import progress_dialog
-from view.dialog import select_dialog
+from view.dialog import single_select_dialog
 from view.dialog import multiple_select_dialog
-from view.dialog import see_image_ui
+from view.dialog import see_image_dialog
 
 
 class ProgressDialog(QDialog, progress_dialog.Ui_Dialog):
@@ -13,9 +13,9 @@ class ProgressDialog(QDialog, progress_dialog.Ui_Dialog):
         self.setupUi(self)
 
 
-class SelectDialog(QDialog, select_dialog.Ui_Form):
+class SingleSelectDialog(QDialog, single_select_dialog.Ui_Form):
     def __init__(self, parent=None):
-        super(SelectDialog, self).__init__(parent)
+        super(SingleSelectDialog, self).__init__(parent)
         self.setupUi(self)
 
 
@@ -25,7 +25,7 @@ class MultipleSelectDialog(QDialog, multiple_select_dialog.Ui_Dialog):
         self.setupUi(self)
 
 
-class SeeImageDialog(QDialog, see_image_ui.Ui_Form):
+class SeeImageDialog(QDialog, see_image_dialog.Ui_Form):
     def __init__(self, parent=None):
         super(SeeImageDialog, self).__init__(parent)
         self.setupUi(self)
