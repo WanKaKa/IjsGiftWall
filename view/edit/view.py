@@ -13,7 +13,7 @@ from utils import path_utils, ico_utils, gift_xml_utils, kevin_utils
 from view.edit import ui
 from view.add import view
 from view import dialog
-import giftdata
+from giftdata import download
 from giftdata import urls
 from giftdata.entity import GiftConfig
 
@@ -40,6 +40,7 @@ class EditGiftView(QWidget, ui.Ui_Form):
 
         self.setWindowTitle("广告配置编辑-为便捷而生")
         self.setWindowIcon(ico_utils.get_logo_icon())
+        self.progress_dialog = dialog.ProgressDialog(self)
 
         self.file_name_radio_list = [
             self.file_name_radio_1,
@@ -455,6 +456,16 @@ class EditGiftView(QWidget, ui.Ui_Form):
         y = int((rect.top() + rect.bottom() - image_dialog.height() - title_bar_height) / 2)
         image_dialog.move(x, y)
 
+    def show_progress_dialog(self, title="为便捷而生", message="正在下载，请稍等..."):
+        self.progress_dialog.setWindowTitle(title)
+        self.progress_dialog.setWindowIcon(ico_utils.get_logo_icon())
+        self.progress_dialog.label.setText(message)
+        self.progress_dialog.progressBar.setProperty("value", 0)
+        self.progress_dialog.show()
+
+    def hide_progress_dialog(self):
+        self.progress_dialog.hide()
+
     # 下载弹框进度条更新UI
     def progress_callback(self, value):
         if self.progress_dialog:
@@ -467,11 +478,11 @@ class EditGiftView(QWidget, ui.Ui_Form):
                         print("配置表下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
                         database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, time.time())
-                        giftdata.analysis_gift_data()
-                    giftdata.LoadIcon(self, progress_dialog=self.progress_dialog)
+                        download.analysis_gift_data()
+                    download.DownloadIcon(self)
                 # 图标下载完成
                 if value["type"] == "icon":
-                    self.progress_dialog.hide()
+                    self.hide_progress_dialog()
                     if value["success"]:
                         print("图标下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
@@ -599,7 +610,7 @@ def click_reload_data_config(edit_gift_view):
         edit_gift_view, '重新下载', '确认重新下载服务器配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
     if reply == QMessageBox.Yes:
         database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, 0)
-        giftdata.init_gift_data(edit_gift_view)
+        download.init_gift_data(edit_gift_view)
 
 
 def click_reload_data(edit_gift_view):
@@ -608,7 +619,7 @@ def click_reload_data(edit_gift_view):
     if reply == QMessageBox.Yes:
         database_json.save(database_json.KEY_GIFT_DATA_UPDATE_TIME, 0)
         database_json.save(database_json.KEY_GIFT_ICON_UPDATE_TIME, 0)
-        giftdata.init_gift_data(edit_gift_view)
+        download.init_gift_data(edit_gift_view)
 
 
 def click_reset_ui(edit_gift_view):
@@ -680,11 +691,11 @@ def load_signal_xml_file(edit_gift_view, path, tip_enable=True):
         global add_gift_config_list
         add_gift_item_list.clear()
         add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
-        if giftdata.overall_gift_entity and giftdata.overall_gift_entity.item_list:
+        if download.overall_gift_entity and download.overall_gift_entity.item_list:
             if gift_entity:
                 if gift_entity.item_list:
                     for item1 in gift_entity.item_list:
-                        for item2 in giftdata.overall_gift_entity.item_list:
+                        for item2 in download.overall_gift_entity.item_list:
                             if compare_entity(item1, item2):
                                 add_gift_item_list.append(item2)
                 if gift_entity.config_list:

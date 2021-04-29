@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtCore import QCoreApplication, Qt
 
-import giftdata
+from giftdata import download
 from PyQt5.QtWidgets import QApplication
 from view import edit
 
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     edit_gift_view.show()
 
     # 初始化服务器GiftWall数据
-    giftdata.init_gift_data(edit_gift_view)
+    download.init_gift_data(edit_gift_view)
 
     edit_gift_view.init_view()
     sys.exit(app.exec_())

@@ -6,7 +6,7 @@ from PyQt5 import QtCore
 from utils import path_utils
 from view.edit import view
 from view.add import ui
-import giftdata
+from giftdata import download
 from giftdata import urls
 
 
@@ -104,15 +104,15 @@ class AddGiftView(QDialog, ui.Ui_Dialog):
     def set_table_widget(self):
         if self.item_list:
             self.item_list.clear()
-        if giftdata.overall_gift_entity and giftdata.overall_gift_entity.item_list:
+        if download.overall_gift_entity and download.overall_gift_entity.item_list:
             if self.OVERALL_GIFT_WALL_FILE_NAME == self.select_gift_name:
-                self.item_list = giftdata.overall_gift_entity.item_list[:]
+                self.item_list = download.overall_gift_entity.item_list[:]
             else:
-                if self.select_gift_name in giftdata.gift_entity_list[self.select_language]:
-                    gift_entity = giftdata.gift_entity_list[self.select_language][self.select_gift_name]
+                if self.select_gift_name in download.gift_entity_list[self.select_language]:
+                    gift_entity = download.gift_entity_list[self.select_language][self.select_gift_name]
                     if gift_entity and gift_entity.item_list:
                         for item1 in gift_entity.item_list:
-                            for item2 in giftdata.overall_gift_entity.item_list:
+                            for item2 in download.overall_gift_entity.item_list:
                                 if view.compare_entity(item1, item2):
                                     self.item_list.append(item2)
                                     break
