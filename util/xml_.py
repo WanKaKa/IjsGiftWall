@@ -146,32 +146,32 @@ def write_config_item(file, config):
         file.write("\n")
 
 
-def write_entity_item(file, entity_value):
-    value = "    <" + TAG_GIFT + " " + ATTRIBUTE_ID + "=\"" + entity_value.id + "\">"
+def write_entity_item(file, entity_):
+    value = "    <" + TAG_GIFT + " " + ATTRIBUTE_ID + "=\"" + entity_.id + "\">"
     value += "\n"
-    if entity_value.title:
-        title = entity_value.title
+    if entity_.title:
+        title = entity_.title
         if isinstance(title, str):
             title = title.replace("&", "&amp;")
         value += "        <" + TAG_TITLE + ">" + title + "</" + TAG_TITLE + ">"
         value += "\n"
-    if entity_value.detailed:
-        value += "        <" + TAG_DETAILED + ">" + entity_value.detailed + "</" + TAG_DETAILED + ">"
+    if entity_.detailed:
+        value += "        <" + TAG_DETAILED + ">" + entity_.detailed + "</" + TAG_DETAILED + ">"
         value += "\n"
-    if entity_value.icon_image_path:
-        value += "        <" + TAG_ICON_PATH + ">" + entity_value.icon_image_path + "</" + TAG_ICON_PATH + ">"
+    if entity_.icon_image_path:
+        value += "        <" + TAG_ICON_PATH + ">" + entity_.icon_image_path + "</" + TAG_ICON_PATH + ">"
         value += "\n"
-    if entity_value.package_name:
-        value += "        <" + TAG_PACKAGE_NAME + ">" + entity_value.package_name + "</" + TAG_PACKAGE_NAME + ">"
+    if entity_.package_name:
+        value += "        <" + TAG_PACKAGE_NAME + ">" + entity_.package_name + "</" + TAG_PACKAGE_NAME + ">"
         value += "\n"
-    if entity_value.poster_path:
-        value += "        <" + TAG_POSTER_PATH + ">" + entity_value.poster_path + "</" + TAG_POSTER_PATH + ">"
+    if entity_.poster_path:
+        value += "        <" + TAG_POSTER_PATH + ">" + entity_.poster_path + "</" + TAG_POSTER_PATH + ">"
         value += "\n"
-    if entity_value.market_url:
-        value += "        <" + TAG_MARKET_URL + ">" + entity_value.market_url + "</" + TAG_MARKET_URL + ">"
+    if entity_.market_url:
+        value += "        <" + TAG_MARKET_URL + ">" + entity_.market_url + "</" + TAG_MARKET_URL + ">"
         value += "\n"
-    if entity_value.app_type:
-        value += "        <" + TAG_APP_TYPE + ">" + entity_value.app_type + "</" + TAG_APP_TYPE + ">"
+    if entity_.app_type:
+        value += "        <" + TAG_APP_TYPE + ">" + entity_.app_type + "</" + TAG_APP_TYPE + ">"
         value += "\n"
     value += "    </" + TAG_GIFT + ">"
     value += "\n"
