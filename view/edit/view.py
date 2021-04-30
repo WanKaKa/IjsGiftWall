@@ -8,13 +8,9 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
 from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog, QStyle
 from PyQt5 import QtCore
 
-import database.json_
-import gift.entity
-import gift.urls
-import gift.download
-import utils.xml_
-import utils.path_
-import utils.icon_
+from database import json_
+from gift import urls, download, entity
+from util import xml_, path_, icon, utils
 import view.add.view
 import view.edit.ui
 import view.dialog
@@ -23,13 +19,13 @@ import view.dialog
 select_mode_type = 0
 add_gift_item_list = []
 DEFAULT_GIFT_CONFIG_LIST = {
-    utils.xml_.TARGET_RATE: gift.entity.GiftConfig(target=utils.xml_.TARGET_RATE, limit='5'),
-    utils.xml_.TARGET_INTERSTITIAL: gift.entity.GiftConfig(target=utils.xml_.TARGET_INTERSTITIAL, count='3'),
-    utils.xml_.TARGET_LIST: gift.entity.GiftConfig(target=utils.xml_.TARGET_LIST),
-    utils.xml_.TARGET_DIALOG: gift.entity.GiftConfig(target=utils.xml_.TARGET_DIALOG, limit='2'),
-    utils.xml_.TARGET_CAROUSEL: gift.entity.GiftConfig(target=utils.xml_.TARGET_CAROUSEL, count='10000'),
-    utils.xml_.TARGET_SIDEBAR: gift.entity.GiftConfig(target=utils.xml_.TARGET_SIDEBAR, count='3'),
-    utils.xml_.TARGET_WALL: gift.entity.GiftConfig(target=utils.xml_.TARGET_WALL, count=None, limit=None),
+    xml_.TARGET_RATE: entity.GiftConfig(target=xml_.TARGET_RATE, limit='5'),
+    xml_.TARGET_INTERSTITIAL: entity.GiftConfig(target=xml_.TARGET_INTERSTITIAL, count='3'),
+    xml_.TARGET_LIST: entity.GiftConfig(target=xml_.TARGET_LIST),
+    xml_.TARGET_DIALOG: entity.GiftConfig(target=xml_.TARGET_DIALOG, limit='2'),
+    xml_.TARGET_CAROUSEL: entity.GiftConfig(target=xml_.TARGET_CAROUSEL, count='10000'),
+    xml_.TARGET_SIDEBAR: entity.GiftConfig(target=xml_.TARGET_SIDEBAR, count='3'),
+    xml_.TARGET_WALL: entity.GiftConfig(target=xml_.TARGET_WALL, count=None, limit=None),
 }
 add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
 outputs_dir_list = []
@@ -41,7 +37,7 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
         self.setupUi(self)
 
         self.setWindowTitle("广告配置编辑-为便捷而生")
-        self.setWindowIcon(utils.icon_.get_logo())
+        self.setWindowIcon(icon.get_logo())
         self.progress_dialog = view.dialog.ProgressDialog(self)
 
         self.file_name_radio_list = [
@@ -73,11 +69,11 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
             self.language_radio_12,
         ]
 
-        pix_map = QPixmap(utils.icon_.resource_path(os.path.join("ico", "logo_big.png")))
+        pix_map = QPixmap(icon.resource_path(os.path.join("ico", "logo_big.png")))
         self.ijoysoft_icon.setPixmap(pix_map)
 
         self.tableWidget.keyPressEvent = self.key_press_event
-        self.pushButton.clicked.connect(lambda: click_set_select_string(self, gift.urls.XML_NAME_LIST, self.file_name))
+        self.pushButton.clicked.connect(lambda: click_set_select_string(self, urls.XML_NAME_LIST, self.file_name))
         self.pushButton_2.clicked.connect(lambda: click_set_language(self))
 
         self.edit_gift_wall_mode.toggled.connect(lambda: self.click_switch_mode())
@@ -91,8 +87,8 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
         self.import_gift_wall.clicked.connect(lambda: click_import_gift_wall(self))
         self.create_gift_wall_file.clicked.connect(self.click_create_gift_wall_file)
 
-        self.open_outputs.clicked.connect(lambda: os.system("start " + utils.path_.get_outputs()))
-        self.open_outputs_2.clicked.connect(lambda: os.system("start " + utils.path_.get_outputs()))
+        self.open_outputs.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
+        self.open_outputs_2.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
         self.clear_outputs.clicked.connect(self.delete_dir)
         self.clear_outputs_2.clicked.connect(self.delete_dir)
 
@@ -104,8 +100,8 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
         self.tableWidget.itemDoubleClicked.connect(self.click_table_item_double)
 
     def init_view(self):
-        self.init_radio_button(self.file_name, self.file_name_radio_list, gift.urls.XML_NAME_LIST)
-        self.init_radio_button(self.language, self.language_radio_list, gift.urls.LANGUAGE_LIST)
+        self.init_radio_button(self.file_name, self.file_name_radio_list, urls.XML_NAME_LIST)
+        self.init_radio_button(self.language, self.language_radio_list, urls.LANGUAGE_LIST)
         self.init_table_widget()
         self.set_table_widget()
         if select_mode_type == 0:
@@ -154,8 +150,8 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
             else:
                 radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(255, 0, 0);")
         for radio in self.file_name_radio_list:
-            if not self.language.text() or os.path.exists(utils.path_.get_outputs() + (
-                    self.language.text() if self.language.text() != gift.urls.LANGUAGE_LIST[
+            if not self.language.text() or os.path.exists(path_.get_outputs() + (
+                    self.language.text() if self.language.text() != urls.LANGUAGE_LIST[
                         0] else "") + "\\" + radio.text()):
                 radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(0, 0, 0);")
             else:
@@ -207,78 +203,78 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
                     self.file_name.setText(radio.text())
             self.set_radio_button_color()
 
-    def set_table_widget_item(self, index, entity):
+    def set_table_widget_item(self, index, entity_):
         self.tableWidget.setRowHeight(index, 50)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 18))
         item.setForeground(QBrush(QColor(85, 85, 255)))
-        entity.id = str(index + 1)
-        item.setText(entity.id)
+        entity_.id = str(index + 1)
+        item.setText(entity_.id)
         item.setTextAlignment(Qt.AlignCenter)
         self.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon = QIcon(utils.path_.get_download() + entity.icon_image_path)
-        item.setIcon(icon)
+        icon_ = QIcon(path_.get_download() + entity_.icon_image_path)
+        item.setIcon(icon_)
         self.tableWidget.setItem(index, 1, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 12))
         item.setForeground(QBrush(QColor(85, 85, 255)))
-        item.setText(entity.project_name)
+        item.setText(entity_.project_name)
         self.tableWidget.setItem(index, 2, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 8))
-        item.setText("产品名: " + (entity.title if entity.title else "") +
-                     "\n类   型: " + (entity.app_type if entity.app_type else ""))
+        item.setText("产品名: " + (entity_.title if entity_.title else "") +
+                     "\n类   型: " + (entity_.app_type if entity_.app_type else ""))
         self.tableWidget.setItem(index, 3, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 8))
-        item.setText(entity.package_name)
+        item.setText(entity_.package_name)
         self.tableWidget.setItem(index, 4, item)
 
         item = None
-        if entity.poster_path:
+        if entity_.poster_path:
             item = QTableWidgetItem()
-            icon = QIcon(utils.path_.get_download() + entity.poster_path)
-            item.setIcon(QIcon(icon))
+            icon_ = QIcon(path_.get_download() + entity_.poster_path)
+            item.setIcon(QIcon(icon_))
         self.tableWidget.setItem(index, 5, item)
 
     def set_gift_config_view(self):
-        value = add_gift_config_list[utils.xml_.TARGET_RATE]
+        value = add_gift_config_list[xml_.TARGET_RATE]
         self.rate_index.setText(value.index)
         self.rate_count.setText(value.count)
         self.rate_limit.setText(value.limit)
 
-        value = add_gift_config_list[utils.xml_.TARGET_INTERSTITIAL]
+        value = add_gift_config_list[xml_.TARGET_INTERSTITIAL]
         self.interstitial_index.setText(value.index)
         self.interstitial_count.setText(value.count)
         self.interstitial_limit.setText(value.limit)
 
-        value = add_gift_config_list[utils.xml_.TARGET_LIST]
+        value = add_gift_config_list[xml_.TARGET_LIST]
         self.list_index.setText(value.index)
         self.list_count.setText(value.count)
         self.list_limit.setText(value.limit)
 
-        value = add_gift_config_list[utils.xml_.TARGET_DIALOG]
+        value = add_gift_config_list[xml_.TARGET_DIALOG]
         self.dialog_index.setText(value.index)
         self.dialog_count.setText(value.count)
         self.dialog_limit.setText(value.limit)
 
-        value = add_gift_config_list[utils.xml_.TARGET_CAROUSEL]
+        value = add_gift_config_list[xml_.TARGET_CAROUSEL]
         self.carousel_index.setText(value.index)
         self.carousel_count.setText(value.count)
         self.carousel_limit.setText(value.limit)
 
-        value = add_gift_config_list[utils.xml_.TARGET_SIDEBAR]
+        value = add_gift_config_list[xml_.TARGET_SIDEBAR]
         self.sidebar_index.setText(value.index)
         self.sidebar_count.setText(value.count)
         self.sidebar_limit.setText(value.limit)
 
-        value = add_gift_config_list[utils.xml_.TARGET_WALL]
+        value = add_gift_config_list[xml_.TARGET_WALL]
         self.wall_index.setText(value.index)
 
     def key_press_event(self, event):
@@ -305,9 +301,9 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
         if len(selected_rows) == 1:
             row = selected_rows[0]
             new_row = max(selected_rows[0] - 1, 0) if up else min(row + 1, len(add_gift_item_list) - 1)
-            entity = add_gift_item_list[row]
-            add_gift_item_list.remove(entity)
-            add_gift_item_list.insert(new_row, entity)
+            entity_ = add_gift_item_list[row]
+            add_gift_item_list.remove(entity_)
+            add_gift_item_list.insert(new_row, entity_)
             self.set_table_widget_item(row, add_gift_item_list[row])
             self.set_table_widget_item(new_row, add_gift_item_list[new_row])
             self.tableWidget.selectRow(new_row)
@@ -331,7 +327,7 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
         if not self.set_gift_config_list():
             QMessageBox.information(self, '提示', 'GiftWall配置输入不正确!')
             return
-        utils.xml_.create_gift_wall_files(
+        xml_.create_gift_wall_files(
             self.file_name.text(), self.language.text().split(","), add_gift_config_list, add_gift_item_list)
         # 每次生成文件后，更新输出文件夹中的文件夹集合
         self.set_radio_button_color()
@@ -340,45 +336,45 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
     def set_gift_config_list(self):
         if not self.is_gift_config_valid():
             return False
-        value = add_gift_config_list[utils.xml_.TARGET_RATE]
+        value = add_gift_config_list[xml_.TARGET_RATE]
         value.index = self.rate_index.text()
         value.count = self.rate_count.text()
         value.limit = self.rate_limit.text()
-        add_gift_config_list[utils.xml_.TARGET_RATE] = value
+        add_gift_config_list[xml_.TARGET_RATE] = value
 
-        value = add_gift_config_list[utils.xml_.TARGET_INTERSTITIAL]
+        value = add_gift_config_list[xml_.TARGET_INTERSTITIAL]
         value.index = self.interstitial_index.text()
         value.count = self.interstitial_count.text()
         value.limit = self.interstitial_limit.text()
-        add_gift_config_list[utils.xml_.TARGET_INTERSTITIAL] = value
+        add_gift_config_list[xml_.TARGET_INTERSTITIAL] = value
 
-        value = add_gift_config_list[utils.xml_.TARGET_LIST]
+        value = add_gift_config_list[xml_.TARGET_LIST]
         value.index = self.list_index.text()
         value.count = self.list_count.text()
         value.limit = self.list_limit.text()
-        add_gift_config_list[utils.xml_.TARGET_LIST] = value
+        add_gift_config_list[xml_.TARGET_LIST] = value
 
-        value = add_gift_config_list[utils.xml_.TARGET_DIALOG]
+        value = add_gift_config_list[xml_.TARGET_DIALOG]
         value.index = self.dialog_index.text()
         value.count = self.dialog_count.text()
         value.limit = self.dialog_limit.text()
-        add_gift_config_list[utils.xml_.TARGET_DIALOG] = value
+        add_gift_config_list[xml_.TARGET_DIALOG] = value
 
-        value = add_gift_config_list[utils.xml_.TARGET_CAROUSEL]
+        value = add_gift_config_list[xml_.TARGET_CAROUSEL]
         value.index = self.carousel_index.text()
         value.count = self.carousel_count.text()
         value.limit = self.carousel_limit.text()
-        add_gift_config_list[utils.xml_.TARGET_CAROUSEL] = value
+        add_gift_config_list[xml_.TARGET_CAROUSEL] = value
 
-        value = add_gift_config_list[utils.xml_.TARGET_SIDEBAR]
+        value = add_gift_config_list[xml_.TARGET_SIDEBAR]
         value.index = self.sidebar_index.text()
         value.count = self.sidebar_count.text()
         value.limit = self.sidebar_limit.text()
-        add_gift_config_list[utils.xml_.TARGET_SIDEBAR] = value
+        add_gift_config_list[xml_.TARGET_SIDEBAR] = value
 
-        value = add_gift_config_list[utils.xml_.TARGET_WALL]
+        value = add_gift_config_list[xml_.TARGET_WALL]
         value.index = self.wall_index.text()
-        add_gift_config_list[utils.xml_.TARGET_WALL] = value
+        add_gift_config_list[xml_.TARGET_WALL] = value
         return True
 
     def is_gift_config_valid(self):
@@ -412,7 +408,7 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
         reply = QMessageBox.question(
             self, '清空Outputs', '确定清空Outputs吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            utils.delete_dir(utils.path_.get_outputs())
+            utils.delete_dir(path_.get_outputs())
             self.set_radio_button_color()
             load_outputs_xml_file(self)
             QMessageBox.information(self, '提示', 'Outputs已清空!')
@@ -436,16 +432,16 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
         row = self.tableWidget.currentItem().row()
         image_dialog = view.dialog.SeeImageDialog(self)
         image_dialog.setWindowTitle("为便捷而生")
-        image_dialog.setWindowIcon(utils.icon_.get_logo())
+        image_dialog.setWindowIcon(icon.get_logo())
         if add_gift_item_list[row].icon_image_path:
-            icon_image_path = utils.path_.get_download() + add_gift_item_list[row].icon_image_path
+            icon_image_path = path_.get_download() + add_gift_item_list[row].icon_image_path
             if os.path.exists(icon_image_path):
                 pix_map = QPixmap(icon_image_path)
                 if pix_map.width() >= 180:
                     pix_map = pix_map.scaled(160, 160, Qt.KeepAspectRatio | Qt.SmoothTransformation)
                 image_dialog.icon.setPixmap(pix_map)
         if add_gift_item_list[row].poster_path:
-            poster_path = utils.path_.get_download() + add_gift_item_list[row].poster_path
+            poster_path = path_.get_download() + add_gift_item_list[row].poster_path
             if os.path.exists(poster_path):
                 pix_map = QPixmap(poster_path)
                 if pix_map.height() >= 800:
@@ -460,7 +456,7 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
 
     def show_progress_dialog(self, title="为便捷而生", message="正在下载，请稍等..."):
         self.progress_dialog.setWindowTitle(title)
-        self.progress_dialog.setWindowIcon(utils.icon_.get_logo())
+        self.progress_dialog.setWindowIcon(icon.get_logo())
         self.progress_dialog.label.setText(message)
         self.progress_dialog.progressBar.setProperty("value", 0)
         self.progress_dialog.show()
@@ -479,16 +475,16 @@ class EditGiftView(QWidget, view.edit.ui.Ui_Form):
                     if value["success"]:
                         print("配置表下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
-                        database.json_.save(database.json_.KEY_CONFIG_TIME, time.time())
-                        gift.download.analysis_gift_data()
-                    gift.download.DownloadIcon(self)
+                        json_.put_config_download_time(time.time())
+                        download.analysis_gift_data()
+                    download.DownloadIcon(self)
                 # 图标下载完成
                 if value["type"] == "icon":
                     self.hide_progress_dialog()
                     if value["success"]:
                         print("图标下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
-                        database.json_.save(database.json_.KEY_ICON_TIME, time.time())
+                        json_.put_icon_download_time(time.time())
 
 
 def click_edit_view_radio_button(view_, label, radio_button_list):
@@ -508,7 +504,7 @@ def click_edit_view_radio_button(view_, label, radio_button_list):
 def click_set_select_string(view_, string_list, label):
     out_file_dialog = view.dialog.SingleSelectDialog(view_)
     out_file_dialog.setWindowTitle("选择字符-为便捷而生")
-    out_file_dialog.setWindowIcon(utils.icon_.get_logo())
+    out_file_dialog.setWindowIcon(icon.get_logo())
 
     out_file_radio_button_list = [
         out_file_dialog.radioButton,
@@ -556,7 +552,7 @@ def click_get_out_file(label, out_file_dialog, out_file_radio_button_list):
 def click_set_language(view_):
     language_dialog = view.dialog.MultipleSelectDialog(view_)
     language_dialog.setWindowTitle("选择地区-为便捷而生")
-    language_dialog.setWindowIcon(utils.icon_.get_logo())
+    language_dialog.setWindowIcon(icon.get_logo())
 
     language_check_box_list = [
         language_dialog.checkBox,
@@ -578,15 +574,15 @@ def click_set_language(view_):
     ]
     # 设置按钮状态和点击事件
     _translate = QtCore.QCoreApplication.translate
-    for i in range(len(gift.urls.LANGUAGE_LIST)):
-        language_check_box_list[i].setText(_translate("Dialog", gift.urls.LANGUAGE_LIST[i].ljust(50, " ")))
-        language_check_box_list[i].setChecked(gift.urls.LANGUAGE_LIST[i] in view_.language.text())
+    for i in range(len(urls.LANGUAGE_LIST)):
+        language_check_box_list[i].setText(_translate("Dialog", urls.LANGUAGE_LIST[i].ljust(50, " ")))
+        language_check_box_list[i].setChecked(urls.LANGUAGE_LIST[i] in view_.language.text())
         language_check_box_list[i].toggled.connect(
             lambda: click_get_language(view_, language_check_box_list))
     # 隐藏多出来的按钮
-    if len(language_check_box_list) > len(gift.urls.LANGUAGE_LIST):
+    if len(language_check_box_list) > len(urls.LANGUAGE_LIST):
         for i in range(len(language_check_box_list)):
-            if i >= len(gift.urls.LANGUAGE_LIST):
+            if i >= len(urls.LANGUAGE_LIST):
                 language_check_box_list[i].hide()
     language_dialog.deselect_all.clicked.connect(lambda: click_select_all_language(language_check_box_list, False))
     language_dialog.select_all.clicked.connect(lambda: click_select_all_language(language_check_box_list, True))
@@ -603,7 +599,7 @@ def click_get_language(view_, language_check_box_list):
 
 
 def click_select_all_language(language_check_box_list, enable):
-    for i in range(len(gift.urls.LANGUAGE_LIST)):
+    for i in range(len(urls.LANGUAGE_LIST)):
         language_check_box_list[i].setChecked(enable)
 
 
@@ -611,17 +607,17 @@ def click_reload_data_config(view_):
     reply = QMessageBox.question(
         view_, '重新下载', '确认重新下载服务器配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
     if reply == QMessageBox.Yes:
-        database.json_.save(database.json_.KEY_CONFIG_TIME, 0)
-        gift.download.init_gift_data(view_)
+        json_.put_config_download_time(0)
+        download.init_gift_data(view_)
 
 
 def click_reload_data(view_):
     reply = QMessageBox.question(
         view_, '重新下载', '确认重新下载服务器数据吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
     if reply == QMessageBox.Yes:
-        database.json_.save(database.json_.KEY_CONFIG_TIME, 0)
-        database.json_.save(database.json_.KEY_ICON_TIME, 0)
-        gift.download.init_gift_data(view_)
+        json_.put_config_download_time(0)
+        json_.put_icon_download_time(0)
+        download.init_gift_data(view_)
 
 
 def click_reset_ui(view_):
@@ -641,9 +637,9 @@ def reset_ui(view_):
     view_.set_gift_config_view()
 
 
-def is_entity_added(entity):
-    title1 = entity.title if entity.title else ""
-    package_name1 = entity.package_name if entity.package_name else ""
+def is_entity_added(entity_):
+    title1 = entity_.title if entity_.title else ""
+    package_name1 = entity_.package_name if entity_.package_name else ""
     for value in add_gift_item_list:
         title2 = value.title if value.title else ""
         package_name2 = value.package_name if value.package_name else ""
@@ -655,7 +651,7 @@ def is_entity_added(entity):
 def click_add_gift_wall(view_):
     add_view_ = view.add.view.AddGiftView(view_)
     add_view_.setWindowTitle("添加GiftWall-为便捷而生")
-    add_view_.setWindowIcon(utils.icon_.get_logo())
+    add_view_.setWindowIcon(icon.get_logo())
     rect = view_.frameGeometry()
     x = rect.right() - add_view_.width() - 10
     title_bar_height = add_view_.style().pixelMetric(QStyle.PM_TitleBarHeight)
@@ -665,7 +661,7 @@ def click_add_gift_wall(view_):
 
 
 def click_import_gift_wall(view_):
-    file_name, file_type = QFileDialog.getOpenFileName(view_, "选取文件", utils.path_.get_outputs())
+    file_name, file_type = QFileDialog.getOpenFileName(view_, "选取文件", path_.get_outputs())
     load_signal_xml_file(view_, file_name)
 
 
@@ -674,23 +670,23 @@ def load_outputs_xml_file(view_):
         name = view_.file_name.text()
         language = view_.language.text()
         if name and language:
-            path = utils.path_.get_outputs() + \
-                   (language if gift.urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
+            path = path_.get_outputs() + \
+                   (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
             load_signal_xml_file(view_, path, tip_enable=False)
 
 
 def load_signal_xml_file(view_, path, tip_enable=True):
     if path:
-        gift_entity = utils.xml_.analysis_gift_xml(path)
+        gift_entity = xml_.analysis_gift_xml(path)
         global add_gift_item_list
         global add_gift_config_list
         add_gift_item_list.clear()
         add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
-        if gift.download.overall_gift_entity and gift.download.overall_gift_entity.item_list:
+        if download.overall_gift_entity and download.overall_gift_entity.item_list:
             if gift_entity:
                 if gift_entity.item_list:
                     for item1 in gift_entity.item_list:
-                        for item2 in gift.download.overall_gift_entity.item_list:
+                        for item2 in download.overall_gift_entity.item_list:
                             if utils.compare_entity(item1, item2):
                                 add_gift_item_list.append(item2)
                 if gift_entity.config_list:
@@ -717,8 +713,8 @@ def click_cancel_save(view_):
 
 def get_outputs_dir_list():
     outputs_dir_list.clear()
-    outputs_dir_list.append(gift.urls.LANGUAGE_LIST[0])
-    file_list = os.listdir(utils.path_.get_outputs())
+    outputs_dir_list.append(urls.LANGUAGE_LIST[0])
+    file_list = os.listdir(path_.get_outputs())
     for file_name in file_list:
-        if os.path.isdir(utils.path_.get_outputs() + file_name):
+        if os.path.isdir(path_.get_outputs() + file_name):
             outputs_dir_list.append(file_name)

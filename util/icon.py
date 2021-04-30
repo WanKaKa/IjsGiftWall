@@ -14,6 +14,6 @@ def resource_path(relative_path):
 
 def get_logo():
     filename = resource_path(os.path.join("ico", "logo.ico"))
-    icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(filename))
-    return icon
+    icon_ = QtGui.QIcon()
+    icon_.addPixmap(QtGui.QPixmap(filename))
+    return icon_

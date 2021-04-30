@@ -3,16 +3,15 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog
 from PyQt5 import QtCore
 
-import gift.urls
-import gift.download
-import utils.path_
+from gift import urls, download
+from util import path_, utils
 import view.add.ui
 import view.edit.view
 
 
 class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
     OVERALL_GIFT_WALL_FILE_NAME = "总表"
-    select_language = gift.urls.LANGUAGE_LIST[0]
+    select_language = urls.LANGUAGE_LIST[0]
     select_gift_name = OVERALL_GIFT_WALL_FILE_NAME
 
     def __init__(self, parent=None):
@@ -20,7 +19,7 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
         self.setupUi(self)
 
         self.server_gift_wall_file = [self.OVERALL_GIFT_WALL_FILE_NAME]
-        for file in gift.urls.XML_NAME_LIST:
+        for file in urls.XML_NAME_LIST:
             self.server_gift_wall_file.append(file)
         self.item_list = []
 
@@ -61,7 +60,7 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
         self.add_all.clicked.connect(self.click_select_all_add)
 
     def init_view(self):
-        self.init_radio_button(0, self.language_radio_list, gift.urls.LANGUAGE_LIST)
+        self.init_radio_button(0, self.language_radio_list, urls.LANGUAGE_LIST)
         self.init_radio_button(1, self.file_name_radio_list, self.server_gift_wall_file)
 
         self.init_table_widget()
@@ -104,15 +103,15 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
     def set_table_widget(self):
         if self.item_list:
             self.item_list.clear()
-        if gift.download.overall_gift_entity and gift.download.overall_gift_entity.item_list:
+        if download.overall_gift_entity and download.overall_gift_entity.item_list:
             if self.OVERALL_GIFT_WALL_FILE_NAME == self.select_gift_name:
-                self.item_list = gift.download.overall_gift_entity.item_list[:]
+                self.item_list = download.overall_gift_entity.item_list[:]
             else:
-                if self.select_gift_name in gift.download.gift_entity_list[self.select_language]:
-                    gift_entity = gift.download.gift_entity_list[self.select_language][self.select_gift_name]
+                if self.select_gift_name in download.gift_entity_list[self.select_language]:
+                    gift_entity = download.gift_entity_list[self.select_language][self.select_gift_name]
                     if gift_entity and gift_entity.item_list:
                         for item1 in gift_entity.item_list:
-                            for item2 in gift.download.overall_gift_entity.item_list:
+                            for item2 in download.overall_gift_entity.item_list:
                                 if utils.compare_entity(item1, item2):
                                     self.item_list.append(item2)
                                     break
@@ -123,7 +122,7 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
         else:
             self.tableWidget.setRowCount(0)
 
-    def set_table_widget_item(self, index, entity):
+    def set_table_widget_item(self, index, entity_):
         self.tableWidget.setRowHeight(index, 40)
 
         item = QTableWidgetItem()
@@ -134,35 +133,35 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
         self.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon = QIcon(utils.path_.get_download() + entity.icon_image_path)
-        item.setIcon(icon)
+        icon_ = QIcon(path_.get_download() + entity_.icon_image_path)
+        item.setIcon(icon_)
         self.tableWidget.setItem(index, 1, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 10))
         item.setForeground(QBrush(QColor(85, 85, 255)))
-        item.setText(entity.project_name)
+        item.setText(entity_.project_name)
         self.tableWidget.setItem(index, 2, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 10))
-        item.setText("产品名: " + (entity.title if entity.title else "") +
-                     "\n类   型: " + (entity.app_type if entity.app_type else ""))
+        item.setText("产品名: " + (entity_.title if entity_.title else "") +
+                     "\n类   型: " + (entity_.app_type if entity_.app_type else ""))
         self.tableWidget.setItem(index, 3, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 10))
-        item.setText(entity.package_name)
+        item.setText(entity_.package_name)
         self.tableWidget.setItem(index, 4, item)
 
         item = None
-        if entity.poster_path:
+        if entity_.poster_path:
             item = QTableWidgetItem()
-            icon = QIcon(utils.path_.get_download() + entity.poster_path)
-            item.setIcon(QIcon(icon))
+            icon_ = QIcon(path_.get_download() + entity_.poster_path)
+            item.setIcon(QIcon(icon_))
         self.tableWidget.setItem(index, 5, item)
 
-        self.set_table_widget_item_state(index, view.edit.view.is_entity_added(entity))
+        self.set_table_widget_item_state(index, view.edit.view.is_entity_added(entity_))
 
     def set_table_widget_item_state(self, index, state):
         item = QTableWidgetItem()
@@ -191,9 +190,9 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
             for row in selected_rows:
                 if self.tableWidget.item(row, 6).text():
                     delete_entity = None
-                    for entity in view.edit.view.add_gift_item_list:
-                        if utils.compare_entity(entity, self.item_list[row]):
-                            delete_entity = entity
+                    for entity_ in view.edit.view.add_gift_item_list:
+                        if utils.compare_entity(entity_, self.item_list[row]):
+                            delete_entity = entity_
                             break
                     view.edit.view.add_gift_item_list.remove(delete_entity)
                     self.set_table_widget_item_state(row, False)
@@ -215,12 +214,12 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
 
     def add_gift_item(self, row):
         index = len(view.edit.view.add_gift_item_list)
-        entity = self.item_list[row]
-        if view.edit.view.is_entity_added(entity):
+        entity_ = self.item_list[row]
+        if view.edit.view.is_entity_added(entity_):
             return
-        view.edit.view.add_gift_item_list.append(entity)
+        view.edit.view.add_gift_item_list.append(entity_)
         self.parent().tableWidget.setRowCount(len(view.edit.view.add_gift_item_list))
-        self.parent().set_table_widget_item(index, entity)
+        self.parent().set_table_widget_item(index, entity_)
         self.parent().tableWidget.selectRow(index)
         self.set_table_widget_item_state(row, True)
 
