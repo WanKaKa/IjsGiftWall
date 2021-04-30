@@ -13,13 +13,13 @@ for language in urls.LANGUAGE_LIST:
 overall_gift_entity = entity.OverallGiftEntity()
 
 
+# 初始化数据
 def init_gift_data(view_):
-    # 下载数据
     DownloadConfig(view_)
 
 
+# 下载数据成功后解析数据
 def analysis_gift_data():
-    # 下载数据成功后解析数据
     if is_downloaded_config():
         # 总表数据
         global overall_gift_entity
@@ -51,6 +51,7 @@ class DownloadConfig:
             return
 
         self.view_.show_progress_dialog(title="为便捷而生", message="正在下载配置文件，请稍等...")
+        # 解析需要下载的配置列表
         file_path_list = [urls.OVERALL_XML_NAME]
         for language_ in urls.LANGUAGE_LIST:
             language_ = language_ + '/' if language_ != urls.LANGUAGE_LIST[0] else ""
@@ -58,6 +59,7 @@ class DownloadConfig:
                 os.makedirs(path_.get_download() + language_)
             for name in urls.XML_NAME_LIST:
                 file_path_list.append(language_ + name)
+        # 开始下载
         downloader_ = downloader.Downloader(urls.BASE_URL, file_path_list, download_type="config")
         downloader_.my_signal.connect(self.view_.progress_callback)
         downloader_.run()
@@ -72,20 +74,22 @@ class DownloadIcon:
             return
 
         self.view_.show_progress_dialog(title="为便捷而生", message="正在下载图片资源，请稍等...")
-        if overall_gift_entity:
-            file_path_list = []
-            for item in overall_gift_entity.item_list:
-                if item.icon_image_path:
-                    file_path_list.append(item.icon_image_path)
-                if item.poster_path:
-                    file_path_list.append(item.poster_path)
-            if not os.path.exists(path_.get_download() + 'icons'):
-                os.makedirs(path_.get_download() + 'icons')
-            if not os.path.exists(path_.get_download() + 'posters'):
-                os.makedirs(path_.get_download() + 'posters')
-            downloader_ = downloader.Downloader(urls.BASE_URL, file_path_list, download_type="icon")
-            downloader_.my_signal.connect(self.view_.progress_callback)
-            downloader_.run()
+        # 解析需要下载的图标列表
+        file_path_list = []
+        for item in overall_gift_entity.item_list:
+            if item.icon_image_path:
+                file_path_list.append(item.icon_image_path)
+            if item.poster_path:
+                file_path_list.append(item.poster_path)
+        # 手动创建icons、posters文件夹
+        if not os.path.exists(path_.get_download() + 'icons'):
+            os.makedirs(path_.get_download() + 'icons')
+        if not os.path.exists(path_.get_download() + 'posters'):
+            os.makedirs(path_.get_download() + 'posters')
+        # 开始下载
+        downloader_ = downloader.Downloader(urls.BASE_URL, file_path_list, download_type="icon")
+        downloader_.my_signal.connect(self.view_.progress_callback)
+        downloader_.run()
 
 
 def is_downloaded_config():

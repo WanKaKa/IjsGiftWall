@@ -13,9 +13,12 @@ KEY_ICON_DOWNLOAD_TIME = "key_icon_download_time"
 
 
 def get_config_download_time():
-    data = get()
-    if data and KEY_CONFIG_DOWNLOAD_TIME in data:
-        return data[KEY_CONFIG_DOWNLOAD_TIME]
+    try:
+        data = get()
+        if data and KEY_CONFIG_DOWNLOAD_TIME in data:
+            return float(data[KEY_CONFIG_DOWNLOAD_TIME])
+    except Exception as e:
+        print(e)
     return 0
 
 
@@ -24,9 +27,12 @@ def put_config_download_time(value):
 
 
 def get_icon_download_time():
-    data = get()
-    if data and KEY_ICON_DOWNLOAD_TIME in data:
-        return data[KEY_ICON_DOWNLOAD_TIME]
+    try:
+        data = get()
+        if data and KEY_ICON_DOWNLOAD_TIME in data:
+            return float(data[KEY_ICON_DOWNLOAD_TIME])
+    except Exception as e:
+        print(e)
     return 0
 
 
