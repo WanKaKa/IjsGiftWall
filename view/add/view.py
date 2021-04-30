@@ -161,7 +161,7 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
             item.setIcon(QIcon(icon_))
         self.tableWidget.setItem(index, 5, item)
 
-        self.set_table_widget_item_state(index, view.main.view.is_entity_added(entity_))
+        self.set_table_widget_item_state(index, utils.is_entity_added(entity_, view.main.view.add_gift_item_list))
 
     def set_table_widget_item_state(self, index, state):
         item = QTableWidgetItem()
@@ -215,7 +215,7 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
     def add_gift_item(self, row):
         index = len(view.main.view.add_gift_item_list)
         entity_ = self.item_list[row]
-        if view.main.view.is_entity_added(entity_):
+        if utils.is_entity_added(entity_, view.main.view.add_gift_item_list):
             return
         view.main.view.add_gift_item_list.append(entity_)
         self.parent().tableWidget.setRowCount(len(view.main.view.add_gift_item_list))

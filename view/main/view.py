@@ -15,6 +15,8 @@ import view.add.view
 import view.main.operation.edit
 import view.main.operation.check
 import view.main.ui
+import view.main.language_dialog
+import view.main.out_file_dialog
 import view.dialog
 
 # 0: 编辑模式 1: 查看模式
@@ -30,7 +32,6 @@ DEFAULT_GIFT_CONFIG_LIST = {
     xml_.TARGET_WALL: entity.GiftConfig(target=xml_.TARGET_WALL, count=None, limit=None),
 }
 add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
-outputs_dir_list = []
 
 
 class EditGiftView(QWidget, view.main.ui.Ui_Form):
@@ -81,8 +82,9 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
         self.ijoysoft_icon.setPixmap(pix_map)
 
         self.tableWidget.keyPressEvent = self.key_press_event
-        self.pushButton.clicked.connect(lambda: click_set_select_string(self, urls.XML_NAME_LIST, self.file_name))
-        self.pushButton_2.clicked.connect(lambda: click_set_language(self))
+        self.pushButton.clicked.connect(
+            lambda: view.main.out_file_dialog.show_dialog(self, urls.XML_NAME_LIST, self.file_name))
+        self.pushButton_2.clicked.connect(lambda: view.main.language_dialog.show_dialog(self))
 
         self.edit_gift_wall_mode.toggled.connect(lambda: self.click_switch_mode())
         self.check_outputs_mode.toggled.connect(lambda: self.click_switch_mode())
@@ -111,7 +113,7 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
             if radio_list[i].isChecked():
                 label.setText(radio_list[i].text())
             radio_list[i].toggled.connect(
-                lambda: click_edit_view_radio_button(self, label, radio_list))
+                lambda: self.click_edit_view_radio_button(label, radio_list))
         # 隐藏多出来的按钮
         if len(radio_list) > len(string_list):
             for i in range(len(radio_list)):
@@ -134,7 +136,7 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
         self.tableWidget.setColumnWidth(5, 60)
 
     def set_radio_button_color(self):
-        get_outputs_dir_list()
+        outputs_dir_list = utils.get_outputs_dir_list()
         for radio in self.language_radio_list:
             if radio.text() in outputs_dir_list:
                 radio.setStyleSheet("font: 10pt \"微软雅黑\";\n""color: rgb(0, 0, 0);")
@@ -410,11 +412,20 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
         if select_mode_type == mode:
             return
         select_mode_type = mode
-        reset_ui(self)
+        self.reset_ui()
         self.set_select_mode()
         # 切换到检查模式时，如果有选中文件，则加载
         if select_mode_type == 1:
             self.load_outputs_xml_file()
+
+    def reset_ui(self):
+        self.file_name.setText("")
+        self.language.setText("")
+        add_gift_item_list.clear()
+        global add_gift_config_list
+        add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
+        self.set_table_widget()
+        self.set_gift_config_view()
 
     def click_table_item(self):
         print(self.tableWidget.currentItem().text())
@@ -481,7 +492,7 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
         reply = QMessageBox.question(
             self, '重置界面', '确认重置界面吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            reset_ui(self)
+            self.reset_ui()
 
     def click_add_gift_wall(self):
         view_ = view.add.view.AddGiftView(self)
@@ -531,148 +542,15 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
                        (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
                 self.load_signal_xml_file(path, tip_enable=False)
 
-
-def click_edit_view_radio_button(view_, label, radio_button_list):
-    if radio_button_list:
-        for radio_button in radio_button_list:
-            if radio_button.isChecked():
-                if label.text() == radio_button.text():
-                    return
-                label.setText(radio_button.text())
-    view_.set_radio_button_color()
-    # 检查模式时，选取了文件名或者地区后，加载对应的配置文件
-    global select_mode_type
-    if select_mode_type == 1:
-        view_.load_outputs_xml_file()
-
-
-def click_set_select_string(view_, string_list, label):
-    out_file_dialog = view.dialog.SingleSelectDialog(view_)
-    out_file_dialog.setWindowTitle("选择字符-为便捷而生")
-    out_file_dialog.setWindowIcon(icon.get_logo())
-
-    out_file_radio_button_list = [
-        out_file_dialog.radioButton,
-        out_file_dialog.radioButton_2,
-        out_file_dialog.radioButton_3,
-        out_file_dialog.radioButton_4,
-        out_file_dialog.radioButton_5,
-        out_file_dialog.radioButton_6,
-        out_file_dialog.radioButton_7,
-        out_file_dialog.radioButton_8,
-        out_file_dialog.radioButton_9,
-        out_file_dialog.radioButton_10,
-        out_file_dialog.radioButton_11,
-        out_file_dialog.radioButton_12,
-        out_file_dialog.radioButton_13,
-        out_file_dialog.radioButton_14,
-        out_file_dialog.radioButton_15,
-        out_file_dialog.radioButton_16
-    ]
-    # 设置按钮状态和点击事件
-    _translate = QtCore.QCoreApplication.translate
-    for i in range(len(string_list)):
-        out_file_radio_button_list[i].setText(_translate("Form", string_list[i]))
-        out_file_radio_button_list[i].setChecked(label.text() == string_list[i])
-        out_file_radio_button_list[i].toggled.connect(
-            lambda: click_get_out_file(label, out_file_dialog, out_file_radio_button_list))
-    # 隐藏多出来的按钮
-    if len(out_file_radio_button_list) > len(string_list):
-        for i in range(len(out_file_radio_button_list)):
-            if i >= len(string_list):
-                out_file_radio_button_list[i].hide()
-    out_file_dialog.exec()
-
-
-def click_get_out_file(label, out_file_dialog, out_file_radio_button_list):
-    if out_file_radio_button_list:
-        for radio_button in out_file_radio_button_list:
-            if radio_button.isChecked():
-                if label.text() == radio_button.text():
-                    return
-                label.setText(radio_button.text())
-                out_file_dialog.hide()
-
-
-def click_set_language(view_):
-    language_dialog = view.dialog.MultipleSelectDialog(view_)
-    language_dialog.setWindowTitle("选择地区-为便捷而生")
-    language_dialog.setWindowIcon(icon.get_logo())
-
-    language_check_box_list = [
-        language_dialog.checkBox,
-        language_dialog.checkBox_2,
-        language_dialog.checkBox_3,
-        language_dialog.checkBox_4,
-        language_dialog.checkBox_5,
-        language_dialog.checkBox_6,
-        language_dialog.checkBox_7,
-        language_dialog.checkBox_8,
-        language_dialog.checkBox_9,
-        language_dialog.checkBox_10,
-        language_dialog.checkBox_11,
-        language_dialog.checkBox_12,
-        language_dialog.checkBox_13,
-        language_dialog.checkBox_14,
-        language_dialog.checkBox_15,
-        language_dialog.checkBox_16,
-    ]
-    # 设置按钮状态和点击事件
-    _translate = QtCore.QCoreApplication.translate
-    for i in range(len(urls.LANGUAGE_LIST)):
-        language_check_box_list[i].setText(_translate("Dialog", urls.LANGUAGE_LIST[i].ljust(50, " ")))
-        language_check_box_list[i].setChecked(urls.LANGUAGE_LIST[i] in view_.language.text())
-        language_check_box_list[i].toggled.connect(
-            lambda: click_get_language(view_, language_check_box_list))
-    # 隐藏多出来的按钮
-    if len(language_check_box_list) > len(urls.LANGUAGE_LIST):
-        for i in range(len(language_check_box_list)):
-            if i >= len(urls.LANGUAGE_LIST):
-                language_check_box_list[i].hide()
-    language_dialog.deselect_all.clicked.connect(lambda: click_select_all_language(language_check_box_list, False))
-    language_dialog.select_all.clicked.connect(lambda: click_select_all_language(language_check_box_list, True))
-    language_dialog.ok.clicked.connect(lambda: language_dialog.hide())
-    language_dialog.exec()
-
-
-def click_get_language(view_, language_check_box_list):
-    if language_check_box_list:
-        view_.language.setText("")
-        for radio_button in language_check_box_list:
-            if radio_button.isChecked():
-                view_.language.setText(view_.language.text() + radio_button.text().strip(" ") + ",")
-
-
-def click_select_all_language(language_check_box_list, enable):
-    for i in range(len(urls.LANGUAGE_LIST)):
-        language_check_box_list[i].setChecked(enable)
-
-
-def reset_ui(view_):
-    view_.file_name.setText("")
-    view_.language.setText("")
-    add_gift_item_list.clear()
-    global add_gift_config_list
-    add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
-    view_.set_table_widget()
-    view_.set_gift_config_view()
-
-
-def is_entity_added(entity_):
-    title1 = entity_.title if entity_.title else ""
-    package_name1 = entity_.package_name if entity_.package_name else ""
-    for value in add_gift_item_list:
-        title2 = value.title if value.title else ""
-        package_name2 = value.package_name if value.package_name else ""
-        if title1 == title2 and package_name1 == package_name2:
-            return True
-    return False
-
-
-def get_outputs_dir_list():
-    outputs_dir_list.clear()
-    outputs_dir_list.append(urls.LANGUAGE_LIST[0])
-    file_list = os.listdir(path_.get_outputs())
-    for file_name in file_list:
-        if os.path.isdir(path_.get_outputs() + file_name):
-            outputs_dir_list.append(file_name)
+    def click_edit_view_radio_button(self, label, radio_button_list):
+        if radio_button_list:
+            for radio_button in radio_button_list:
+                if radio_button.isChecked():
+                    if label.text() == radio_button.text():
+                        return
+                    label.setText(radio_button.text())
+        self.set_radio_button_color()
+        # 检查模式时，选取了文件名或者地区后，加载对应的配置文件
+        global select_mode_type
+        if select_mode_type == 1:
+            self.load_outputs_xml_file()
