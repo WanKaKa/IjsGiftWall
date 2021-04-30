@@ -505,105 +505,12 @@ class Ui_Form(object):
         self.label_13.setAlignment(QtCore.Qt.AlignCenter)
         self.label_13.setObjectName("label_13")
         self.verticalLayout_2.addWidget(self.frame_3)
-        self.frame_4 = QtWidgets.QFrame(Form)
-        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_4.setObjectName("frame_4")
-        self.verticalLayout_2.addWidget(self.frame_4)
-        self.check_menu_frame = QtWidgets.QFrame(Form)
-        self.check_menu_frame.setMinimumSize(QtCore.QSize(480, 110))
-        self.check_menu_frame.setMaximumSize(QtCore.QSize(480, 110))
-        self.check_menu_frame.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.check_menu_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.check_menu_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.check_menu_frame.setObjectName("check_menu_frame")
-        self.save = QtWidgets.QPushButton(self.check_menu_frame)
-        self.save.setGeometry(QtCore.QRect(15, 10, 140, 40))
-        self.save.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.save.setObjectName("save")
-        self.cancel_save = QtWidgets.QPushButton(self.check_menu_frame)
-        self.cancel_save.setGeometry(QtCore.QRect(325, 10, 140, 40))
-        self.cancel_save.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.cancel_save.setObjectName("cancel_save")
-        self.add_gift_wall_2 = QtWidgets.QPushButton(self.check_menu_frame)
-        self.add_gift_wall_2.setGeometry(QtCore.QRect(170, 10, 140, 40))
-        self.add_gift_wall_2.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.add_gift_wall_2.setObjectName("add_gift_wall_2")
-        self.open_outputs_2 = QtWidgets.QPushButton(self.check_menu_frame)
-        self.open_outputs_2.setGeometry(QtCore.QRect(15, 60, 140, 40))
-        self.open_outputs_2.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.open_outputs_2.setObjectName("open_outputs_2")
-        self.clear_outputs_2 = QtWidgets.QPushButton(self.check_menu_frame)
-        self.clear_outputs_2.setGeometry(QtCore.QRect(170, 60, 140, 40))
-        self.clear_outputs_2.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.clear_outputs_2.setObjectName("clear_outputs_2")
-        self.verticalLayout_2.addWidget(self.check_menu_frame)
-        self.edit_menu_frame = QtWidgets.QFrame(Form)
-        self.edit_menu_frame.setMinimumSize(QtCore.QSize(480, 160))
-        self.edit_menu_frame.setMaximumSize(QtCore.QSize(480, 160))
-        self.edit_menu_frame.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.edit_menu_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.edit_menu_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.edit_menu_frame.setObjectName("edit_menu_frame")
-        self.reload_data_config = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.reload_data_config.setGeometry(QtCore.QRect(15, 10, 140, 40))
-        self.reload_data_config.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.reload_data_config.setObjectName("reload_data_config")
-        self.add_gift_wall = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.add_gift_wall.setGeometry(QtCore.QRect(15, 60, 140, 40))
-        self.add_gift_wall.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.add_gift_wall.setObjectName("add_gift_wall")
-        self.reload_data = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.reload_data.setGeometry(QtCore.QRect(170, 10, 140, 40))
-        self.reload_data.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.reload_data.setObjectName("reload_data")
-        self.create_gift_wall_file = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.create_gift_wall_file.setGeometry(QtCore.QRect(325, 60, 140, 40))
-        self.create_gift_wall_file.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.create_gift_wall_file.setObjectName("create_gift_wall_file")
-        self.open_outputs = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.open_outputs.setGeometry(QtCore.QRect(15, 110, 140, 40))
-        self.open_outputs.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.open_outputs.setObjectName("open_outputs")
-        self.clear_outputs = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.clear_outputs.setGeometry(QtCore.QRect(170, 110, 140, 40))
-        self.clear_outputs.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.clear_outputs.setObjectName("clear_outputs")
-        self.reset_ui = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.reset_ui.setGeometry(QtCore.QRect(325, 10, 140, 40))
-        self.reset_ui.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.reset_ui.setObjectName("reset_ui")
-        self.import_gift_wall = QtWidgets.QPushButton(self.edit_menu_frame)
-        self.import_gift_wall.setGeometry(QtCore.QRect(170, 60, 140, 40))
-        self.import_gift_wall.setStyleSheet("background-color: rgb(85, 85, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
-        self.import_gift_wall.setObjectName("import_gift_wall")
-        self.verticalLayout_2.addWidget(self.edit_menu_frame)
+        self.widget = QtWidgets.QWidget(Form)
+        self.widget.setObjectName("widget")
+        self.verticalLayout_2.addWidget(self.widget)
+        self.edit_check_menu_layout = QtWidgets.QVBoxLayout()
+        self.edit_check_menu_layout.setObjectName("edit_check_menu_layout")
+        self.verticalLayout_2.addLayout(self.edit_check_menu_layout)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
         self.retranslateUi(Form)
@@ -661,16 +568,3 @@ class Ui_Form(object):
         self.rate_title.setText(_translate("Form", "rate"))
         self.interstitial_title.setText(_translate("Form", "interstitial"))
         self.label_13.setText(_translate("Form", "GiftWall配置"))
-        self.save.setText(_translate("Form", "保存"))
-        self.cancel_save.setText(_translate("Form", "放弃修改"))
-        self.add_gift_wall_2.setText(_translate("Form", "添加GiftWall"))
-        self.open_outputs_2.setText(_translate("Form", "查看Outputs"))
-        self.clear_outputs_2.setText(_translate("Form", "清空Outputs"))
-        self.reload_data_config.setText(_translate("Form", "重下载服务器配置表"))
-        self.add_gift_wall.setText(_translate("Form", "添加GiftWall"))
-        self.reload_data.setText(_translate("Form", "重下载服务器数据"))
-        self.create_gift_wall_file.setText(_translate("Form", "生成GiftWall"))
-        self.open_outputs.setText(_translate("Form", "查看Outputs"))
-        self.clear_outputs.setText(_translate("Form", "清空Outputs"))
-        self.reset_ui.setText(_translate("Form", "重置界面"))
-        self.import_gift_wall.setText(_translate("Form", "导入GiftWall"))

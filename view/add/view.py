@@ -6,7 +6,7 @@ from PyQt5 import QtCore
 from gift import urls, download
 from util import path_, utils
 import view.add.ui
-import view.edit.view
+import view.main.view
 
 
 class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
@@ -161,7 +161,7 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
             item.setIcon(QIcon(icon_))
         self.tableWidget.setItem(index, 5, item)
 
-        self.set_table_widget_item_state(index, view.edit.view.is_entity_added(entity_))
+        self.set_table_widget_item_state(index, view.main.view.is_entity_added(entity_))
 
     def set_table_widget_item_state(self, index, state):
         item = QTableWidgetItem()
@@ -190,11 +190,11 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
             for row in selected_rows:
                 if self.tableWidget.item(row, 6).text():
                     delete_entity = None
-                    for entity_ in view.edit.view.add_gift_item_list:
+                    for entity_ in view.main.view.add_gift_item_list:
                         if utils.compare_entity(entity_, self.item_list[row]):
                             delete_entity = entity_
                             break
-                    view.edit.view.add_gift_item_list.remove(delete_entity)
+                    view.main.view.add_gift_item_list.remove(delete_entity)
                     self.set_table_widget_item_state(row, False)
             self.parent().set_table_widget()
             self.tableWidget.clearSelection()
@@ -213,12 +213,12 @@ class AddGiftView(QDialog, view.add.ui.Ui_Dialog):
         self.tableWidget.clearSelection()
 
     def add_gift_item(self, row):
-        index = len(view.edit.view.add_gift_item_list)
+        index = len(view.main.view.add_gift_item_list)
         entity_ = self.item_list[row]
-        if view.edit.view.is_entity_added(entity_):
+        if view.main.view.is_entity_added(entity_):
             return
-        view.edit.view.add_gift_item_list.append(entity_)
-        self.parent().tableWidget.setRowCount(len(view.edit.view.add_gift_item_list))
+        view.main.view.add_gift_item_list.append(entity_)
+        self.parent().tableWidget.setRowCount(len(view.main.view.add_gift_item_list))
         self.parent().set_table_widget_item(index, entity_)
         self.parent().tableWidget.selectRow(index)
         self.set_table_widget_item_state(row, True)
