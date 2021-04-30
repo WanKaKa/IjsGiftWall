@@ -78,14 +78,15 @@ class DownloadIcon:
         file_path_list = []
         for item in overall_gift_entity.item_list:
             if item.icon_image_path:
+                dir_path = os.path.dirname(path_.get_download() + item.icon_image_path)
+                if not os.path.exists(dir_path):
+                    os.makedirs(dir_path)
                 file_path_list.append(item.icon_image_path)
             if item.poster_path:
+                dir_path = os.path.dirname(path_.get_download() + item.poster_path)
+                if not os.path.exists(dir_path):
+                    os.makedirs(dir_path)
                 file_path_list.append(item.poster_path)
-        # 手动创建icons、posters文件夹
-        if not os.path.exists(path_.get_download() + 'icons'):
-            os.makedirs(path_.get_download() + 'icons')
-        if not os.path.exists(path_.get_download() + 'posters'):
-            os.makedirs(path_.get_download() + 'posters')
         # 开始下载
         downloader_ = downloader.Downloader(urls.BASE_URL, file_path_list, download_type="icon")
         downloader_.my_signal.connect(self.view_.progress_callback)
