@@ -36,8 +36,8 @@ def analysis_gift_data():
                 gift_entity = xml_.analysis_gift_xml(path_.get_download() + language_ + path)
                 if gift_entity:
                     gift_entity_list[urls.LANGUAGE_LIST[i]][path] = gift_entity
-            print("地区 = %s GiftEntity Count = %d" % (
-                urls.LANGUAGE_LIST[i].ljust(20, " "), len(gift_entity_list[urls.LANGUAGE_LIST[i]])))
+            language_ = urls.LANGUAGE_LIST[i]
+            print("地区 = %s 表数量 = %d" % (language_.ljust(20, " "), len(gift_entity_list[language_])))
 
 
 class DownloadConfig:

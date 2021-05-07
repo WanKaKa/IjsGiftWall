@@ -11,13 +11,13 @@ from PyQt5 import QtCore
 from database import json_
 from gift import urls, download, entity
 from util import xml_, path_, icon, utils
-import view.add.view
-import view.main.operation.edit
-import view.main.operation.check
-import view.main.ui
-import view.main.language_dialog
-import view.main.out_file_dialog
-import view.dialog
+import gui.add.view
+import gui.main.operation.edit
+import gui.main.operation.check
+import gui.main.ui
+import gui.main.language_dialog
+import gui.main.out_file_dialog
+import gui.dialog
 
 # 0: 编辑模式 1: 查看模式
 select_mode_type = 0
@@ -34,7 +34,7 @@ DEFAULT_GIFT_CONFIG_LIST = {
 add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
 
 
-class EditGiftView(QWidget, view.main.ui.Ui_Form):
+class EditGiftView(QWidget, gui.main.ui.Ui_Form):
     def __init__(self, parent=None):
         super(EditGiftView, self).__init__(parent)
         self.setupUi(self)
@@ -42,11 +42,11 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
         self.setWindowTitle("广告配置编辑-为便捷而生")
         self.setWindowIcon(icon.get_logo())
         self.setWindowState(Qt.WindowMaximized)
-        self.progress_dialog = view.dialog.ProgressDialog(self)
+        self.progress_dialog = gui.dialog.ProgressDialog(self)
 
-        self.edit_menu = view.main.operation.edit.EditMenu(parent=self)
+        self.edit_menu = gui.main.operation.edit.EditMenu(parent=self)
         self.edit_check_menu_layout.addWidget(self.edit_menu)
-        self.check_menu = view.main.operation.check.CheckMenu(parent=self)
+        self.check_menu = gui.main.operation.check.CheckMenu(parent=self)
         self.edit_check_menu_layout.addWidget(self.check_menu)
 
         self.file_name_radio_list = [
@@ -83,8 +83,8 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
 
         self.tableWidget.keyPressEvent = self.key_press_event
         self.pushButton.clicked.connect(
-            lambda: view.main.out_file_dialog.show_dialog(self, urls.XML_NAME_LIST, self.file_name))
-        self.pushButton_2.clicked.connect(lambda: view.main.language_dialog.show_dialog(self))
+            lambda: gui.main.out_file_dialog.show_dialog(self, urls.XML_NAME_LIST, self.file_name))
+        self.pushButton_2.clicked.connect(lambda: gui.main.language_dialog.show_dialog(self))
 
         self.edit_gift_wall_mode.toggled.connect(lambda: self.click_switch_mode())
         self.check_outputs_mode.toggled.connect(lambda: self.click_switch_mode())
@@ -432,7 +432,7 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
 
     def click_table_item_double(self):
         row = self.tableWidget.currentItem().row()
-        image_dialog = view.dialog.SeeImageDialog(self)
+        image_dialog = gui.dialog.SeeImageDialog(self)
         image_dialog.setWindowTitle("为便捷而生")
         image_dialog.setWindowIcon(icon.get_logo())
         if add_gift_item_list[row].icon_image_path:
@@ -495,7 +495,7 @@ class EditGiftView(QWidget, view.main.ui.Ui_Form):
             self.reset_ui()
 
     def click_add_gift_wall(self):
-        view_ = view.add.view.AddGiftView(self)
+        view_ = gui.add.view.AddGiftView(self)
         view_.setWindowTitle("添加GiftWall-为便捷而生")
         view_.setWindowIcon(icon.get_logo())
         rect = self.frameGeometry()

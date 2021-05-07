@@ -3,11 +3,11 @@ import os
 from PyQt5.QtWidgets import QMessageBox
 
 from PyQt5.QtWidgets import QWidget
-import view.main.operation.check_ui
+import gui.main.operation.check_ui
 from util import path_
 
 
-class CheckMenu(QWidget, view.main.operation.check_ui.Ui_Form):
+class CheckMenu(QWidget, gui.main.operation.check_ui.Ui_Form):
     def __init__(self, parent=None):
         super(CheckMenu, self).__init__(None)
         self.setupUi(self)

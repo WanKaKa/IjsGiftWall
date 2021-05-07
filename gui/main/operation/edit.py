@@ -2,13 +2,13 @@ import os
 
 from PyQt5.QtWidgets import QWidget, QMessageBox, QFileDialog
 
-import view.main.operation.edit_ui
+import gui.main.operation.edit_ui
 from database import json_
 from gift import download
 from util import path_
 
 
-class EditMenu(QWidget, view.main.operation.edit_ui.Ui_Form):
+class EditMenu(QWidget, gui.main.operation.edit_ui.Ui_Form):
     def __init__(self, parent=None):
         super(EditMenu, self).__init__(None)
         self.setupUi(self)

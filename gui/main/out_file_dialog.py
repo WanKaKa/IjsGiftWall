@@ -1,11 +1,11 @@
 from PyQt5 import QtCore
 
-import view.dialog
+import gui.dialog
 from util import icon
 
 
 def show_dialog(view_, string_list, label):
-    out_file_dialog = view.dialog.SingleSelectDialog(view_)
+    out_file_dialog = gui.dialog.SingleSelectDialog(view_)
     out_file_dialog.setWindowTitle("选择字符-为便捷而生")
     out_file_dialog.setWindowIcon(icon.get_logo())
 

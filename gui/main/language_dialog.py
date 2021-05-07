@@ -1,12 +1,12 @@
 from PyQt5 import QtCore
 
-import view.dialog
+import gui.dialog
 from gift import urls
 from util import icon
 
 
 def show_dialog(view_):
-    language_dialog = view.dialog.MultipleSelectDialog(view_)
+    language_dialog = gui.dialog.MultipleSelectDialog(view_)
     language_dialog.setWindowTitle("选择地区-为便捷而生")
     language_dialog.setWindowIcon(icon.get_logo())
 
