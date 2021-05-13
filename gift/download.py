@@ -26,7 +26,7 @@ def analysis_gift_data():
         overall_gift_entity = xml_.analysis_overall_gift_xml(
             path_.get_download() + urls.OVERALL_XML_NAME)
         if overall_gift_entity:
-            print("总表产品数量 = %d" % len(overall_gift_entity.item_list))
+            print("总表 - 产品数量 = %d" % len(overall_gift_entity.item_list))
         # 各地区表数据
         for i in range(len(gift_entity_list)):
             gift_entity_list[urls.LANGUAGE_LIST[i]].clear()

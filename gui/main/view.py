@@ -11,7 +11,7 @@ from PyQt5 import QtCore
 from database import json_
 from gift import urls, download, entity
 from util import xml_, path_, icon, utils
-import gui.add.view
+import gui.dialog.add_gift.dialog
 import gui.main.operation.edit
 import gui.main.operation.check
 import gui.main.ui
@@ -495,15 +495,17 @@ class EditGiftView(QWidget, gui.main.ui.Ui_Form):
             self.reset_ui()
 
     def click_add_gift_wall(self):
-        view_ = gui.add.view.AddGiftView(self)
-        view_.setWindowTitle("添加GiftWall-为便捷而生")
-        view_.setWindowIcon(icon.get_logo())
+        dialog = gui.dialog.add_gift.dialog.AddGiftDialog(self, add_gift_item_list=add_gift_item_list)
+        dialog.setWindowTitle("添加GiftWall-为便捷而生")
+        dialog.setWindowIcon(icon.get_logo())
         rect = self.frameGeometry()
-        x = rect.right() - view_.width() - 10
-        title_bar_height = view_.style().pixelMetric(QStyle.PM_TitleBarHeight)
-        y = int((rect.top() + rect.bottom() - view_.height() - title_bar_height) / 2)
-        view_.move(x, y)
-        view_.exec()
+        x = rect.right() - dialog.width() - 10
+        title_bar_height = dialog.style().pixelMetric(QStyle.PM_TitleBarHeight)
+        y = int((rect.top() + rect.bottom() - dialog.height() - title_bar_height) / 2)
+        dialog.move(x, y)
+        dialog.set_add_single_gift_callback(callback=self.add_single_gift_callback)
+        dialog.set_modify_gift_callback(callback=lambda: self.set_table_widget())
+        dialog.exec()
 
     def load_signal_xml_file(self, path, tip_enable=True):
         if path:
@@ -554,3 +556,9 @@ class EditGiftView(QWidget, gui.main.ui.Ui_Form):
         global select_mode_type
         if select_mode_type == 1:
             self.load_outputs_xml_file()
+
+    def add_single_gift_callback(self, entity_):
+        index = len(add_gift_item_list) - 1
+        self.tableWidget.setRowCount(len(add_gift_item_list))
+        self.set_table_widget_item(index, entity_)
+        self.tableWidget.selectRow(index)
