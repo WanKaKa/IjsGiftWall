@@ -5,19 +5,20 @@ import time
 from copy import deepcopy
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
-from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QStyle
+from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QStyle, QFileDialog
 from PyQt5 import QtCore
 
 from database import json_
 from gift import urls, download, entity
 from util import xml_, path_, icon, utils
-import gui.dialog.add_gift.dialog
-import gui.main.operation.edit
-import gui.main.operation.check
+
+import gui.dialog
+import gui.dialog.add_gift
+import gui.main.operation.edit_ui
+import gui.main.operation.check_ui
 import gui.main.ui
 import gui.main.language_dialog
 import gui.main.out_file_dialog
-import gui.dialog
 
 # 0: 编辑模式 1: 查看模式
 select_mode_type = 0
@@ -44,10 +45,10 @@ class EditGiftView(QWidget, gui.main.ui.Ui_Form):
         self.setWindowState(Qt.WindowMaximized)
         self.progress_dialog = gui.dialog.ProgressDialog(self)
 
-        self.edit_menu = gui.main.operation.edit.EditMenu(parent=self)
-        self.edit_check_menu_layout.addWidget(self.edit_menu)
-        self.check_menu = gui.main.operation.check.CheckMenu(parent=self)
-        self.edit_check_menu_layout.addWidget(self.check_menu)
+        self.edit_operation = EditOperation(parent=self)
+        self.edit_check_menu_layout.addWidget(self.edit_operation)
+        self.check_operation = CheckOperation(parent=self)
+        self.edit_check_menu_layout.addWidget(self.check_operation)
 
         self.file_name_radio_list = [
             self.file_name_radio_1,
@@ -171,8 +172,8 @@ class EditGiftView(QWidget, gui.main.ui.Ui_Form):
             self.file_name_title.setText("选择输出文件名")
             self.language_title.setText("选择输出地区")
             self.mode_frame.setStyleSheet("background-color: rgb(85, 85, 255);")
-            self.edit_menu.show()
-            self.check_menu.hide()
+            self.edit_operation.show()
+            self.check_operation.hide()
         else:
             self.file_name_title.hide()
             self.file_name.hide()
@@ -185,8 +186,8 @@ class EditGiftView(QWidget, gui.main.ui.Ui_Form):
             self.file_name_title.setText("文件名")
             self.language_title.setText("地区")
             self.mode_frame.setStyleSheet("background-color: rgb(0, 170, 0);")
-            self.edit_menu.hide()
-            self.check_menu.show()
+            self.edit_operation.hide()
+            self.check_operation.show()
 
             for radio in self.language_radio_list:
                 if radio.isChecked():
@@ -495,7 +496,7 @@ class EditGiftView(QWidget, gui.main.ui.Ui_Form):
             self.reset_ui()
 
     def click_add_gift_wall(self):
-        dialog = gui.dialog.add_gift.dialog.AddGiftDialog(self, add_gift_item_list=add_gift_item_list)
+        dialog = gui.dialog.add_gift.AddGiftDialog(self, add_gift_item_list=add_gift_item_list)
         dialog.setWindowTitle("添加GiftWall-为便捷而生")
         dialog.setWindowIcon(icon.get_logo())
         rect = self.frameGeometry()
@@ -562,3 +563,60 @@ class EditGiftView(QWidget, gui.main.ui.Ui_Form):
         self.tableWidget.setRowCount(len(add_gift_item_list))
         self.set_table_widget_item(index, entity_)
         self.tableWidget.selectRow(index)
+
+
+class EditOperation(QWidget, gui.main.operation.edit_ui.Ui_Form):
+    def __init__(self, parent: EditGiftView = None):
+        super(EditOperation, self).__init__(None)
+        self.setupUi(self)
+        self.__view = parent
+
+        self.reload_data_config.clicked.connect(self.__reload_data_config)
+        self.reload_data.clicked.connect(self.__reload_data)
+        self.reset_ui.clicked.connect(self.__view.click_reset_ui)
+
+        self.add_gift_wall.clicked.connect(self.__view.click_add_gift_wall)
+        self.import_gift_wall.clicked.connect(self.__import_gift_wall)
+        self.create_gift_wall_file.clicked.connect(self.__view.click_create_gift_wall_file)
+
+        self.open_outputs.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
+        self.clear_outputs.clicked.connect(self.__view.delete_dir)
+
+    def __reload_data_config(self):
+        reply = QMessageBox.question(
+            self.__view, '重新下载', '确认重新下载服务器配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            json_.put_config_download_time(0)
+            download.init_gift_data(self.__view)
+
+    def __reload_data(self):
+        reply = QMessageBox.question(
+            self.__view, '重新下载', '确认重新下载服务器数据吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            json_.put_config_download_time(0)
+            json_.put_icon_download_time(0)
+            download.init_gift_data(self.__view)
+
+    def __import_gift_wall(self):
+        file_name, file_type = QFileDialog.getOpenFileName(self.__view, "选取文件", path_.get_outputs())
+        self.__view.load_signal_xml_file(file_name)
+
+
+class CheckOperation(QWidget, gui.main.operation.check_ui.Ui_Form):
+    def __init__(self, parent: EditGiftView = None):
+        super(CheckOperation, self).__init__(None)
+        self.setupUi(self)
+        self.__view = parent
+
+        self.open_outputs_2.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
+        self.clear_outputs_2.clicked.connect(self.__view.delete_dir)
+
+        self.save.clicked.connect(self.__view.fun_create_gift_wall_file)
+        self.add_gift_wall_2.clicked.connect(self.__view.click_add_gift_wall)
+        self.cancel_save.clicked.connect(self.__cancel_save)
+
+    def __cancel_save(self):
+        reply = QMessageBox.question(
+            self.__view, '放弃修改', '确定放弃修改吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            self.__view.load_outputs_xml_file()
