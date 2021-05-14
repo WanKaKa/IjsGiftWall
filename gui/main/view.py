@@ -352,12 +352,12 @@ class TableWidget(QWidget, gui.main.table_widget.Ui_Form):
         self.setupUi(self)
         self.__view = parent
 
-        self.init_table_widget()
-        self.tableWidget.keyPressEvent = self.key_press_event
-        self.tableWidget.itemClicked.connect(self.table_widget_item_click)
-        self.tableWidget.itemDoubleClicked.connect(self.table_widget_item_double_click)
+        self.__init_table_widget()
+        self.tableWidget.keyPressEvent = self.__key_press_event
+        self.tableWidget.itemClicked.connect(self.__table_widget_item_click)
+        self.tableWidget.itemDoubleClicked.connect(self.__table_widget_item_double_click)
 
-    def init_table_widget(self):
+    def __init_table_widget(self):
         self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
 
@@ -420,10 +420,10 @@ class TableWidget(QWidget, gui.main.table_widget.Ui_Form):
             item.setIcon(QIcon(icon_))
         self.tableWidget.setItem(index, 5, item)
 
-    def table_widget_item_click(self):
+    def __table_widget_item_click(self):
         print(self.tableWidget.currentItem().text())
 
-    def table_widget_item_double_click(self):
+    def __table_widget_item_double_click(self):
         row = self.tableWidget.currentItem().row()
         image_dialog = gui.dialog.SeeImageDialog(self.__view)
         image_dialog.setWindowTitle("为便捷而生")
@@ -449,7 +449,7 @@ class TableWidget(QWidget, gui.main.table_widget.Ui_Form):
         y = int((rect.top() + rect.bottom() - image_dialog.height() - title_bar_height) / 2)
         image_dialog.move(x, y)
 
-    def key_press_event(self, event):
+    def __key_press_event(self, event):
         if event.key() == QtCore.Qt.Key_Delete or event.key() == QtCore.Qt.Key_D:
             while self.tableWidget.selectedItems():
                 row = self.tableWidget.selectedItems()[0].row()
@@ -457,15 +457,15 @@ class TableWidget(QWidget, gui.main.table_widget.Ui_Form):
                 add_gift_item_list.remove(add_gift_item_list[row])
             self.set_table_widget()
         elif event.key() == QtCore.Qt.Key_Up:
-            self.move_table_widget_item(True)
+            self.__move_table_widget_item(True)
         elif event.key() == QtCore.Qt.Key_Down:
-            self.move_table_widget_item(False)
+            self.__move_table_widget_item(False)
         elif event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_A:
             self.tableWidget.selectAll()
         else:
             super().keyPressEvent(event)
 
-    def move_table_widget_item(self, up):
+    def __move_table_widget_item(self, up):
         selected_rows = []
         for item in self.tableWidget.selectedItems():
             if item.row() not in selected_rows:
@@ -543,10 +543,10 @@ class CheckLanguage(QWidget, gui.main.operation.check_language.Ui_Form):
             self.language_radio_12,
         ]
 
-        self.init_radio_button(self.__view.edit_language.file_name, self.file_name_radio_list, urls.XML_NAME_LIST)
-        self.init_radio_button(self.__view.edit_language.language, self.language_radio_list, urls.LANGUAGE_LIST)
+        self.__init_radio_button(self.__view.edit_language.file_name, self.file_name_radio_list, urls.XML_NAME_LIST)
+        self.__init_radio_button(self.__view.edit_language.language, self.language_radio_list, urls.LANGUAGE_LIST)
 
-    def init_radio_button(self, label, radio_list, string_list):
+    def __init_radio_button(self, label, radio_list, string_list):
         _translate = QtCore.QCoreApplication.translate
         for i in range(len(string_list)):
             radio_list[i].setText(_translate("Form", string_list[i]))
@@ -573,14 +573,6 @@ class CheckLanguage(QWidget, gui.main.operation.check_language.Ui_Form):
         if select_mode_type == 1:
             self.__view.load_outputs_xml_file()
 
-    def set_select_language_value(self):
-        for radio in self.language_radio_list:
-            if radio.isChecked():
-                self.__view.edit_language.language.setText(radio.text())
-        for radio in self.file_name_radio_list:
-            if radio.isChecked():
-                self.__view.edit_language.file_name.setText(radio.text())
-
     def set_radio_button_color(self):
         outputs_dir_list = utils.get_outputs_dir_list()
         for radio in self.language_radio_list:
@@ -600,7 +592,12 @@ class CheckLanguage(QWidget, gui.main.operation.check_language.Ui_Form):
         self.layout_check_mode_file_name.show()
         self.layout_check_mode_language.show()
 
-        self.set_select_language_value()
+        for radio in self.language_radio_list:
+            if radio.isChecked():
+                self.__view.edit_language.language.setText(radio.text())
+        for radio in self.file_name_radio_list:
+            if radio.isChecked():
+                self.__view.edit_language.file_name.setText(radio.text())
         self.set_radio_button_color()
 
     def hide(self):
@@ -703,7 +700,7 @@ class OutFileDialog:
             out_file_radio_button_list[i].setText(_translate("Form", string_list[i]))
             out_file_radio_button_list[i].setChecked(self.__view.edit_language.file_name.text() == string_list[i])
             out_file_radio_button_list[i].toggled.connect(
-                lambda: self.set_out_file(out_file_dialog, out_file_radio_button_list))
+                lambda: self.__set_out_file(out_file_dialog, out_file_radio_button_list))
         # 隐藏多出来的按钮
         if len(out_file_radio_button_list) > len(string_list):
             for i in range(len(out_file_radio_button_list)):
@@ -711,7 +708,7 @@ class OutFileDialog:
                     out_file_radio_button_list[i].hide()
         out_file_dialog.exec()
 
-    def set_out_file(self, out_file_dialog, out_file_radio_button_list):
+    def __set_out_file(self, out_file_dialog, out_file_radio_button_list):
         if out_file_radio_button_list:
             for radio_button in out_file_radio_button_list:
                 if radio_button.isChecked():
@@ -754,18 +751,18 @@ class LanguageDialog:
             self.language_check_box_list[i].setChecked(
                 urls.LANGUAGE_LIST[i] in self.__view.edit_language.language.text())
             self.language_check_box_list[i].toggled.connect(
-                lambda: self.select_language(self.language_check_box_list))
+                lambda: self.__select_language(self.language_check_box_list))
         # 隐藏多出来的按钮
         if len(self.language_check_box_list) > len(urls.LANGUAGE_LIST):
             for i in range(len(self.language_check_box_list)):
                 if i >= len(urls.LANGUAGE_LIST):
                     self.language_check_box_list[i].hide()
-        language_dialog.deselect_all.clicked.connect(lambda: self.select_all_language(False))
-        language_dialog.select_all.clicked.connect(lambda: self.select_all_language(True))
+        language_dialog.deselect_all.clicked.connect(lambda: self.__select_all_language(False))
+        language_dialog.select_all.clicked.connect(lambda: self.__select_all_language(True))
         language_dialog.ok.clicked.connect(lambda: language_dialog.hide())
         language_dialog.exec()
 
-    def select_language(self, language_check_box_list):
+    def __select_language(self, language_check_box_list):
         if language_check_box_list:
             self.__view.edit_language.language.setText("")
             for radio_button in language_check_box_list:
@@ -773,6 +770,6 @@ class LanguageDialog:
                     self.__view.edit_language.language.setText(
                         self.__view.edit_language.language.text() + radio_button.text().strip(" ") + ",")
 
-    def select_all_language(self, enable):
+    def __select_all_language(self, enable):
         for i in range(len(urls.LANGUAGE_LIST)):
             self.language_check_box_list[i].setChecked(enable)
