@@ -33,7 +33,9 @@ DEFAULT_GIFT_CONFIG_LIST = {
 
 # 0: 编辑模式 1: 查看模式
 select_mode_type = 0
+# GiftItem列表数据
 add_gift_item_list = []
+# gift wall配置数据
 add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
 
 
