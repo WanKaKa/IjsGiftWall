@@ -75,6 +75,7 @@ class AddGiftDialog(QDialog, Ui_Dialog):
     def __init_radio_button(self, type_value, radio_list, string_list):
         _translate = QtCore.QCoreApplication.translate
         for i in range(len(string_list)):
+            utils.set_radio_button_style(radio_list[i], False)
             radio_list[i].setText(_translate("Form", string_list[i]))
             if type_value == 0:
                 if self.__select_language == radio_list[i].text():
