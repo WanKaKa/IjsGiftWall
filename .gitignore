@@ -36,6 +36,7 @@ captures/
 *.apks
 
 venv/
+dist/
 
 __pycache__/
 

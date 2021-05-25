@@ -29,3 +29,10 @@ def get_outputs():
     if not os.path.exists(path):
         os.makedirs(path)
     return path
+
+
+def get_res():
+    path = ROOT_PATH + 'res\\'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    return path
