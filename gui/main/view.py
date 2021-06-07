@@ -608,6 +608,7 @@ class EditOperation(QWidget, gui.main.operation.edit_button.Ui_Form):
         super(EditOperation, self).__init__(None)
         self.setupUi(self)
         self.__view = parent
+        self.setMinimumSize(480, 160)
 
         self.reload_data_config.clicked.connect(self.__reload_data_config)
         self.reload_data.clicked.connect(self.__reload_data)
@@ -651,6 +652,7 @@ class CheckOperation(QWidget, gui.main.operation.check_button.Ui_Form):
         super(CheckOperation, self).__init__(None)
         self.setupUi(self)
         self.__view = parent
+        self.setMinimumSize(480, 110)
 
         self.open_outputs_2.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
         self.clear_outputs_2.clicked.connect(self.__view.delete_dir)

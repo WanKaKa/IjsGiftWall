@@ -19,6 +19,7 @@ class Ui_Form(object):
         Form.setStyleSheet("")
         self.frame = QtWidgets.QFrame(Form)
         self.frame.setGeometry(QtCore.QRect(0, 0, 480, 160))
+        self.frame.setMinimumSize(QtCore.QSize(480, 160))
         self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
