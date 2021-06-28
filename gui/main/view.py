@@ -645,6 +645,7 @@ class EditOperation(QWidget, gui.main.operation.edit_button.Ui_Form):
             self.__view, '生成GiftWall配置表', '确定生成GiftWall配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.__view.save_gift_wall_file()
+            self.__view.edit_language.language.setText("")
 
 
 class CheckOperation(QWidget, gui.main.operation.check_button.Ui_Form):

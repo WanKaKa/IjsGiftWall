@@ -104,31 +104,32 @@ def analysis_xml_item(content, name):
 
 def create_gift_wall_files(file_name, language_list, config_list, entity_list):
     for language in language_list:
-        dir_path = path_.get_outputs() + (language + "\\" if urls.LANGUAGE_LIST[0] != language else "")
-        if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
-        file = open(dir_path + file_name, mode='w', encoding='utf-8')
-        file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-        file.write("\n")
-        file.write("<" + TAG_GIFT_LIST + ">")
-        file.write("\n")
-        file.write("\n")
+        if language:
+            dir_path = path_.get_outputs() + (language + "\\" if urls.LANGUAGE_LIST[0] != language else "")
+            if not os.path.exists(dir_path):
+                os.makedirs(dir_path)
+            file = open(dir_path + file_name, mode='w', encoding='utf-8')
+            file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+            file.write("\n")
+            file.write("<" + TAG_GIFT_LIST + ">")
+            file.write("\n")
+            file.write("\n")
 
-        write_config_item(file, config_list[TARGET_RATE])
-        write_config_item(file, config_list[TARGET_INTERSTITIAL])
-        write_config_item(file, config_list[TARGET_LIST])
-        write_config_item(file, config_list[TARGET_DIALOG])
-        write_config_item(file, config_list[TARGET_CAROUSEL])
-        write_config_item(file, config_list[TARGET_SIDEBAR])
-        write_config_item(file, config_list[TARGET_WALL])
-        file.write("\n")
+            write_config_item(file, config_list[TARGET_RATE])
+            write_config_item(file, config_list[TARGET_INTERSTITIAL])
+            write_config_item(file, config_list[TARGET_LIST])
+            write_config_item(file, config_list[TARGET_DIALOG])
+            write_config_item(file, config_list[TARGET_CAROUSEL])
+            write_config_item(file, config_list[TARGET_SIDEBAR])
+            write_config_item(file, config_list[TARGET_WALL])
+            file.write("\n")
 
-        for entity_value in entity_list:
-            write_entity_item(file, entity_value)
+            for entity_value in entity_list:
+                write_entity_item(file, entity_value)
 
-        file.write("</" + TAG_GIFT_LIST + ">")
-        file.write("\n")
-        file.close()
+            file.write("</" + TAG_GIFT_LIST + ">")
+            file.write("\n")
+            file.close()
 
 
 def write_config_item(file, config):
