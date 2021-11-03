@@ -18,8 +18,8 @@ import gui.main.operation.edit_language
 import gui.main.operation.check_language
 import gui.main.operation.edit_button
 import gui.main.operation.check_button
-import gui.main.table_widget
-import gui.main.ui
+import gui.main.table_widget_ui
+import gui.main.edit_gift_ui
 
 DEFAULT_GIFT_CONFIG_LIST = {
     xml_.TARGET_RATE: entity.GiftConfig(target=xml_.TARGET_RATE, limit='5'),
@@ -39,7 +39,7 @@ add_gift_item_list = []
 add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
 
 
-class EditGiftView(QWidget, gui.main.ui.Ui_Form):
+class EditGiftView(QWidget, gui.main.edit_gift_ui.Ui_Form):
     def __init__(self, parent=None):
         super(EditGiftView, self).__init__(parent)
         self.setupUi(self)
@@ -348,7 +348,7 @@ class EditGiftView(QWidget, gui.main.ui.Ui_Form):
         self.tableWidget.selectRow(index)
 
 
-class TableWidget(QWidget, gui.main.table_widget.Ui_Form):
+class TableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
     def __init__(self, parent: EditGiftView = None):
         super(TableWidget, self).__init__(None)
         self.setupUi(self)
