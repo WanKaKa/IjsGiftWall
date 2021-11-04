@@ -39,12 +39,12 @@ add_gift_item_list = []
 add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
 
 
-class EditGiftView(QWidget, gui.main.edit_gift_ui.Ui_Form):
+class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
     def __init__(self, parent=None):
-        super(EditGiftView, self).__init__(parent)
+        super(QEditGiftWidget, self).__init__(parent)
         self.setupUi(self)
 
-        self.setWindowTitle("广告配置编辑-为便捷而生")
+        self.setWindowTitle("广告配置编辑")
         self.setWindowIcon(icon.get_logo())
         self.setWindowState(Qt.WindowMaximized)
         self.progress_dialog = gui.dialog.ProgressDialog(self)
@@ -58,20 +58,20 @@ class EditGiftView(QWidget, gui.main.edit_gift_ui.Ui_Form):
         self.check_outputs_mode.toggled.connect(lambda: self.switch_mode())
 
         # 不同模式下的地区和文件名选择
-        self.edit_language = EditLanguage(parent=self)
+        self.edit_language = QEditLanguage(parent=self)
         self.edit_check_language_layout.addLayout(self.edit_language.verticalLayout)
-        self.check_language = CheckLanguage(parent=self)
+        self.check_language = QCheckLanguage(parent=self)
         self.edit_check_language_layout.addLayout(self.check_language.verticalLayout)
 
         # 显示列表
-        self.content = TableWidget(parent=self)
+        self.content = QKevinTableWidget(parent=self)
         self.content_layout.addWidget(self.content.tableWidget)
         self.tableWidget = self.content.tableWidget
 
         # 不同模式下的按钮设置
-        self.edit_operation = EditOperation(parent=self)
+        self.edit_operation = QEditOperation(parent=self)
         self.edit_check_menu_layout.addWidget(self.edit_operation)
-        self.check_operation = CheckOperation(parent=self)
+        self.check_operation = QCheckOperation(parent=self)
         self.edit_check_menu_layout.addWidget(self.check_operation)
 
     def init_view(self):
@@ -293,7 +293,7 @@ class EditGiftView(QWidget, gui.main.edit_gift_ui.Ui_Form):
 
     def show_add_gift_wall_dialog(self):
         dialog = gui.dialog.add_gift.AddGiftDialog(self, add_gift_item_list=add_gift_item_list)
-        dialog.setWindowTitle("添加GiftWall-为便捷而生")
+        dialog.setWindowTitle("添加GiftWall")
         dialog.setWindowIcon(icon.get_logo())
         rect = self.frameGeometry()
         x = rect.right() - dialog.width() - 10
@@ -348,9 +348,9 @@ class EditGiftView(QWidget, gui.main.edit_gift_ui.Ui_Form):
         self.tableWidget.selectRow(index)
 
 
-class TableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
-    def __init__(self, parent: EditGiftView = None):
-        super(TableWidget, self).__init__(None)
+class QKevinTableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
+    def __init__(self, parent: QEditGiftWidget = None):
+        super(QKevinTableWidget, self).__init__(None)
         self.setupUi(self)
         self.__view = parent
 
@@ -483,15 +483,15 @@ class TableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
             self.tableWidget.selectRow(new_row)
 
 
-class EditLanguage(QWidget, gui.main.operation.edit_language.Ui_Form):
-    def __init__(self, parent: EditGiftView = None):
-        super(EditLanguage, self).__init__(None)
+class QEditLanguage(QWidget, gui.main.operation.edit_language.Ui_Form):
+    def __init__(self, parent: QEditGiftWidget = None):
+        super(QEditLanguage, self).__init__(None)
         self.setupUi(self)
         self.__view = parent
 
         self.pushButton.clicked.connect(
-            lambda: OutFileDialog(self.__view, urls.XML_NAME_LIST))
-        self.pushButton_2.clicked.connect(lambda: LanguageDialog(self.__view))
+            lambda: QOutFileDialog(self.__view, urls.XML_NAME_LIST))
+        self.pushButton_2.clicked.connect(lambda: QLanguageDialog(self.__view))
 
     def show(self):
         self.file_name_title.show()
@@ -510,9 +510,9 @@ class EditLanguage(QWidget, gui.main.operation.edit_language.Ui_Form):
         self.pushButton_2.hide()
 
 
-class CheckLanguage(QWidget, gui.main.operation.check_language.Ui_Form):
-    def __init__(self, parent: EditGiftView = None):
-        super(CheckLanguage, self).__init__(None)
+class QCheckLanguage(QWidget, gui.main.operation.check_language.Ui_Form):
+    def __init__(self, parent: QEditGiftWidget = None):
+        super(QCheckLanguage, self).__init__(None)
         self.setupUi(self)
         self.__view = parent
 
@@ -603,9 +603,9 @@ class CheckLanguage(QWidget, gui.main.operation.check_language.Ui_Form):
         self.layout_check_mode_language.hide()
 
 
-class EditOperation(QWidget, gui.main.operation.edit_button.Ui_Form):
-    def __init__(self, parent: EditGiftView = None):
-        super(EditOperation, self).__init__(None)
+class QEditOperation(QWidget, gui.main.operation.edit_button.Ui_Form):
+    def __init__(self, parent: QEditGiftWidget = None):
+        super(QEditOperation, self).__init__(None)
         self.setupUi(self)
         self.__view = parent
         self.setMinimumSize(480, 160)
@@ -647,9 +647,9 @@ class EditOperation(QWidget, gui.main.operation.edit_button.Ui_Form):
             self.__view.save_gift_wall_file()
 
 
-class CheckOperation(QWidget, gui.main.operation.check_button.Ui_Form):
-    def __init__(self, parent: EditGiftView = None):
-        super(CheckOperation, self).__init__(None)
+class QCheckOperation(QWidget, gui.main.operation.check_button.Ui_Form):
+    def __init__(self, parent: QEditGiftWidget = None):
+        super(QCheckOperation, self).__init__(None)
         self.setupUi(self)
         self.__view = parent
         self.setMinimumSize(480, 110)
@@ -668,12 +668,12 @@ class CheckOperation(QWidget, gui.main.operation.check_button.Ui_Form):
             self.__view.load_outputs_xml_file()
 
 
-class OutFileDialog:
-    def __init__(self, view_: EditGiftView, string_list):
+class QOutFileDialog:
+    def __init__(self, view_: QEditGiftWidget, string_list):
         self.__view = view_
 
         out_file_dialog = gui.dialog.SingleSelectDialog(self.__view)
-        out_file_dialog.setWindowTitle("选择字符-为便捷而生")
+        out_file_dialog.setWindowTitle("选择字符")
         out_file_dialog.setWindowIcon(icon.get_logo())
 
         out_file_radio_button_list = [
@@ -719,12 +719,12 @@ class OutFileDialog:
                     out_file_dialog.hide()
 
 
-class LanguageDialog:
-    def __init__(self, view_: EditGiftView):
+class QLanguageDialog:
+    def __init__(self, view_: QEditGiftWidget):
         self.__view = view_
 
         language_dialog = gui.dialog.MultipleSelectDialog(self.__view)
-        language_dialog.setWindowTitle("选择地区-为便捷而生")
+        language_dialog.setWindowTitle("选择地区")
         language_dialog.setWindowIcon(icon.get_logo())
 
         self.language_check_box_list = [

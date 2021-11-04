@@ -13,7 +13,7 @@ for language in urls.LANGUAGE_LIST:
 overall_gift_entity = entity.OverallGiftEntity()
 
 
-# 初始化数据
+# 初始化服务器GiftWall数据
 def init_gift_data(view_):
     DownloadConfig(view_)
 
