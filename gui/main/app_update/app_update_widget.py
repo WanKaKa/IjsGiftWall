@@ -13,7 +13,6 @@ class ItemInfo:
         self.min_version = None
         self.max_version = None
         self.priority = None
-        self.tip = None
 
 
 def save_app_update_xml(directory, version, item_list):
@@ -33,9 +32,6 @@ def save_app_update_xml(directory, version, item_list):
             range_str += "max=\"%s\"" % item.ui.max_version.text()
             range_str += " "
             range_str += "p=\"%s\"" % item.ui.priority.text()
-            if item.ui.tip.toPlainText():
-                range_str += " "
-                range_str += "msg=\"%s\"" % (item.ui.tip.toPlainText().replace("\n", "\\n"))
             range_str += "/>"
             file.write(range_str)
             file.write("\n")
@@ -91,9 +87,12 @@ class QKevinAppUpdate(QWidget):
             self.content_layout.removeWidget(item)
         self.item_list.clear()
 
-        self.ui.content.setMinimumSize(QtCore.QSize(0, count * 120 + (count + 1) * 6))
+        self.ui.content.setMinimumSize(QtCore.QSize(0, count * 80 + (count + 1) * 6))
         for i in range(count):
             item = QKevinAppUpdateItem(parent=self)
+            # item.ui.label_4.setVisible(i == 0)
+            # item.ui.label_5.setVisible(i == 0)
+            # item.ui.label_6.setVisible(i == 0)
             self.item_list.append(item)
             self.content_layout.addWidget(item)
 
@@ -132,8 +131,7 @@ class QKevinAppUpdate(QWidget):
                 return "优先级格式错误 行数 = %d" % (index + 1)
 
             # 当一行输入有一项不为空时，版本号和优先级就必须输入
-            if (item.ui.min_version.text() or item.ui.max_version.text()
-                    or item.ui.priority.text() or item.ui.tip.toPlainText()):
+            if item.ui.min_version.text() or item.ui.max_version.text() or item.ui.priority.text():
                 if not (item.ui.min_version.text() and item.ui.max_version.text() and item.ui.priority.text()):
                     return "输入不完整 行数 = %d" % (index + 1)
 
@@ -143,8 +141,7 @@ class QKevinAppUpdate(QWidget):
 
             if index != 0:
                 # 当前行输入不为空，上一行必须输入
-                if (item.ui.min_version.text() or item.ui.max_version.text()
-                        or item.ui.priority.text() or item.ui.tip.toPlainText()):
+                if item.ui.min_version.text() or item.ui.max_version.text() or item.ui.priority.text():
                     pre_item: QKevinAppUpdateItem = self.item_list[index - 1]
                     if (not pre_item.ui.min_version.text()
                             or not pre_item.ui.max_version.text() or not pre_item.ui.priority.text()):
@@ -166,5 +163,3 @@ class QKevinAppUpdate(QWidget):
                 item.ui.min_version.setText(info.min_version)
                 item.ui.max_version.setText(info.max_version)
                 item.ui.priority.setText(info.priority)
-                if isinstance(info.tip, str):
-                    item.ui.tip.setText(info.tip.replace("\\n", "\n"))
