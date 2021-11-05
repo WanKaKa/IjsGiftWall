@@ -24,7 +24,6 @@ class QKevinMainWindow(QWidget):
         self.setWindowTitle("爱卓软工具")
         self.setWindowIcon(icon.get_logo())
         self.setWindowState(Qt.WindowMaximized)
-        self.keyPressEvent = self.key_press_event
 
         # 主菜单界面
         self.main_menu = QKevinMainMenu(parent=self)
@@ -42,28 +41,13 @@ class QKevinMainWindow(QWidget):
         self.app_update = QKevinAppUpdate(parent=self)
         self.ui.verticalLayout.addWidget(self.app_update)
 
-        self.state = None
-        self.show_main_menu()
-
-    def show_main_menu(self):
-        if self.state == self.STATE_MAIN_MENU:
-            return
-        self.state = self.STATE_MAIN_MENU
         self.edit_gift_widget.setVisible(True)
         self.app_update.setVisible(False)
 
     def show_edit_gift(self):
-        self.state = self.STATE_EDIT_GIFT
         self.app_update.setVisible(False)
         self.edit_gift_widget.setVisible(True)
 
     def show_app_update(self):
-        self.state = self.STATE_APP_UPDATE
         self.edit_gift_widget.setVisible(False)
         self.app_update.setVisible(True)
-
-    def key_press_event(self, event):
-        if event.key() == Qt.Key_Escape:
-            self.show_main_menu()
-        else:
-            super().keyPressEvent(event)
