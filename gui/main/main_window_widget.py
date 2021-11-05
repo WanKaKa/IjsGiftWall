@@ -27,17 +27,20 @@ class QKevinMainWindow(QWidget):
         self.keyPressEvent = self.key_press_event
 
         # 主菜单界面
-        self.main_menu = QKevinMainMenu()
+        self.main_menu = QKevinMainMenu(parent=self)
         self.main_menu.show_edit_gift = self.show_edit_gift
         self.main_menu.show_app_update = self.show_app_update
+        self.ui.verticalLayout.addWidget(self.main_menu)
 
         # 广告配置界面
-        self.edit_gift_widget = QEditGiftWidget()
+        self.edit_gift_widget = QEditGiftWidget(parent=self)
         gift.download.init_gift_data(self.edit_gift_widget)
         self.edit_gift_widget.init_view()
+        self.ui.verticalLayout.addWidget(self.edit_gift_widget)
 
         # App升级配置
-        self.app_update = QKevinAppUpdate()
+        self.app_update = QKevinAppUpdate(parent=self)
+        self.ui.verticalLayout.addWidget(self.app_update)
 
         self.state = None
         self.show_main_menu()
@@ -45,29 +48,19 @@ class QKevinMainWindow(QWidget):
     def show_main_menu(self):
         if self.state == self.STATE_MAIN_MENU:
             return
-        if self.state == self.STATE_EDIT_GIFT:
-            self.edit_gift_widget.setVisible(False)
-            self.ui.content.removeWidget(self.edit_gift_widget)
-        elif self.state == self.STATE_APP_UPDATE:
-            self.app_update.setVisible(False)
-            self.ui.content.removeWidget(self.app_update)
-        self.main_menu.setVisible(True)
         self.state = self.STATE_MAIN_MENU
-        self.ui.content.addWidget(self.main_menu)
+        self.edit_gift_widget.setVisible(True)
+        self.app_update.setVisible(False)
 
     def show_edit_gift(self):
         self.state = self.STATE_EDIT_GIFT
-        self.main_menu.setVisible(False)
+        self.app_update.setVisible(False)
         self.edit_gift_widget.setVisible(True)
-        self.ui.content.removeWidget(self.main_menu)
-        self.ui.content.addWidget(self.edit_gift_widget)
 
     def show_app_update(self):
         self.state = self.STATE_APP_UPDATE
-        self.main_menu.setVisible(False)
+        self.edit_gift_widget.setVisible(False)
         self.app_update.setVisible(True)
-        self.ui.content.removeWidget(self.main_menu)
-        self.ui.content.addWidget(self.app_update)
 
     def key_press_event(self, event):
         if event.key() == Qt.Key_Escape:

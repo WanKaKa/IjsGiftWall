@@ -1,9 +1,12 @@
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QMessageBox
 
 import gui.main.app_update.app_update_ui
 import gui.main.app_update.app_update_item_ui
 import xml.dom.minidom
+
+from util import icon
 
 
 class ItemInfo:
@@ -70,10 +73,12 @@ class QKevinAppUpdateItem(QWidget):
 class QKevinAppUpdate(QWidget):
     item_list = []
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidget):
         super(QKevinAppUpdate, self).__init__(parent)
         self.ui = gui.main.app_update.app_update_ui.Ui_Form()
         self.ui.setupUi(self)
+        self.setWindowState(Qt.WindowMaximized)
+
         self.ui.save_to.clicked.connect(self.do_save_to)
         self.ui.open_to.clicked.connect(self.do_open_to)
 
@@ -90,7 +95,7 @@ class QKevinAppUpdate(QWidget):
 
         self.ui.content.setMinimumSize(QtCore.QSize(0, count * 120 + (count + 1) * 6))
         for i in range(count):
-            item = QKevinAppUpdateItem()
+            item = QKevinAppUpdateItem(parent=self)
             self.item_list.append(item)
             self.content_layout.addWidget(item)
 

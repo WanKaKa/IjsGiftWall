@@ -39,49 +39,48 @@ add_gift_item_list = []
 add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
 
 
-class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
-    def __init__(self, parent=None):
+class QEditGiftWidget(QWidget):
+    def __init__(self, parent: QWidget):
         super(QEditGiftWidget, self).__init__(parent)
-        self.setupUi(self)
+        self.ui = gui.main.edit_gift_ui.Ui_Form()
+        self.ui.setupUi(self)
 
-        self.setWindowTitle("广告配置编辑")
-        self.setWindowIcon(icon.get_logo())
         self.setWindowState(Qt.WindowMaximized)
         self.progress_dialog = gui.dialog.ProgressDialog(self)
 
         # 设置公司Logo
         pix_map = QPixmap(icon.resource_path(os.path.join("ico", "logo_big.png")))
-        self.ijoysoft_icon.setPixmap(pix_map)
+        self.ui.ijoysoft_icon.setPixmap(pix_map)
 
         # 模式切换点击事件
-        self.edit_gift_wall_mode.toggled.connect(lambda: self.switch_mode())
-        self.check_outputs_mode.toggled.connect(lambda: self.switch_mode())
+        self.ui.edit_gift_wall_mode.toggled.connect(lambda: self.switch_mode())
+        self.ui.check_outputs_mode.toggled.connect(lambda: self.switch_mode())
 
         # 不同模式下的地区和文件名选择
         self.edit_language = QEditLanguage(parent=self)
-        self.edit_check_language_layout.addLayout(self.edit_language.verticalLayout)
+        self.ui.edit_check_language_layout.addLayout(self.edit_language.ui.verticalLayout)
         self.check_language = QCheckLanguage(parent=self)
-        self.edit_check_language_layout.addLayout(self.check_language.verticalLayout)
+        self.ui.edit_check_language_layout.addLayout(self.check_language.ui.verticalLayout)
 
         # 显示列表
         self.content = QKevinTableWidget(parent=self)
-        self.content_layout.addWidget(self.content.tableWidget)
-        self.tableWidget = self.content.tableWidget
+        self.ui.content_layout.addWidget(self.content.ui.tableWidget)
+        self.tableWidget = self.content.ui.tableWidget
 
         # 不同模式下的按钮设置
         self.edit_operation = QEditOperation(parent=self)
-        self.edit_check_menu_layout.addWidget(self.edit_operation)
+        self.ui.edit_check_menu_layout.addWidget(self.edit_operation)
         self.check_operation = QCheckOperation(parent=self)
-        self.edit_check_menu_layout.addWidget(self.check_operation)
+        self.ui.edit_check_menu_layout.addWidget(self.check_operation)
 
     def init_view(self):
         self.content.set_table_widget()
         if select_mode_type == 0:
-            self.edit_gift_wall_mode.setChecked(True)
-            self.check_outputs_mode.setChecked(False)
+            self.ui.edit_gift_wall_mode.setChecked(True)
+            self.ui.check_outputs_mode.setChecked(False)
         else:
-            self.edit_gift_wall_mode.setChecked(False)
-            self.check_outputs_mode.setChecked(True)
+            self.ui.edit_gift_wall_mode.setChecked(False)
+            self.ui.check_outputs_mode.setChecked(True)
         self.set_select_mode()
         self.set_gift_config_view()
 
@@ -89,55 +88,55 @@ class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
         if select_mode_type == 0:
             self.edit_language.show()
             self.check_language.hide()
-            self.mode_frame.setStyleSheet("background-color: rgb(85, 85, 255);")
-            self.edit_operation.show()
+            self.ui.mode_frame.setStyleSheet("background-color: rgb(85, 85, 255);")
             self.check_operation.hide()
+            self.edit_operation.show()
         else:
             self.edit_language.hide()
             self.check_language.show()
-            self.mode_frame.setStyleSheet("background-color: rgb(0, 170, 0);")
+            self.ui.mode_frame.setStyleSheet("background-color: rgb(0, 170, 0);")
             self.edit_operation.hide()
             self.check_operation.show()
 
     def set_gift_config_view(self):
         value = add_gift_config_list[xml_.TARGET_RATE]
-        self.rate_index.setText(value.index)
-        self.rate_count.setText(value.count)
-        self.rate_limit.setText(value.limit)
+        self.ui.rate_index.setText(value.index)
+        self.ui.rate_count.setText(value.count)
+        self.ui.rate_limit.setText(value.limit)
 
         value = add_gift_config_list[xml_.TARGET_INTERSTITIAL]
-        self.interstitial_index.setText(value.index)
-        self.interstitial_count.setText(value.count)
-        self.interstitial_limit.setText(value.limit)
+        self.ui.interstitial_index.setText(value.index)
+        self.ui.interstitial_count.setText(value.count)
+        self.ui.interstitial_limit.setText(value.limit)
 
         value = add_gift_config_list[xml_.TARGET_LIST]
-        self.list_index.setText(value.index)
-        self.list_count.setText(value.count)
-        self.list_limit.setText(value.limit)
+        self.ui.list_index.setText(value.index)
+        self.ui.list_count.setText(value.count)
+        self.ui.list_limit.setText(value.limit)
 
         value = add_gift_config_list[xml_.TARGET_DIALOG]
-        self.dialog_index.setText(value.index)
-        self.dialog_count.setText(value.count)
-        self.dialog_limit.setText(value.limit)
+        self.ui.dialog_index.setText(value.index)
+        self.ui.dialog_count.setText(value.count)
+        self.ui.dialog_limit.setText(value.limit)
 
         value = add_gift_config_list[xml_.TARGET_CAROUSEL]
-        self.carousel_index.setText(value.index)
-        self.carousel_count.setText(value.count)
-        self.carousel_limit.setText(value.limit)
+        self.ui.carousel_index.setText(value.index)
+        self.ui.carousel_count.setText(value.count)
+        self.ui.carousel_limit.setText(value.limit)
 
         value = add_gift_config_list[xml_.TARGET_SIDEBAR]
-        self.sidebar_index.setText(value.index)
-        self.sidebar_count.setText(value.count)
-        self.sidebar_limit.setText(value.limit)
+        self.ui.sidebar_index.setText(value.index)
+        self.ui.sidebar_count.setText(value.count)
+        self.ui.sidebar_limit.setText(value.limit)
 
         value = add_gift_config_list[xml_.TARGET_WALL]
-        self.wall_index.setText(value.index)
+        self.ui.wall_index.setText(value.index)
 
     def save_gift_wall_file(self):
-        if not self.edit_language.file_name.text():
+        if not self.edit_language.ui.file_name.text():
             QMessageBox.information(self, '提示', '输出文件名为空!')
             return
-        if not self.edit_language.language.text():
+        if not self.edit_language.ui.language.text():
             QMessageBox.information(self, '提示', '输出地区为空!')
             return
         if not add_gift_item_list:
@@ -146,8 +145,8 @@ class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
         if not self.get_gift_config_list():
             QMessageBox.information(self, '提示', 'GiftWall配置输入不正确!')
             return
-        xml_.create_gift_wall_files(self.edit_language.file_name.text(),
-                                    self.edit_language.language.text().split(","),
+        xml_.create_gift_wall_files(self.edit_language.ui.file_name.text(),
+                                    self.edit_language.ui.language.text().split(","),
                                     add_gift_config_list, add_gift_item_list)
         # 每次生成文件后，更新输出文件夹中的文件夹集合
         self.check_language.set_radio_button_color()
@@ -157,67 +156,67 @@ class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
         if not self.is_gift_config_valid():
             return False
         value = add_gift_config_list[xml_.TARGET_RATE]
-        value.index = self.rate_index.text()
-        value.count = self.rate_count.text()
-        value.limit = self.rate_limit.text()
+        value.index = self.ui.rate_index.text()
+        value.count = self.ui.rate_count.text()
+        value.limit = self.ui.rate_limit.text()
         add_gift_config_list[xml_.TARGET_RATE] = value
 
         value = add_gift_config_list[xml_.TARGET_INTERSTITIAL]
-        value.index = self.interstitial_index.text()
-        value.count = self.interstitial_count.text()
-        value.limit = self.interstitial_limit.text()
+        value.index = self.ui.interstitial_index.text()
+        value.count = self.ui.interstitial_count.text()
+        value.limit = self.ui.interstitial_limit.text()
         add_gift_config_list[xml_.TARGET_INTERSTITIAL] = value
 
         value = add_gift_config_list[xml_.TARGET_LIST]
-        value.index = self.list_index.text()
-        value.count = self.list_count.text()
-        value.limit = self.list_limit.text()
+        value.index = self.ui.list_index.text()
+        value.count = self.ui.list_count.text()
+        value.limit = self.ui.list_limit.text()
         add_gift_config_list[xml_.TARGET_LIST] = value
 
         value = add_gift_config_list[xml_.TARGET_DIALOG]
-        value.index = self.dialog_index.text()
-        value.count = self.dialog_count.text()
-        value.limit = self.dialog_limit.text()
+        value.index = self.ui.dialog_index.text()
+        value.count = self.ui.dialog_count.text()
+        value.limit = self.ui.dialog_limit.text()
         add_gift_config_list[xml_.TARGET_DIALOG] = value
 
         value = add_gift_config_list[xml_.TARGET_CAROUSEL]
-        value.index = self.carousel_index.text()
-        value.count = self.carousel_count.text()
-        value.limit = self.carousel_limit.text()
+        value.index = self.ui.carousel_index.text()
+        value.count = self.ui.carousel_count.text()
+        value.limit = self.ui.carousel_limit.text()
         add_gift_config_list[xml_.TARGET_CAROUSEL] = value
 
         value = add_gift_config_list[xml_.TARGET_SIDEBAR]
-        value.index = self.sidebar_index.text()
-        value.count = self.sidebar_count.text()
-        value.limit = self.sidebar_limit.text()
+        value.index = self.ui.sidebar_index.text()
+        value.count = self.ui.sidebar_count.text()
+        value.limit = self.ui.sidebar_limit.text()
         add_gift_config_list[xml_.TARGET_SIDEBAR] = value
 
         value = add_gift_config_list[xml_.TARGET_WALL]
-        value.index = self.wall_index.text()
+        value.index = self.ui.wall_index.text()
         add_gift_config_list[xml_.TARGET_WALL] = value
         return True
 
     def is_gift_config_valid(self):
         gift_config_input_list = [
-            self.rate_index,
-            self.rate_count,
-            self.rate_limit,
-            self.interstitial_index,
-            self.interstitial_count,
-            self.interstitial_limit,
-            self.list_index,
-            self.list_count,
-            self.list_limit,
-            self.dialog_index,
-            self.dialog_count,
-            self.dialog_limit,
-            self.carousel_index,
-            self.carousel_count,
-            self.carousel_limit,
-            self.sidebar_index,
-            self.sidebar_count,
-            self.sidebar_limit,
-            self.wall_index,
+            self.ui.rate_index,
+            self.ui.rate_count,
+            self.ui.rate_limit,
+            self.ui.interstitial_index,
+            self.ui.interstitial_count,
+            self.ui.interstitial_limit,
+            self.ui.list_index,
+            self.ui.list_count,
+            self.ui.list_limit,
+            self.ui.dialog_index,
+            self.ui.dialog_count,
+            self.ui.dialog_limit,
+            self.ui.carousel_index,
+            self.ui.carousel_count,
+            self.ui.carousel_limit,
+            self.ui.sidebar_index,
+            self.ui.sidebar_count,
+            self.ui.sidebar_limit,
+            self.ui.wall_index,
         ]
         for gift_config_input in gift_config_input_list:
             if not gift_config_input.text() or not gift_config_input.text().isdigit():
@@ -226,7 +225,7 @@ class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
 
     def switch_mode(self):
         global select_mode_type
-        mode = 0 if self.edit_gift_wall_mode.isChecked() else 1
+        mode = 0 if self.ui.edit_gift_wall_mode.isChecked() else 1
         if select_mode_type == mode:
             return
         select_mode_type = mode
@@ -251,8 +250,8 @@ class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
                 self, '重置界面', '确认重置界面吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
             if reply == QMessageBox.No:
                 return
-        self.edit_language.file_name.setText("")
-        self.edit_language.language.setText("")
+        self.edit_language.ui.file_name.setText("")
+        self.edit_language.ui.language.setText("")
         add_gift_item_list.clear()
         global add_gift_config_list
         add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
@@ -334,8 +333,8 @@ class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
 
     def load_outputs_xml_file(self):
         if select_mode_type == 1:
-            name = self.edit_language.file_name.text()
-            language = self.edit_language.language.text()
+            name = self.edit_language.ui.file_name.text()
+            language = self.edit_language.ui.language.text()
             if name and language:
                 path = path_.get_outputs() + \
                        (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
@@ -348,42 +347,43 @@ class QEditGiftWidget(QWidget, gui.main.edit_gift_ui.Ui_Form):
         self.tableWidget.selectRow(index)
 
 
-class QKevinTableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
+class QKevinTableWidget(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QKevinTableWidget, self).__init__(None)
-        self.setupUi(self)
+        self.ui = gui.main.table_widget_ui.Ui_Form()
+        self.ui.setupUi(self)
         self.__view = parent
 
         self.__init_table_widget()
-        self.tableWidget.keyPressEvent = self.__key_press_event
-        self.tableWidget.itemClicked.connect(self.__table_widget_item_click)
-        self.tableWidget.itemDoubleClicked.connect(self.__table_widget_item_double_click)
+        self.ui.tableWidget.keyPressEvent = self.__key_press_event
+        self.ui.tableWidget.itemClicked.connect(self.__table_widget_item_click)
+        self.ui.tableWidget.itemDoubleClicked.connect(self.__table_widget_item_double_click)
 
     def __init_table_widget(self):
-        self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.ui.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        self.tableWidget.setColumnCount(6)
-        self.tableWidget.setHorizontalHeaderLabels(['序号', '图标', '项目名', '产品名 类型', '包名', '推广图'])
-        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.tableWidget.setIconSize(QSize(48, 48))
-        self.tableWidget.setColumnWidth(0, 60)
-        self.tableWidget.setColumnWidth(1, 60)
-        self.tableWidget.setColumnWidth(2, 200)
-        self.tableWidget.setColumnWidth(3, 200)
-        self.tableWidget.setColumnWidth(4, 270)
-        self.tableWidget.setColumnWidth(5, 60)
+        self.ui.tableWidget.setColumnCount(6)
+        self.ui.tableWidget.setHorizontalHeaderLabels(['序号', '图标', '项目名', '产品名 类型', '包名', '推广图'])
+        self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.tableWidget.setIconSize(QSize(48, 48))
+        self.ui.tableWidget.setColumnWidth(0, 60)
+        self.ui.tableWidget.setColumnWidth(1, 60)
+        self.ui.tableWidget.setColumnWidth(2, 200)
+        self.ui.tableWidget.setColumnWidth(3, 200)
+        self.ui.tableWidget.setColumnWidth(4, 270)
+        self.ui.tableWidget.setColumnWidth(5, 60)
 
     def set_table_widget(self):
         if add_gift_item_list:
-            self.tableWidget.setRowCount(len(add_gift_item_list))
+            self.ui.tableWidget.setRowCount(len(add_gift_item_list))
             for i in range(len(add_gift_item_list)):
                 self.set_table_widget_item(i, add_gift_item_list[i])
         else:
-            self.tableWidget.setRowCount(0)
+            self.ui.tableWidget.setRowCount(0)
 
     def set_table_widget_item(self, index, entity_):
-        self.tableWidget.setRowHeight(index, 50)
+        self.ui.tableWidget.setRowHeight(index, 50)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 18))
@@ -391,42 +391,42 @@ class QKevinTableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
         entity_.id = str(index + 1)
         item.setText(entity_.id)
         item.setTextAlignment(Qt.AlignCenter)
-        self.tableWidget.setItem(index, 0, item)
+        self.ui.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
         icon_ = QIcon(path_.get_download() + entity_.icon_image_path)
         item.setIcon(icon_)
-        self.tableWidget.setItem(index, 1, item)
+        self.ui.tableWidget.setItem(index, 1, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 12))
         item.setForeground(QBrush(QColor(85, 85, 255)))
         item.setText(entity_.project_name)
-        self.tableWidget.setItem(index, 2, item)
+        self.ui.tableWidget.setItem(index, 2, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 8))
         item.setText("产品名: " + (entity_.title if entity_.title else "") +
                      "\n类   型: " + (entity_.app_type if entity_.app_type else ""))
-        self.tableWidget.setItem(index, 3, item)
+        self.ui.tableWidget.setItem(index, 3, item)
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 8))
         item.setText(entity_.package_name)
-        self.tableWidget.setItem(index, 4, item)
+        self.ui.tableWidget.setItem(index, 4, item)
 
         item = None
         if entity_.poster_path:
             item = QTableWidgetItem()
             icon_ = QIcon(path_.get_download() + entity_.poster_path)
             item.setIcon(QIcon(icon_))
-        self.tableWidget.setItem(index, 5, item)
+        self.ui.tableWidget.setItem(index, 5, item)
 
     def __table_widget_item_click(self):
-        print(self.tableWidget.currentItem().text())
+        print(self.ui.tableWidget.currentItem().text())
 
     def __table_widget_item_double_click(self):
-        row = self.tableWidget.currentItem().row()
+        row = self.ui.tableWidget.currentItem().row()
         image_dialog = gui.dialog.SeeImageDialog(self.__view)
         image_dialog.setWindowTitle("为便捷而生")
         image_dialog.setWindowIcon(icon.get_logo())
@@ -453,9 +453,9 @@ class QKevinTableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
 
     def __key_press_event(self, event):
         if event.key() == QtCore.Qt.Key_Delete or event.key() == QtCore.Qt.Key_D:
-            while self.tableWidget.selectedItems():
-                row = self.tableWidget.selectedItems()[0].row()
-                self.tableWidget.removeRow(row)
+            while self.ui.tableWidget.selectedItems():
+                row = self.ui.tableWidget.selectedItems()[0].row()
+                self.ui.tableWidget.removeRow(row)
                 add_gift_item_list.remove(add_gift_item_list[row])
             self.set_table_widget()
         elif event.key() == QtCore.Qt.Key_Up:
@@ -463,13 +463,13 @@ class QKevinTableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
         elif event.key() == QtCore.Qt.Key_Down:
             self.__move_table_widget_item(False)
         elif event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_A:
-            self.tableWidget.selectAll()
+            self.ui.tableWidget.selectAll()
         else:
             super().keyPressEvent(event)
 
     def __move_table_widget_item(self, up):
         selected_rows = []
-        for item in self.tableWidget.selectedItems():
+        for item in self.ui.tableWidget.selectedItems():
             if item.row() not in selected_rows:
                 selected_rows.append(item.row())
         if len(selected_rows) == 1:
@@ -480,73 +480,75 @@ class QKevinTableWidget(QWidget, gui.main.table_widget_ui.Ui_Form):
             add_gift_item_list.insert(new_row, entity_)
             self.set_table_widget_item(row, add_gift_item_list[row])
             self.set_table_widget_item(new_row, add_gift_item_list[new_row])
-            self.tableWidget.selectRow(new_row)
+            self.ui.tableWidget.selectRow(new_row)
 
 
-class QEditLanguage(QWidget, gui.main.operation.edit_language.Ui_Form):
+class QEditLanguage(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QEditLanguage, self).__init__(None)
-        self.setupUi(self)
+        self.ui = gui.main.operation.edit_language.Ui_Form()
+        self.ui.setupUi(self)
         self.__view = parent
 
-        self.pushButton.clicked.connect(
+        self.ui.pushButton.clicked.connect(
             lambda: QOutFileDialog(self.__view, urls.XML_NAME_LIST))
-        self.pushButton_2.clicked.connect(lambda: QLanguageDialog(self.__view))
+        self.ui.pushButton_2.clicked.connect(lambda: QLanguageDialog(self.__view))
 
     def show(self):
-        self.file_name_title.show()
-        self.file_name.show()
-        self.pushButton.show()
-        self.language_title.show()
-        self.language.show()
-        self.pushButton_2.show()
+        self.ui.file_name_title.show()
+        self.ui.file_name.show()
+        self.ui.pushButton.show()
+        self.ui.language_title.show()
+        self.ui.language.show()
+        self.ui.pushButton_2.show()
 
     def hide(self):
-        self.file_name_title.hide()
-        self.file_name.hide()
-        self.pushButton.hide()
-        self.language_title.hide()
-        self.language.hide()
-        self.pushButton_2.hide()
+        self.ui.file_name_title.hide()
+        self.ui.file_name.hide()
+        self.ui.pushButton.hide()
+        self.ui.language_title.hide()
+        self.ui.language.hide()
+        self.ui.pushButton_2.hide()
 
 
-class QCheckLanguage(QWidget, gui.main.operation.check_language.Ui_Form):
+class QCheckLanguage(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QCheckLanguage, self).__init__(None)
-        self.setupUi(self)
+        self.ui = gui.main.operation.check_language.Ui_Form()
+        self.ui.setupUi(self)
         self.__view = parent
 
         self.file_name_radio_list = [
-            self.file_name_radio_1,
-            self.file_name_radio_3,
-            self.file_name_radio_5,
-            self.file_name_radio_7,
-            self.file_name_radio_9,
-            self.file_name_radio_11,
-            self.file_name_radio_2,
-            self.file_name_radio_4,
-            self.file_name_radio_6,
-            self.file_name_radio_8,
-            self.file_name_radio_10,
-            self.file_name_radio_12,
+            self.ui.file_name_radio_1,
+            self.ui.file_name_radio_3,
+            self.ui.file_name_radio_5,
+            self.ui.file_name_radio_7,
+            self.ui.file_name_radio_9,
+            self.ui.file_name_radio_11,
+            self.ui.file_name_radio_2,
+            self.ui.file_name_radio_4,
+            self.ui.file_name_radio_6,
+            self.ui.file_name_radio_8,
+            self.ui.file_name_radio_10,
+            self.ui.file_name_radio_12,
         ]
         self.language_radio_list = [
-            self.language_radio_1,
-            self.language_radio_3,
-            self.language_radio_5,
-            self.language_radio_7,
-            self.language_radio_9,
-            self.language_radio_11,
-            self.language_radio_2,
-            self.language_radio_4,
-            self.language_radio_6,
-            self.language_radio_8,
-            self.language_radio_10,
-            self.language_radio_12,
+            self.ui.language_radio_1,
+            self.ui.language_radio_3,
+            self.ui.language_radio_5,
+            self.ui.language_radio_7,
+            self.ui.language_radio_9,
+            self.ui.language_radio_11,
+            self.ui.language_radio_2,
+            self.ui.language_radio_4,
+            self.ui.language_radio_6,
+            self.ui.language_radio_8,
+            self.ui.language_radio_10,
+            self.ui.language_radio_12,
         ]
 
-        self.__init_radio_button(self.__view.edit_language.file_name, self.file_name_radio_list, urls.XML_NAME_LIST)
-        self.__init_radio_button(self.__view.edit_language.language, self.language_radio_list, urls.LANGUAGE_LIST)
+        self.__init_radio_button(self.__view.edit_language.ui.file_name, self.file_name_radio_list, urls.XML_NAME_LIST)
+        self.__init_radio_button(self.__view.edit_language.ui.language, self.language_radio_list, urls.LANGUAGE_LIST)
 
     def __init_radio_button(self, label, radio_list, string_list):
         _translate = QtCore.QCoreApplication.translate
@@ -581,45 +583,46 @@ class QCheckLanguage(QWidget, gui.main.operation.check_language.Ui_Form):
         for radio in self.language_radio_list:
             utils.set_radio_button_style(radio, radio.text() not in outputs_dir_list)
         for radio in self.file_name_radio_list:
-            language = self.__view.edit_language.language.text()
+            language = self.__view.edit_language.ui.language.text()
             dir_name = language if language != urls.LANGUAGE_LIST[0] else ""
             utils.set_radio_button_style(
                 radio, language and not os.path.exists(path_.get_outputs() + dir_name + "\\" + radio.text()))
 
     def show(self):
-        self.layout_check_mode_file_name.show()
-        self.layout_check_mode_language.show()
+        self.ui.layout_check_mode_file_name.show()
+        self.ui.layout_check_mode_language.show()
 
         for radio in self.language_radio_list:
             if radio.isChecked():
-                self.__view.edit_language.language.setText(radio.text())
+                self.__view.edit_language.ui.language.setText(radio.text())
         for radio in self.file_name_radio_list:
             if radio.isChecked():
-                self.__view.edit_language.file_name.setText(radio.text())
+                self.__view.edit_language.ui.file_name.setText(radio.text())
         self.set_radio_button_color()
 
     def hide(self):
-        self.layout_check_mode_file_name.hide()
-        self.layout_check_mode_language.hide()
+        self.ui.layout_check_mode_file_name.hide()
+        self.ui.layout_check_mode_language.hide()
 
 
-class QEditOperation(QWidget, gui.main.operation.edit_button.Ui_Form):
+class QEditOperation(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QEditOperation, self).__init__(None)
-        self.setupUi(self)
+        self.ui = gui.main.operation.edit_button.Ui_Form()
+        self.ui.setupUi(self)
         self.__view = parent
         self.setMinimumSize(480, 160)
 
-        self.reload_data_config.clicked.connect(self.__reload_data_config)
-        self.reload_data.clicked.connect(self.__reload_data)
-        self.reset_ui.clicked.connect(lambda: self.__view.reset_ui(confirm=True))
+        self.ui.reload_data_config.clicked.connect(self.__reload_data_config)
+        self.ui.reload_data.clicked.connect(self.__reload_data)
+        self.ui.reset_ui.clicked.connect(lambda: self.__view.reset_ui(confirm=True))
 
-        self.add_gift_wall.clicked.connect(self.__view.show_add_gift_wall_dialog)
-        self.import_gift_wall.clicked.connect(self.__import_gift_wall)
-        self.create_gift_wall_file.clicked.connect(self.__save_gift_wall_file)
+        self.ui.add_gift_wall.clicked.connect(self.__view.show_add_gift_wall_dialog)
+        self.ui.import_gift_wall.clicked.connect(self.__import_gift_wall)
+        self.ui.create_gift_wall_file.clicked.connect(self.__save_gift_wall_file)
 
-        self.open_outputs.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
-        self.clear_outputs.clicked.connect(self.__view.delete_dir)
+        self.ui.open_outputs.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
+        self.ui.clear_outputs.clicked.connect(self.__view.delete_dir)
 
     def __reload_data_config(self):
         reply = QMessageBox.question(
@@ -647,19 +650,20 @@ class QEditOperation(QWidget, gui.main.operation.edit_button.Ui_Form):
             self.__view.save_gift_wall_file()
 
 
-class QCheckOperation(QWidget, gui.main.operation.check_button.Ui_Form):
+class QCheckOperation(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QCheckOperation, self).__init__(None)
-        self.setupUi(self)
+        self.ui = gui.main.operation.check_button.Ui_Form()
+        self.ui.setupUi(self)
         self.__view = parent
         self.setMinimumSize(480, 110)
 
-        self.open_outputs_2.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
-        self.clear_outputs_2.clicked.connect(self.__view.delete_dir)
+        self.ui.open_outputs_2.clicked.connect(lambda: os.system("start " + path_.get_outputs()))
+        self.ui.clear_outputs_2.clicked.connect(self.__view.delete_dir)
 
-        self.save.clicked.connect(self.__view.save_gift_wall_file)
-        self.add_gift_wall_2.clicked.connect(self.__view.show_add_gift_wall_dialog)
-        self.cancel_save.clicked.connect(self.__cancel_save)
+        self.ui.save.clicked.connect(self.__view.save_gift_wall_file)
+        self.ui.add_gift_wall_2.clicked.connect(self.__view.show_add_gift_wall_dialog)
+        self.ui.cancel_save.clicked.connect(self.__cancel_save)
 
     def __cancel_save(self):
         reply = QMessageBox.question(
@@ -699,7 +703,7 @@ class QOutFileDialog:
         for i in range(len(string_list)):
             utils.set_radio_button_style(out_file_radio_button_list[i], False)
             out_file_radio_button_list[i].setText(_translate("Form", string_list[i]))
-            out_file_radio_button_list[i].setChecked(self.__view.edit_language.file_name.text() == string_list[i])
+            out_file_radio_button_list[i].setChecked(self.__view.edit_language.ui.file_name.text() == string_list[i])
             out_file_radio_button_list[i].toggled.connect(
                 lambda: self.__set_out_file(out_file_dialog, out_file_radio_button_list))
         # 隐藏多出来的按钮
@@ -713,9 +717,9 @@ class QOutFileDialog:
         if out_file_radio_button_list:
             for radio_button in out_file_radio_button_list:
                 if radio_button.isChecked():
-                    if self.__view.edit_language.file_name.text() == radio_button.text():
+                    if self.__view.edit_language.ui.file_name.text() == radio_button.text():
                         return
-                    self.__view.edit_language.file_name.setText(radio_button.text())
+                    self.__view.edit_language.ui.file_name.setText(radio_button.text())
                     out_file_dialog.hide()
 
 
@@ -751,7 +755,7 @@ class QLanguageDialog:
             utils.set_check_box_style(self.language_check_box_list[i])
             self.language_check_box_list[i].setText(_translate("Dialog", urls.LANGUAGE_LIST[i].ljust(50, " ")))
             self.language_check_box_list[i].setChecked(
-                urls.LANGUAGE_LIST[i] in self.__view.edit_language.language.text())
+                urls.LANGUAGE_LIST[i] in self.__view.edit_language.ui.language.text())
             self.language_check_box_list[i].toggled.connect(
                 lambda: self.__select_language(self.language_check_box_list))
         # 隐藏多出来的按钮
@@ -766,11 +770,11 @@ class QLanguageDialog:
 
     def __select_language(self, language_check_box_list):
         if language_check_box_list:
-            self.__view.edit_language.language.setText("")
+            self.__view.edit_language.ui.language.setText("")
             for radio_button in language_check_box_list:
                 if radio_button.isChecked():
-                    self.__view.edit_language.language.setText(
-                        self.__view.edit_language.language.text() + radio_button.text().strip(" ") + ",")
+                    self.__view.edit_language.ui.language.setText(
+                        self.__view.edit_language.ui.language.text() + radio_button.text().strip(" ") + ",")
 
     def __select_all_language(self, enable):
         for i in range(len(urls.LANGUAGE_LIST)):

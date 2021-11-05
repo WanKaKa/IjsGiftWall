@@ -19,10 +19,9 @@ class Ui_From(object):
         self.formLayout.setContentsMargins(6, 6, 6, 6)
         self.formLayout.setSpacing(0)
         self.formLayout.setObjectName("formLayout")
-        self.content = QtWidgets.QVBoxLayout()
-        self.content.setSpacing(6)
-        self.content.setObjectName("content")
-        self.formLayout.setLayout(0, QtWidgets.QFormLayout.FieldRole, self.content)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.formLayout.setLayout(0, QtWidgets.QFormLayout.FieldRole, self.verticalLayout)
 
         self.retranslateUi(From)
         QtCore.QMetaObject.connectSlotsByName(From)
