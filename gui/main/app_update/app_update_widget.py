@@ -6,8 +6,6 @@ import gui.main.app_update.app_update_ui
 import gui.main.app_update.app_update_item_ui
 import xml.dom.minidom
 
-from util import icon
-
 
 class ItemInfo:
 
@@ -28,7 +26,7 @@ def save_app_update_xml(directory, version, item_list):
     for index in range(len(item_list)):
         item: QKevinAppUpdateItem = item_list[index]
         if item.ui.min_version.text() and item.ui.max_version.text() and item.ui.priority.text():
-            range_str = "<range"
+            range_str = "    <range"
             range_str += " "
             range_str += "min=\"%s\"" % item.ui.min_version.text()
             range_str += " "
