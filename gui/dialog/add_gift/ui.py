@@ -170,14 +170,14 @@ class Ui_Dialog(object):
         self.add_all.setMinimumSize(QtCore.QSize(0, 0))
         self.add_all.setStyleSheet("font: 12pt \"微软雅黑\";\n"
 "color: rgb(255, 255, 255);\n"
-"background-color: rgb(85, 85, 255);")
+"background-color: rgb(57, 61, 255);")
         self.add_all.setObjectName("add_all")
         self.add = QtWidgets.QPushButton(self.frame)
         self.add.setGeometry(QtCore.QRect(840, 10, 160, 40))
         self.add.setMinimumSize(QtCore.QSize(0, 0))
         self.add.setStyleSheet("font: 12pt \"微软雅黑\";\n"
 "color: rgb(255, 255, 255);\n"
-"background-color: rgb(85, 85, 255);")
+"background-color: rgb(57, 61, 255);")
         self.add.setObjectName("add")
         self.verticalLayout.addWidget(self.frame)
         self.formLayout.setLayout(0, QtWidgets.QFormLayout.SpanningRole, self.verticalLayout)

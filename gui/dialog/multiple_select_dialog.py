@@ -100,19 +100,19 @@ class Ui_Dialog(object):
         self.checkBox_16.setObjectName("checkBox_16")
         self.select_all = QtWidgets.QPushButton(Dialog)
         self.select_all.setGeometry(QtCore.QRect(160, 10, 120, 40))
-        self.select_all.setStyleSheet("background-color: rgb(85, 85, 255);\n"
+        self.select_all.setStyleSheet("background-color: rgb(57, 61, 255);\n"
 "color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.select_all.setObjectName("select_all")
         self.deselect_all = QtWidgets.QPushButton(Dialog)
         self.deselect_all.setGeometry(QtCore.QRect(20, 10, 120, 40))
-        self.deselect_all.setStyleSheet("background-color: rgb(85, 85, 255);\n"
+        self.deselect_all.setStyleSheet("background-color: rgb(57, 61, 255);\n"
 "color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.deselect_all.setObjectName("deselect_all")
         self.ok = QtWidgets.QPushButton(Dialog)
         self.ok.setGeometry(QtCore.QRect(160, 710, 120, 40))
-        self.ok.setStyleSheet("background-color: rgb(85, 85, 255);\n"
+        self.ok.setStyleSheet("background-color: rgb(57, 61, 255);\n"
 "color: rgb(255, 255, 255);\n"
 "font: 12pt \"微软雅黑\";")
         self.ok.setObjectName("ok")

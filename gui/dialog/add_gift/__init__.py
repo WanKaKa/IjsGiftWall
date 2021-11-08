@@ -149,7 +149,7 @@ class AddGiftDialog(QDialog, Ui_Dialog):
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 18))
-        item.setForeground(QBrush(QColor(85, 85, 255)))
+        item.setForeground(QBrush(QColor(57, 61, 255)))
         item.setText(str(index + 1))
         item.setTextAlignment(Qt.AlignCenter)
         self.tableWidget.setItem(index, 0, item)
@@ -161,7 +161,7 @@ class AddGiftDialog(QDialog, Ui_Dialog):
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 10))
-        item.setForeground(QBrush(QColor(85, 85, 255)))
+        item.setForeground(QBrush(QColor(57, 61, 255)))
         item.setText(entity_.project_name)
         self.tableWidget.setItem(index, 2, item)
 

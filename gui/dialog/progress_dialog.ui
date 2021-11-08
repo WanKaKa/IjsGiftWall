@@ -49,7 +49,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">font: 14pt &quot;微软雅黑&quot;;
-color: rgb(85, 85, 255);</string>
+color: rgb(57, 61, 255);</string>
    </property>
    <property name="text">
     <string>正在更新数据，请稍等...</string>

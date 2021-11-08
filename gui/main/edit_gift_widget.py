@@ -88,13 +88,13 @@ class QEditGiftWidget(QWidget):
         if select_mode_type == 0:
             self.edit_language.show()
             self.check_language.hide()
-            self.ui.mode_frame.setStyleSheet("background-color: rgb(85, 85, 255);")
+            # self.ui.mode_frame.setStyleSheet("background-color: rgb(57, 61, 255);")
             self.check_operation.hide()
             self.edit_operation.show()
         else:
             self.edit_language.hide()
             self.check_language.show()
-            self.ui.mode_frame.setStyleSheet("background-color: rgb(0, 170, 0);")
+            # self.ui.mode_frame.setStyleSheet("background-color: rgb(0, 170, 0);")
             self.edit_operation.hide()
             self.check_operation.show()
 
@@ -387,7 +387,7 @@ class QKevinTableWidget(QWidget):
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 18))
-        item.setForeground(QBrush(QColor(85, 85, 255)))
+        item.setForeground(QBrush(QColor(57, 61, 255)))
         entity_.id = str(index + 1)
         item.setText(entity_.id)
         item.setTextAlignment(Qt.AlignCenter)
@@ -400,7 +400,7 @@ class QKevinTableWidget(QWidget):
 
         item = QTableWidgetItem()
         item.setFont(QFont('微软雅黑', 12))
-        item.setForeground(QBrush(QColor(85, 85, 255)))
+        item.setForeground(QBrush(QColor(57, 61, 255)))
         item.setText(entity_.project_name)
         self.ui.tableWidget.setItem(index, 2, item)
 

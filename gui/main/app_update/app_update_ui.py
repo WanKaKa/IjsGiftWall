@@ -37,7 +37,7 @@ class Ui_Form(object):
         self.latest_version = QtWidgets.QLineEdit(self.frame)
         self.latest_version.setGeometry(QtCore.QRect(220, 30, 180, 60))
         self.latest_version.setStyleSheet("font: 18pt \"微软雅黑\";\n"
-"color: rgb(0, 0, 255);")
+"color: rgb(57, 61, 255);")
         self.latest_version.setAlignment(QtCore.Qt.AlignCenter)
         self.latest_version.setObjectName("latest_version")
         self.verticalLayout.addWidget(self.frame)

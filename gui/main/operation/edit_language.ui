@@ -66,7 +66,7 @@ background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="styleSheet">
           <string notr="true">font: 14pt &quot;微软雅黑&quot;;
-color: rgb(85, 85, 255);
+color: rgb(57, 61, 255);
 background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
@@ -94,7 +94,7 @@ background-color: rgb(255, 255, 255);</string>
          <property name="styleSheet">
           <string notr="true">font: 12pt &quot;微软雅黑&quot;;
 color: rgb(255, 255, 255);
-background-color: rgb(85, 85, 255);</string>
+background-color: rgb(57, 61, 255);</string>
          </property>
          <property name="text">
           <string>选择</string>
@@ -159,7 +159,7 @@ background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="styleSheet">
           <string notr="true">font: 14pt &quot;微软雅黑&quot;;
-color: rgb(85, 85, 255);
+color: rgb(57, 61, 255);
 background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
@@ -187,7 +187,7 @@ background-color: rgb(255, 255, 255);</string>
          <property name="styleSheet">
           <string notr="true">font: 12pt &quot;微软雅黑&quot;;
 color: rgb(255, 255, 255);
-background-color: rgb(85, 85, 255);</string>
+background-color: rgb(57, 61, 255);</string>
          </property>
          <property name="text">
           <string>选择</string>

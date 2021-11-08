@@ -40,6 +40,20 @@ def put_icon_download_time(value):
     save(KEY_ICON_DOWNLOAD_TIME, value)
 
 
+def get_icon_version():
+    try:
+        data = get()
+        if data and "icon_version" in data:
+            return int(data["icon_version"])
+    except Exception as e:
+        print(e)
+    return 0
+
+
+def put_icon_version(value):
+    save("icon_version", value)
+
+
 def get():
     path = path_.get_database() + normal_json_name
     if not os.path.exists(path):

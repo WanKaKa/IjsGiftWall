@@ -5,7 +5,7 @@ import gui.main.main_menu_ui
 
 
 class QKevinMainMenu(QWidget):
-    THEME_STYLE = "font: 16pt \"微软雅黑\";\ncolor: rgb(255, 255, 255);\nbackground-color: rgb(85, 85, 255);"
+    THEME_STYLE = "font: 16pt \"微软雅黑\";\ncolor: rgb(255, 255, 255);\nbackground-color: rgb(57, 61, 255);"
     NORMAL_STYLE = "font: 16pt \"微软雅黑\";\ncolor: rgb(0, 0, 0);\nbackground-color: rgb(255, 255, 255);"
 
     def __init__(self, parent=None):

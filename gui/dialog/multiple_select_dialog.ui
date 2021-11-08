@@ -310,7 +310,7 @@ font: 12pt &quot;微软雅黑&quot;;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 85, 255);
+    <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
 font: 12pt &quot;微软雅黑&quot;;</string>
    </property>
@@ -328,7 +328,7 @@ font: 12pt &quot;微软雅黑&quot;;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 85, 255);
+    <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
 font: 12pt &quot;微软雅黑&quot;;</string>
    </property>
@@ -346,7 +346,7 @@ font: 12pt &quot;微软雅黑&quot;;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 85, 255);
+    <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
 font: 12pt &quot;微软雅黑&quot;;</string>
    </property>

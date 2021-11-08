@@ -24,7 +24,7 @@ class Ui_Dialog(object):
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(50, 70, 300, 30))
         self.label.setStyleSheet("font: 14pt \"微软雅黑\";\n"
-"color: rgb(85, 85, 255);")
+"color: rgb(57, 61, 255);")
         self.label.setObjectName("label")
 
         self.retranslateUi(Dialog)
