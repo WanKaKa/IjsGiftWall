@@ -3,20 +3,20 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog
 from PyQt5 import QtCore
 
-from gift import urls, download
+from app.edit_gift.core import download, urls
 from util import path_, utils
 
-from gui.dialog.add_gift.ui import Ui_Dialog
+from app.edit_gift.gui.dialog import add_gift_ui
 
 
-class AddGiftDialog(QDialog, Ui_Dialog):
+class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
     __OVERALL_GIFT_WALL_FILE_NAME = "总表"
 
     __select_language = urls.LANGUAGE_LIST[0]
     __select_gift_name = __OVERALL_GIFT_WALL_FILE_NAME
 
     def __init__(self, parent=None, add_gift_item_list=None):
-        super(AddGiftDialog, self).__init__(parent)
+        super(QAddGiftDialog, self).__init__(parent)
         self.setupUi(self)
 
         self.add_gift_item_list = add_gift_item_list

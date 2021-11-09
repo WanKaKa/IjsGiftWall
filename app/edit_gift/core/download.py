@@ -1,9 +1,9 @@
 import os
 import time
 
-from database import json_
-from gift import urls, entity, downloader
-from util import xml_, path_
+from database import json_ex
+from app.edit_gift.core import entity, urls, downloader, xml_
+from util import path_
 
 # 每个地区对应的表数据
 gift_entity_list = {}
@@ -94,8 +94,8 @@ class DownloadIcon:
 
 
 def is_downloaded_config():
-    return json_.get_config_download_time() > 0
+    return json_ex.get_config_download_time() > 0
 
 
 def is_downloaded_icon():
-    return json_.get_icon_download_time() > 0
+    return json_ex.get_icon_download_time() > 0

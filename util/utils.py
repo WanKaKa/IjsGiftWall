@@ -4,8 +4,8 @@ import shutil
 from PyQt5.QtWidgets import QCheckBox, QRadioButton
 
 import release
-from database import json_
-from gift import urls
+from database import json_ex
+from app.edit_gift.core import urls
 from util import path_, icon
 
 
@@ -49,12 +49,12 @@ def is_entity_added(entity_, entity_list):
 
 def copy_res():
     res_list = os.listdir(path_.get_res())
-    icon_version = json_.get_icon_version()
+    icon_version = json_ex.get_icon_version()
     for item in os.listdir(icon.resource_path("./ico")):
         if item not in res_list or icon_version != release.version:
             shutil.copyfile(icon.resource_path(os.path.join("ico", item)), os.path.join(path_.get_res(), item))
     if icon_version != release.version:
-        json_.put_icon_version(release.version)
+        json_ex.put_icon_version(release.version)
 
 
 def set_check_box_style(check_box):

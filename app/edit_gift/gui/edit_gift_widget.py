@@ -8,18 +8,17 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
 from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QStyle, QFileDialog
 from PyQt5 import QtCore
 
-from database import json_
-from gift import urls, download, entity
-from util import xml_, path_, icon, utils
+from database import json_ex
+from app.edit_gift.core import entity, download, urls, xml_
+from util import path_, icon, utils
 
-import gui.dialog
-import gui.dialog.add_gift
-import gui.main.operation.edit_language
-import gui.main.operation.check_language
-import gui.main.operation.edit_button
-import gui.main.operation.check_button
-import gui.main.table_widget_ui
-import gui.main.edit_gift_ui
+from app.edit_gift.gui.dialog.add_gift_dialog import QAddGiftDialog
+from app.edit_gift.gui.dialog.progress_dialog import QProgressDialog
+from app.edit_gift.gui.dialog.single_select_dialog import QSingleSelectDialog
+from app.edit_gift.gui.dialog.multiple_select_dialog import QMultipleSelectDialog
+from app.edit_gift.gui.dialog.see_image_dialog import QSeeImageDialog
+from app.edit_gift.gui.operation import edit_language_ui, check_language_ui, edit_button_ui, check_button_ui
+from app.edit_gift.gui import table_widget_ui, edit_gift_ui
 
 DEFAULT_GIFT_CONFIG_LIST = {
     xml_.TARGET_RATE: entity.GiftConfig(target=xml_.TARGET_RATE, limit='5'),
@@ -42,11 +41,11 @@ add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
 class QEditGiftWidget(QWidget):
     def __init__(self, parent: QWidget):
         super(QEditGiftWidget, self).__init__(parent)
-        self.ui = gui.main.edit_gift_ui.Ui_Form()
+        self.ui = edit_gift_ui.Ui_Form()
         self.ui.setupUi(self)
 
         self.setWindowState(Qt.WindowMaximized)
-        self.progress_dialog = gui.dialog.ProgressDialog(self)
+        self.progress_dialog = QProgressDialog(self)
 
         # 设置公司Logo
         pix_map = QPixmap(icon.resource_path(os.path.join("ico", "logo_big.png")))
@@ -279,7 +278,7 @@ class QEditGiftWidget(QWidget):
                     if value["success"]:
                         print("配置表下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
-                        json_.put_config_download_time(time.time())
+                        json_ex.put_config_download_time(time.time())
                         download.analysis_gift_data()
                     download.DownloadIcon(self)
                 # 图标下载完成
@@ -288,10 +287,10 @@ class QEditGiftWidget(QWidget):
                     if value["success"]:
                         print("图标下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
-                        json_.put_icon_download_time(time.time())
+                        json_ex.put_icon_download_time(time.time())
 
     def show_add_gift_wall_dialog(self):
-        dialog = gui.dialog.add_gift.AddGiftDialog(self, add_gift_item_list=add_gift_item_list)
+        dialog = QAddGiftDialog(self, add_gift_item_list=add_gift_item_list)
         dialog.setWindowTitle("添加GiftWall")
         dialog.setWindowIcon(icon.get_logo())
         rect = self.frameGeometry()
@@ -350,7 +349,7 @@ class QEditGiftWidget(QWidget):
 class QKevinTableWidget(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QKevinTableWidget, self).__init__(None)
-        self.ui = gui.main.table_widget_ui.Ui_Form()
+        self.ui = table_widget_ui.Ui_Form()
         self.ui.setupUi(self)
         self.__view = parent
 
@@ -427,7 +426,7 @@ class QKevinTableWidget(QWidget):
 
     def __table_widget_item_double_click(self):
         row = self.ui.tableWidget.currentItem().row()
-        image_dialog = gui.dialog.SeeImageDialog(self.__view)
+        image_dialog = QSeeImageDialog(self.__view)
         image_dialog.setWindowTitle("为便捷而生")
         image_dialog.setWindowIcon(icon.get_logo())
         if add_gift_item_list[row].icon_image_path:
@@ -486,7 +485,7 @@ class QKevinTableWidget(QWidget):
 class QEditLanguage(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QEditLanguage, self).__init__(None)
-        self.ui = gui.main.operation.edit_language.Ui_Form()
+        self.ui = edit_language_ui.Ui_Form()
         self.ui.setupUi(self)
         self.__view = parent
 
@@ -514,7 +513,7 @@ class QEditLanguage(QWidget):
 class QCheckLanguage(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QCheckLanguage, self).__init__(None)
-        self.ui = gui.main.operation.check_language.Ui_Form()
+        self.ui = check_language_ui.Ui_Form()
         self.ui.setupUi(self)
         self.__view = parent
 
@@ -608,7 +607,7 @@ class QCheckLanguage(QWidget):
 class QEditOperation(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QEditOperation, self).__init__(None)
-        self.ui = gui.main.operation.edit_button.Ui_Form()
+        self.ui = edit_button_ui.Ui_Form()
         self.ui.setupUi(self)
         self.__view = parent
         self.setMinimumSize(480, 160)
@@ -628,15 +627,15 @@ class QEditOperation(QWidget):
         reply = QMessageBox.question(
             self.__view, '重新下载', '确认重新下载服务器配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            json_.put_config_download_time(0)
+            json_ex.put_config_download_time(0)
             download.init_gift_data(self.__view)
 
     def __reload_data(self):
         reply = QMessageBox.question(
             self.__view, '重新下载', '确认重新下载服务器数据吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            json_.put_config_download_time(0)
-            json_.put_icon_download_time(0)
+            json_ex.put_config_download_time(0)
+            json_ex.put_icon_download_time(0)
             download.init_gift_data(self.__view)
 
     def __import_gift_wall(self):
@@ -653,7 +652,7 @@ class QEditOperation(QWidget):
 class QCheckOperation(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
         super(QCheckOperation, self).__init__(None)
-        self.ui = gui.main.operation.check_button.Ui_Form()
+        self.ui = check_button_ui.Ui_Form()
         self.ui.setupUi(self)
         self.__view = parent
         self.setMinimumSize(480, 110)
@@ -676,7 +675,7 @@ class QOutFileDialog:
     def __init__(self, view_: QEditGiftWidget, string_list):
         self.__view = view_
 
-        out_file_dialog = gui.dialog.SingleSelectDialog(self.__view)
+        out_file_dialog = QSingleSelectDialog(self.__view)
         out_file_dialog.setWindowTitle("选择字符")
         out_file_dialog.setWindowIcon(icon.get_logo())
 
@@ -727,7 +726,7 @@ class QLanguageDialog:
     def __init__(self, view_: QEditGiftWidget):
         self.__view = view_
 
-        language_dialog = gui.dialog.MultipleSelectDialog(self.__view)
+        language_dialog = QMultipleSelectDialog(self.__view)
         language_dialog.setWindowTitle("选择地区")
         language_dialog.setWindowIcon(icon.get_logo())
 

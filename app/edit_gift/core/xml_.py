@@ -1,7 +1,7 @@
 import os
 import xml.dom.minidom
 
-from gift import entity, urls
+from app.edit_gift.core import entity, urls
 from util import path_
 
 TAG_GIFT_LIST = "giftList"

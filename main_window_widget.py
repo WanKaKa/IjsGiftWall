@@ -4,12 +4,12 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget
 
-import gift.download
-from gui.main.app_update.app_update_widget import QKevinAppUpdate
-from gui.main.edit_gift_widget import QEditGiftWidget
+from app.app_update.app_update_widget import QKevinAppUpdate
+from app.edit_gift.gui.edit_gift_widget import QEditGiftWidget
 from util import icon
 
-import gui.main.main_window_ui
+import app.edit_gift.core.download
+import main_window_ui
 
 
 def set_menu_item_enable(enable, menu_layout, menu_title):
@@ -28,7 +28,7 @@ class QKevinMainWindow(QWidget):
 
     def __init__(self, parent=None):
         super(QKevinMainWindow, self).__init__(parent)
-        self.ui = gui.main.main_window_ui.Ui_Form()
+        self.ui = main_window_ui.Ui_Form()
         self.ui.setupUi(self)
 
         self.setWindowTitle("爱卓软工具")
@@ -48,7 +48,7 @@ class QKevinMainWindow(QWidget):
 
         # 广告配置界面
         self.edit_gift_widget = QEditGiftWidget(parent=self)
-        gift.download.init_gift_data(self.edit_gift_widget)
+        app.edit_gift.core.download.init_gift_data(self.edit_gift_widget)
         self.edit_gift_widget.init_view()
         self.ui.verticalLayout.addWidget(self.edit_gift_widget)
 

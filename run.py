@@ -2,9 +2,9 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QCoreApplication, Qt
+from main_window_widget import QKevinMainWindow
 
 import util.utils
-from gui.main.main_window_widget import QKevinMainWindow
 
 if __name__ == '__main__':
     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
