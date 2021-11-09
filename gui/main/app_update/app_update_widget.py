@@ -58,10 +58,27 @@ def open_app_update_xml(file_path):
 
 
 class QKevinAppUpdateItem(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, index=0):
         super(QKevinAppUpdateItem, self).__init__(parent)
         self.ui = gui.main.app_update.app_update_item_ui.Ui_Form()
         self.ui.setupUi(self)
+
+        self.index = index
+        self.ui.pb_add_up.clicked.connect(lambda: self.do_add_item(True))
+        self.ui.pb_add_down.clicked.connect(lambda: self.do_add_item(False))
+        self.ui.pb_delete.clicked.connect(self.do_delete_item)
+
+    def do_add_item(self, up):
+        self.add_item(self.index, up)
+
+    def add_item(self, index, up):
+        pass
+
+    def do_delete_item(self):
+        self.delete_item(self.index)
+
+    def delete_item(self, index):
+        pass
 
 
 class QKevinAppUpdate(QWidget):
@@ -80,21 +97,50 @@ class QKevinAppUpdate(QWidget):
         self.content_layout.setSpacing(6)
         self.ui.content.setLayout(self.content_layout)
 
-        self.set_scroll_area(6)
+        self.init_scroll_area(6)
 
-    def set_scroll_area(self, count):
+    def init_scroll_area(self, count):
         for item in self.item_list:
             self.content_layout.removeWidget(item)
+            item.deleteLater()
         self.item_list.clear()
 
         self.ui.content.setMinimumSize(QtCore.QSize(0, count * 80 + (count + 1) * 6))
         for i in range(count):
-            item = QKevinAppUpdateItem(parent=self)
-            # item.ui.label_4.setVisible(i == 0)
-            # item.ui.label_5.setVisible(i == 0)
-            # item.ui.label_6.setVisible(i == 0)
+            item = QKevinAppUpdateItem(parent=self, index=i)
+            item.add_item = self.add_item
+            item.delete_item = self.delete_item
             self.item_list.append(item)
             self.content_layout.addWidget(item)
+
+    def add_item(self, index, up):
+        for item in self.item_list:
+            self.content_layout.removeWidget(item)
+
+        item = QKevinAppUpdateItem(parent=self)
+        item.add_item = self.add_item
+        item.delete_item = self.delete_item
+        # 插入到index后面的位置
+        self.item_list.insert(index if up else index + 1, item)
+
+        count = len(self.item_list)
+        self.ui.content.setMinimumSize(QtCore.QSize(0, count * 80 + (count + 1) * 6))
+        for i in range(count):
+            item = self.item_list[i]
+            item.index = i
+            self.content_layout.addWidget(item)
+
+    def delete_item(self, index):
+        item = self.item_list[index]
+        self.item_list.remove(item)
+        self.content_layout.removeWidget(item)
+        item.deleteLater()
+
+        count = len(self.item_list)
+        self.ui.content.setMinimumSize(QtCore.QSize(0, count * 80 + (count + 1) * 6))
+        for i in range(count):
+            item = self.item_list[i]
+            item.index = i
 
     def do_save_to(self):
         result = self.check_input_correct()
@@ -156,7 +202,7 @@ class QKevinAppUpdate(QWidget):
         if file_path[0]:
             result = open_app_update_xml(file_path[0])
             self.ui.latest_version.setText(result[0])
-            self.set_scroll_area(len(result[1]) + 4)
+            self.init_scroll_area(len(result[1]) + 4)
             for index in range(len(result[1])):
                 info: ItemInfo = result[1][index]
                 item: QKevinAppUpdateItem = self.item_list[index]
