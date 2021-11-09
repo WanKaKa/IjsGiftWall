@@ -72,7 +72,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 18pt &quot;微软雅黑&quot;;
+     <string notr="true">font: 14pt &quot;微软雅黑&quot;;
 color: rgb(57, 61, 255);</string>
     </property>
     <property name="alignment">
@@ -108,7 +108,7 @@ color: rgb(57, 61, 255);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 18pt &quot;微软雅黑&quot;;
+     <string notr="true">font: 14pt &quot;微软雅黑&quot;;
 color: rgb(57, 61, 255);</string>
     </property>
     <property name="alignment">
@@ -144,7 +144,7 @@ color: rgb(57, 61, 255);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 18pt &quot;微软雅黑&quot;;
+     <string notr="true">font: 14pt &quot;微软雅黑&quot;;
 color: rgb(57, 61, 255);</string>
     </property>
     <property name="alignment">

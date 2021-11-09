@@ -30,7 +30,7 @@ class Ui_Form(object):
         self.label_1.setObjectName("label_1")
         self.min_version = QtWidgets.QLineEdit(self.frame)
         self.min_version.setGeometry(QtCore.QRect(120, 10, 80, 60))
-        self.min_version.setStyleSheet("font: 18pt \"微软雅黑\";\n"
+        self.min_version.setStyleSheet("font: 14pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.min_version.setAlignment(QtCore.Qt.AlignCenter)
         self.min_version.setObjectName("min_version")
@@ -41,7 +41,7 @@ class Ui_Form(object):
         self.label_2.setObjectName("label_2")
         self.max_version = QtWidgets.QLineEdit(self.frame)
         self.max_version.setGeometry(QtCore.QRect(300, 10, 80, 60))
-        self.max_version.setStyleSheet("font: 18pt \"微软雅黑\";\n"
+        self.max_version.setStyleSheet("font: 14pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.max_version.setAlignment(QtCore.Qt.AlignCenter)
         self.max_version.setObjectName("max_version")
@@ -52,7 +52,7 @@ class Ui_Form(object):
         self.label_3.setObjectName("label_3")
         self.priority = QtWidgets.QLineEdit(self.frame)
         self.priority.setGeometry(QtCore.QRect(480, 10, 80, 60))
-        self.priority.setStyleSheet("font: 18pt \"微软雅黑\";\n"
+        self.priority.setStyleSheet("font: 14pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.priority.setAlignment(QtCore.Qt.AlignCenter)
         self.priority.setObjectName("priority")
