@@ -51,6 +51,9 @@ class QEditGiftWidget(QWidget):
         pix_map = QPixmap(icon.resource_path(os.path.join("ico", "logo_big.png")))
         self.ui.ijoysoft_icon.setPixmap(pix_map)
 
+        utils.set_radio_button_style(self.ui.edit_gift_wall_mode, False)
+        utils.set_radio_button_style(self.ui.check_outputs_mode, False)
+
         # 模式切换点击事件
         self.ui.edit_gift_wall_mode.toggled.connect(lambda: self.switch_mode())
         self.ui.check_outputs_mode.toggled.connect(lambda: self.switch_mode())
