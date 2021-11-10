@@ -64,7 +64,6 @@ class QEditGiftWidget(QWidget):
         # 显示列表
         self.content = QKevinTableWidget(parent=self)
         self.ui.content_layout.addWidget(self.content)
-        self.tableWidget = self.content.ui.tableWidget
 
         # 不同模式下的按钮设置
         self.edit_operation = QEditOperation(parent=self)
@@ -88,14 +87,14 @@ class QEditGiftWidget(QWidget):
             self.edit_language.show()
             self.check_language.hide()
             # self.ui.mode_frame.setStyleSheet("background-color: rgb(57, 61, 255);")
-            self.check_operation.hide()
-            self.edit_operation.show()
+            self.check_operation.setVisible(False)
+            self.edit_operation.setVisible(True)
         else:
             self.edit_language.hide()
             self.check_language.show()
             # self.ui.mode_frame.setStyleSheet("background-color: rgb(0, 170, 0);")
-            self.edit_operation.hide()
-            self.check_operation.show()
+            self.edit_operation.setVisible(False)
+            self.check_operation.setVisible(True)
 
     def set_gift_config_view(self):
         value = add_gift_config_list[xml_ex.TARGET_RATE]
@@ -341,9 +340,9 @@ class QEditGiftWidget(QWidget):
 
     def add_single_gift_callback(self, entity_):
         index = len(add_gift_item_list) - 1
-        self.tableWidget.setRowCount(len(add_gift_item_list))
+        self.content.ui.tableWidget.setRowCount(len(add_gift_item_list))
         self.content.set_table_widget_item(index, entity_)
-        self.tableWidget.selectRow(index)
+        self.content.ui.tableWidget.selectRow(index)
 
 
 class QKevinTableWidget(QWidget):
@@ -594,7 +593,7 @@ class QCheckLanguage(QWidget):
 
 class QEditOperation(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
-        super(QEditOperation, self).__init__(None)
+        super(QEditOperation, self).__init__(parent)
         self.ui = edit_button_ui.Ui_Form()
         self.ui.setupUi(self)
         self.__view = parent
@@ -639,7 +638,7 @@ class QEditOperation(QWidget):
 
 class QCheckOperation(QWidget):
     def __init__(self, parent: QEditGiftWidget = None):
-        super(QCheckOperation, self).__init__(None)
+        super(QCheckOperation, self).__init__(parent)
         self.ui = check_button_ui.Ui_Form()
         self.ui.setupUi(self)
         self.__view = parent
