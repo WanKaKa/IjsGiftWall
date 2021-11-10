@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QCheckBox, QRadioButton
 import release
 from database import json_ex
 from app.edit_gift.core import urls
-from util import path_, icon
+from util import path_ex, icon
 
 
 def delete_dir(dir_path):
@@ -21,9 +21,9 @@ def delete_dir(dir_path):
 
 def get_outputs_dir_list():
     dir_list = [urls.LANGUAGE_LIST[0]]
-    file_list = os.listdir(path_.get_outputs())
+    file_list = os.listdir(path_ex.get_outputs())
     for file_name in file_list:
-        if os.path.isdir(path_.get_outputs() + file_name):
+        if os.path.isdir(path_ex.get_outputs() + file_name):
             dir_list.append(file_name)
     return dir_list
 
@@ -48,11 +48,11 @@ def is_entity_added(entity_, entity_list):
 
 
 def copy_res():
-    res_list = os.listdir(path_.get_res())
+    res_list = os.listdir(path_ex.get_res())
     icon_version = json_ex.get_icon_version()
     for item in os.listdir(icon.resource_path("./ico")):
         if item not in res_list or icon_version != release.version:
-            shutil.copyfile(icon.resource_path(os.path.join("ico", item)), os.path.join(path_.get_res(), item))
+            shutil.copyfile(icon.resource_path(os.path.join("ico", item)), os.path.join(path_ex.get_res(), item))
     if icon_version != release.version:
         json_ex.put_icon_version(release.version)
 

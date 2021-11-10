@@ -2,8 +2,8 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QMessageBox
 
-import app.app_update.app_update_ui
-import app.app_update.app_update_item_ui
+from app.app_update import app_update_ui
+from app.app_update import app_update_item_ui
 import xml.dom.minidom
 
 
@@ -60,7 +60,7 @@ def open_app_update_xml(file_path):
 class QKevinAppUpdateItem(QWidget):
     def __init__(self, parent=None, index=0):
         super(QKevinAppUpdateItem, self).__init__(parent)
-        self.ui = app.app_update.app_update_item_ui.Ui_Form()
+        self.ui = app_update_item_ui.Ui_Form()
         self.ui.setupUi(self)
 
         self.index = index
@@ -86,7 +86,7 @@ class QKevinAppUpdate(QWidget):
 
     def __init__(self, parent: QWidget):
         super(QKevinAppUpdate, self).__init__(parent)
-        self.ui = app.app_update.app_update_ui.Ui_Form()
+        self.ui = app_update_ui.Ui_Form()
         self.ui.setupUi(self)
         self.setWindowState(Qt.WindowMaximized)
 

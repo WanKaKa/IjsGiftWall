@@ -2,7 +2,7 @@ import os
 import xml.dom.minidom
 
 from app.edit_gift.core import entity, urls
-from util import path_
+from util import path_ex
 
 TAG_GIFT_LIST = "giftList"
 
@@ -105,7 +105,7 @@ def analysis_xml_item(content, name):
 def create_gift_wall_files(file_name, language_list, config_list, entity_list):
     for language in language_list:
         if language:
-            dir_path = path_.get_outputs() + (language + "\\" if urls.LANGUAGE_LIST[0] != language else "")
+            dir_path = path_ex.get_outputs() + (language + "\\" if urls.LANGUAGE_LIST[0] != language else "")
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
             file = open(dir_path + file_name, mode='w', encoding='utf-8')

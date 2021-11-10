@@ -14,10 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(1120, 186)
+        Form.resize(1120, 168)
         self.formLayout = QtWidgets.QFormLayout(Form)
+        self.formLayout.setContentsMargins(0, 0, 0, 0)
+        self.formLayout.setSpacing(0)
         self.formLayout.setObjectName("formLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setSpacing(6)
         self.verticalLayout.setObjectName("verticalLayout")
         self.layout_check_mode_language = QtWidgets.QFrame(Form)
         self.layout_check_mode_language.setMinimumSize(QtCore.QSize(0, 80))
@@ -152,7 +155,7 @@ class Ui_Form(object):
         self.file_name_radio_12.setStyleSheet("font: 10pt \"微软雅黑\";")
         self.file_name_radio_12.setObjectName("file_name_radio_12")
         self.verticalLayout.addWidget(self.layout_check_mode_file_name)
-        # self.formLayout.setLayout(0, QtWidgets.QFormLayout.SpanningRole, self.verticalLayout)
+        self.formLayout.setLayout(0, QtWidgets.QFormLayout.SpanningRole, self.verticalLayout)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
