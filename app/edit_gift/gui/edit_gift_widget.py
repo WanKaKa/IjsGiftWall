@@ -53,10 +53,20 @@ class QEditGiftWidget(QWidget):
 
         utils.set_radio_button_style(self.ui.edit_gift_wall_mode, False)
         utils.set_radio_button_style(self.ui.check_outputs_mode, False)
+        utils.set_radio_button_style(self.ui.server_url_1, False)
+        utils.set_radio_button_style(self.ui.server_url_2, False)
 
         # 模式切换点击事件
         self.ui.edit_gift_wall_mode.toggled.connect(lambda: self.switch_mode())
         self.ui.check_outputs_mode.toggled.connect(lambda: self.switch_mode())
+
+        self.ui.server_url_1.toggled.connect(lambda: self.switch_server_url())
+        self.ui.server_url_2.toggled.connect(lambda: self.switch_server_url())
+
+        if urls.ALIYUN_SERVER_URL == json_ex.get_selected_server_url():
+            self.ui.server_url_1.setChecked(True)
+        else:
+            self.ui.server_url_2.setChecked(True)
 
         # 不同模式下的地区和文件名选择
         self.edit_language = QEditLanguage(parent=self)
@@ -235,6 +245,16 @@ class QEditGiftWidget(QWidget):
         # 切换到检查模式时，如果有选中文件，则加载
         if select_mode_type == 1:
             self.load_outputs_xml_file()
+
+    def switch_server_url(self):
+        if self.ui.server_url_1.isChecked():
+            urls.BASE_URL = urls.ALIYUN_SERVER_URL
+        elif self.ui.server_url_2.isChecked():
+            urls.BASE_URL = urls.IJOYSOFT_SERVER_URL
+        else:
+            urls.BASE_URL = urls.ALIYUN_SERVER_URL
+        json_ex.put_selected_server_url(urls.BASE_URL)
+        print("选择的服务器 = %s" % urls.BASE_URL)
 
     def delete_dir(self):
         reply = QMessageBox.question(

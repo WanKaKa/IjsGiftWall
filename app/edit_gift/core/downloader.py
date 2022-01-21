@@ -22,6 +22,7 @@ class Downloader(QObject):
         # print("正在下载 线程名称 = %s" % threading.currentThread().name)
         try:
             file_url = self.server_url + file_path
+            # print("正在下载 文件路径 = %s" % file_url)
             r = requests.get(file_url)
             with open(path_ex.get_download() + file_path, "wb+") as fp:
                 fp.write(r.content)

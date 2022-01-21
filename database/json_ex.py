@@ -54,6 +54,20 @@ def put_icon_version(value):
     save("icon_version", value)
 
 
+def get_selected_server_url():
+    try:
+        data = get()
+        if data and "selected_server_url" in data:
+            return str(data["selected_server_url"])
+    except Exception as e:
+        print(e)
+    return 0
+
+
+def put_selected_server_url(value):
+    save("selected_server_url", value)
+
+
 def get():
     path = path_ex.get_database() + normal_json_name
     if not os.path.exists(path):
