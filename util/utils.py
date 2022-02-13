@@ -83,7 +83,49 @@ def set_check_box_style(check_box):
         check_box.setStyleSheet(CHECK_BOX_STYLE)
 
 
-RADIO_BUTTON_STYLE_RED = """
+RADIO_BUTTON_STYLE_RED_8PT = """
+QRadioButton{
+    background-color: rgb(255, 255, 255);
+    font: 8pt \"微软雅黑\";
+    color: rgb(255, 0, 0);
+}
+QRadioButton::indicator {
+    width:20px;
+    height:20px;
+}
+QRadioButton::indicator:unchecked  {
+    image: url(C:/IJoySoft/Kevin/IjsGiftWall/res/radio_button_normal_unchecked.png);
+}
+QRadioButton::indicator:unchecked:hover {
+    image: url(C:/IJoySoft/Kevin/IjsGiftWall/res/radio_button_normal_unchecked_hover.png);
+}
+QRadioButton::indicator:checked {
+    image: url(C:/IJoySoft/Kevin/IjsGiftWall/res/radio_button_normal_checked.png);
+}
+"""
+
+RADIO_BUTTON_STYLE_BLACK_8PT = """
+QRadioButton{
+    background-color: rgb(255, 255, 255);
+    font: 8pt \"微软雅黑\";
+    color: rgb(0, 0, 0);
+}
+QRadioButton::indicator {
+    width:20px;
+    height:20px;
+}
+QRadioButton::indicator:unchecked  {
+    image: url(C:/IJoySoft/Kevin/IjsGiftWall/res/radio_button_normal_unchecked.png);
+}
+QRadioButton::indicator:unchecked:hover {
+    image: url(C:/IJoySoft/Kevin/IjsGiftWall/res/radio_button_normal_unchecked_hover.png);
+}
+QRadioButton::indicator:checked {
+    image: url(C:/IJoySoft/Kevin/IjsGiftWall/res/radio_button_normal_checked.png);
+}
+"""
+
+RADIO_BUTTON_STYLE_RED_10PT = """
 QRadioButton{
     background-color: rgb(255, 255, 255);
     font: 10pt \"微软雅黑\";
@@ -104,7 +146,7 @@ QRadioButton::indicator:checked {
 }
 """
 
-RADIO_BUTTON_STYLE_BLACK = """
+RADIO_BUTTON_STYLE_BLACK_10PT = """
 QRadioButton{
     background-color: rgb(255, 255, 255);
     font: 10pt \"微软雅黑\";
@@ -126,9 +168,17 @@ QRadioButton::indicator:checked {
 """
 
 
-def set_radio_button_style(check_box, error):
+def set_radio_button_style_8pt(check_box, error):
     if isinstance(check_box, QRadioButton):
         if error:
-            check_box.setStyleSheet(RADIO_BUTTON_STYLE_RED)
+            check_box.setStyleSheet(RADIO_BUTTON_STYLE_RED_8PT)
         else:
-            check_box.setStyleSheet(RADIO_BUTTON_STYLE_BLACK)
+            check_box.setStyleSheet(RADIO_BUTTON_STYLE_BLACK_8PT)
+
+
+def set_radio_button_style_10pt(check_box, error):
+    if isinstance(check_box, QRadioButton):
+        if error:
+            check_box.setStyleSheet(RADIO_BUTTON_STYLE_RED_10PT)
+        else:
+            check_box.setStyleSheet(RADIO_BUTTON_STYLE_BLACK_10PT)

@@ -51,10 +51,10 @@ class QEditGiftWidget(QWidget):
         pix_map = QPixmap(icon.resource_path(os.path.join("ico", "logo_big.png")))
         self.ui.ijoysoft_icon.setPixmap(pix_map)
 
-        utils.set_radio_button_style(self.ui.edit_gift_wall_mode, False)
-        utils.set_radio_button_style(self.ui.check_outputs_mode, False)
-        utils.set_radio_button_style(self.ui.server_url_1, False)
-        utils.set_radio_button_style(self.ui.server_url_2, False)
+        utils.set_radio_button_style_10pt(self.ui.edit_gift_wall_mode, False)
+        utils.set_radio_button_style_10pt(self.ui.check_outputs_mode, False)
+        utils.set_radio_button_style_10pt(self.ui.server_url_1, False)
+        utils.set_radio_button_style_10pt(self.ui.server_url_2, False)
 
         # 模式切换点击事件
         self.ui.edit_gift_wall_mode.toggled.connect(lambda: self.switch_mode())
@@ -564,7 +564,7 @@ class QCheckLanguage(QWidget):
     def __init_radio_button(self, label, radio_list, string_list):
         _translate = QtCore.QCoreApplication.translate
         for i in range(len(string_list)):
-            utils.set_radio_button_style(radio_list[i], False)
+            utils.set_radio_button_style_8pt(radio_list[i], False)
             radio_list[i].setText(_translate("Form", string_list[i]))
             if radio_list[i].isChecked():
                 label.setText(radio_list[i].text())
@@ -592,11 +592,11 @@ class QCheckLanguage(QWidget):
     def set_radio_button_color(self):
         outputs_dir_list = utils.get_outputs_dir_list()
         for radio in self.language_radio_list:
-            utils.set_radio_button_style(radio, radio.text() not in outputs_dir_list)
+            utils.set_radio_button_style_8pt(radio, radio.text() not in outputs_dir_list)
         for radio in self.file_name_radio_list:
             language = self.__view.edit_language.ui.language.text()
             dir_name = language if language != urls.LANGUAGE_LIST[0] else ""
-            utils.set_radio_button_style(
+            utils.set_radio_button_style_8pt(
                 radio, language and not os.path.exists(path_ex.get_outputs() + dir_name + "\\" + radio.text()))
 
     def show(self):
@@ -710,7 +710,7 @@ class QOutFileDialog:
         # 设置按钮状态和点击事件
         _translate = QtCore.QCoreApplication.translate
         for i in range(len(string_list)):
-            utils.set_radio_button_style(out_file_radio_button_list[i], False)
+            utils.set_radio_button_style_10pt(out_file_radio_button_list[i], False)
             out_file_radio_button_list[i].setText(_translate("Form", string_list[i]))
             out_file_radio_button_list[i].setChecked(self.__view.edit_language.ui.file_name.text() == string_list[i])
             out_file_radio_button_list[i].toggled.connect(

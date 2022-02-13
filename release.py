@@ -1,7 +1,7 @@
 import os
 
-version = 136
-release_version = "广告工具1.3.6"
+version = 138
+release_version = "广告工具1.3.8"
 
 if __name__ == '__main__':
     os.system("pyinstaller -F --onefile -w -i .\\ico\\logo.ico --add-data \".\\ico;ico\" .\\run.py")
