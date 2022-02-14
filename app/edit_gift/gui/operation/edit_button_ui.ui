@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
+    <width>400</width>
     <height>160</height>
    </rect>
   </property>
@@ -27,13 +27,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>480</width>
+     <width>400</width>
      <height>160</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>480</width>
+     <width>400</width>
      <height>160</height>
     </size>
    </property>
@@ -49,16 +49,16 @@
    <widget class="QPushButton" name="reset_ui">
     <property name="geometry">
      <rect>
-      <x>325</x>
+      <x>270</x>
       <y>10</y>
-      <width>140</width>
+      <width>120</width>
       <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
-font: 10pt &quot;微软雅黑&quot;;</string>
+font: 9pt &quot;微软雅黑&quot;;</string>
     </property>
     <property name="text">
      <string>重置界面</string>
@@ -67,16 +67,16 @@ font: 10pt &quot;微软雅黑&quot;;</string>
    <widget class="QPushButton" name="create_gift_wall_file">
     <property name="geometry">
      <rect>
-      <x>325</x>
+      <x>270</x>
       <y>60</y>
-      <width>140</width>
+      <width>120</width>
       <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
-font: 10pt &quot;微软雅黑&quot;;</string>
+font: 9pt &quot;微软雅黑&quot;;</string>
     </property>
     <property name="text">
      <string>生成GiftWall</string>
@@ -85,16 +85,16 @@ font: 10pt &quot;微软雅黑&quot;;</string>
    <widget class="QPushButton" name="reload_data_config">
     <property name="geometry">
      <rect>
-      <x>15</x>
+      <x>10</x>
       <y>10</y>
-      <width>140</width>
+      <width>120</width>
       <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
-font: 10pt &quot;微软雅黑&quot;;</string>
+font: 9pt &quot;微软雅黑&quot;;</string>
     </property>
     <property name="text">
      <string>重下载服务器配置表</string>
@@ -103,16 +103,16 @@ font: 10pt &quot;微软雅黑&quot;;</string>
    <widget class="QPushButton" name="reload_data">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>140</x>
       <y>10</y>
-      <width>140</width>
+      <width>120</width>
       <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
-font: 10pt &quot;微软雅黑&quot;;</string>
+font: 9pt &quot;微软雅黑&quot;;</string>
     </property>
     <property name="text">
      <string>重下载服务器数据</string>
@@ -121,16 +121,16 @@ font: 10pt &quot;微软雅黑&quot;;</string>
    <widget class="QPushButton" name="clear_outputs">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>140</x>
       <y>110</y>
-      <width>140</width>
+      <width>120</width>
       <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
-font: 10pt &quot;微软雅黑&quot;;</string>
+font: 9pt &quot;微软雅黑&quot;;</string>
     </property>
     <property name="text">
      <string>清空Outputs</string>
@@ -139,16 +139,16 @@ font: 10pt &quot;微软雅黑&quot;;</string>
    <widget class="QPushButton" name="add_gift_wall">
     <property name="geometry">
      <rect>
-      <x>15</x>
+      <x>10</x>
       <y>60</y>
-      <width>140</width>
+      <width>120</width>
       <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
-font: 10pt &quot;微软雅黑&quot;;</string>
+font: 9pt &quot;微软雅黑&quot;;</string>
     </property>
     <property name="text">
      <string>添加GiftWall</string>
@@ -157,16 +157,16 @@ font: 10pt &quot;微软雅黑&quot;;</string>
    <widget class="QPushButton" name="open_outputs">
     <property name="geometry">
      <rect>
-      <x>15</x>
+      <x>10</x>
       <y>110</y>
-      <width>140</width>
+      <width>120</width>
       <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
-font: 10pt &quot;微软雅黑&quot;;</string>
+font: 9pt &quot;微软雅黑&quot;;</string>
     </property>
     <property name="text">
      <string>查看Outputs</string>
@@ -175,16 +175,16 @@ font: 10pt &quot;微软雅黑&quot;;</string>
    <widget class="QPushButton" name="import_gift_wall">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>140</x>
       <y>60</y>
-      <width>140</width>
+      <width>120</width>
       <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(57, 61, 255);
 color: rgb(255, 255, 255);
-font: 10pt &quot;微软雅黑&quot;;</string>
+font: 9pt &quot;微软雅黑&quot;;</string>
     </property>
     <property name="text">
      <string>导入GiftWall</string>

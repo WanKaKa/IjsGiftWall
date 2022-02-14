@@ -14,45 +14,45 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(480, 110)
+        Form.resize(400, 110)
         Form.setMaximumSize(QtCore.QSize(16777215, 110))
         Form.setStyleSheet("")
         self.frame = QtWidgets.QFrame(Form)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 480, 110))
-        self.frame.setMinimumSize(QtCore.QSize(480, 110))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 400, 110))
+        self.frame.setMinimumSize(QtCore.QSize(400, 110))
         self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.save = QtWidgets.QPushButton(self.frame)
-        self.save.setGeometry(QtCore.QRect(15, 10, 140, 40))
+        self.save.setGeometry(QtCore.QRect(10, 10, 120, 40))
         self.save.setStyleSheet("background-color: rgb(57, 61, 255);\n"
 "color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
+"font: 9pt \"微软雅黑\";")
         self.save.setObjectName("save")
         self.cancel_save = QtWidgets.QPushButton(self.frame)
-        self.cancel_save.setGeometry(QtCore.QRect(325, 10, 140, 40))
+        self.cancel_save.setGeometry(QtCore.QRect(270, 10, 120, 40))
         self.cancel_save.setStyleSheet("background-color: rgb(57, 61, 255);\n"
 "color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
+"font: 9pt \"微软雅黑\";")
         self.cancel_save.setObjectName("cancel_save")
         self.open_outputs_2 = QtWidgets.QPushButton(self.frame)
-        self.open_outputs_2.setGeometry(QtCore.QRect(15, 60, 140, 40))
+        self.open_outputs_2.setGeometry(QtCore.QRect(10, 60, 120, 40))
         self.open_outputs_2.setStyleSheet("background-color: rgb(57, 61, 255);\n"
 "color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
+"font: 9pt \"微软雅黑\";")
         self.open_outputs_2.setObjectName("open_outputs_2")
         self.clear_outputs_2 = QtWidgets.QPushButton(self.frame)
-        self.clear_outputs_2.setGeometry(QtCore.QRect(170, 60, 140, 40))
+        self.clear_outputs_2.setGeometry(QtCore.QRect(140, 60, 120, 40))
         self.clear_outputs_2.setStyleSheet("background-color: rgb(57, 61, 255);\n"
 "color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
+"font: 9pt \"微软雅黑\";")
         self.clear_outputs_2.setObjectName("clear_outputs_2")
         self.add_gift_wall_2 = QtWidgets.QPushButton(self.frame)
-        self.add_gift_wall_2.setGeometry(QtCore.QRect(170, 10, 140, 40))
+        self.add_gift_wall_2.setGeometry(QtCore.QRect(140, 10, 120, 40))
         self.add_gift_wall_2.setStyleSheet("background-color: rgb(57, 61, 255);\n"
 "color: rgb(255, 255, 255);\n"
-"font: 10pt \"微软雅黑\";")
+"font: 9pt \"微软雅黑\";")
         self.add_gift_wall_2.setObjectName("add_gift_wall_2")
 
         self.retranslateUi(Form)

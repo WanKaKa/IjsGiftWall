@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>975</width>
+    <width>972</width>
     <height>168</height>
    </rect>
   </property>
@@ -65,7 +65,7 @@
          <rect>
           <x>0</x>
           <y>20</y>
-          <width>90</width>
+          <width>70</width>
           <height>40</height>
          </rect>
         </property>
@@ -77,13 +77,13 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>90</width>
+          <width>70</width>
           <height>40</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>90</width>
+          <width>70</width>
           <height>40</height>
          </size>
         </property>
@@ -101,9 +101,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_2">
         <property name="geometry">
          <rect>
-          <x>110</x>
+          <x>70</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -117,9 +117,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_1">
         <property name="geometry">
          <rect>
-          <x>110</x>
+          <x>70</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -133,9 +133,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_3">
         <property name="geometry">
          <rect>
-          <x>255</x>
+          <x>220</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -149,9 +149,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_4">
         <property name="geometry">
          <rect>
-          <x>255</x>
+          <x>220</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -165,9 +165,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_5">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>370</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -181,9 +181,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_6">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>370</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -197,9 +197,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_7">
         <property name="geometry">
          <rect>
-          <x>545</x>
+          <x>520</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -213,9 +213,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_8">
         <property name="geometry">
          <rect>
-          <x>545</x>
+          <x>520</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -229,9 +229,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_9">
         <property name="geometry">
          <rect>
-          <x>690</x>
+          <x>670</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -245,9 +245,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_10">
         <property name="geometry">
          <rect>
-          <x>690</x>
+          <x>670</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -261,9 +261,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_11">
         <property name="geometry">
          <rect>
-          <x>835</x>
+          <x>820</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -277,9 +277,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="language_radio_12">
         <property name="geometry">
          <rect>
-          <x>835</x>
+          <x>820</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -320,19 +320,19 @@ background-color: rgb(255, 255, 255);</string>
          <rect>
           <x>0</x>
           <y>20</y>
-          <width>90</width>
+          <width>70</width>
           <height>40</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>90</width>
+          <width>70</width>
           <height>40</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>90</width>
+          <width>70</width>
           <height>40</height>
          </size>
         </property>
@@ -350,9 +350,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_1">
         <property name="geometry">
          <rect>
-          <x>110</x>
+          <x>70</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -366,9 +366,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_2">
         <property name="geometry">
          <rect>
-          <x>110</x>
+          <x>70</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -382,9 +382,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_3">
         <property name="geometry">
          <rect>
-          <x>255</x>
+          <x>220</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -398,9 +398,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_4">
         <property name="geometry">
          <rect>
-          <x>255</x>
+          <x>220</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -414,9 +414,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_5">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>370</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -430,9 +430,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_6">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>370</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -446,9 +446,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_7">
         <property name="geometry">
          <rect>
-          <x>545</x>
+          <x>520</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -462,9 +462,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_8">
         <property name="geometry">
          <rect>
-          <x>545</x>
+          <x>520</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -478,9 +478,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_9">
         <property name="geometry">
          <rect>
-          <x>690</x>
+          <x>670</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -494,9 +494,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_10">
         <property name="geometry">
          <rect>
-          <x>690</x>
+          <x>670</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -510,9 +510,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_11">
         <property name="geometry">
          <rect>
-          <x>835</x>
+          <x>820</x>
           <y>0</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
@@ -526,9 +526,9 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_12">
         <property name="geometry">
          <rect>
-          <x>835</x>
+          <x>820</x>
           <y>40</y>
-          <width>140</width>
+          <width>150</width>
           <height>40</height>
          </rect>
         </property>
