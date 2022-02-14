@@ -237,7 +237,7 @@ color: rgb(0, 0, 0);</string>
          <widget class="QLineEdit" name="dialog_limit">
           <property name="geometry">
            <rect>
-            <x>300</x>
+            <x>305</x>
             <y>190</y>
             <width>90</width>
             <height>25</height>
@@ -255,7 +255,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLabel" name="label_6">
           <property name="geometry">
            <rect>
-            <x>270</x>
+            <x>275</x>
             <y>160</y>
             <width>30</width>
             <height>25</height>
@@ -275,7 +275,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="list_limit">
           <property name="geometry">
            <rect>
-            <x>300</x>
+            <x>305</x>
             <y>160</y>
             <width>90</width>
             <height>25</height>
@@ -293,7 +293,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLabel" name="label_5">
           <property name="geometry">
            <rect>
-            <x>270</x>
+            <x>275</x>
             <y>130</y>
             <width>30</width>
             <height>25</height>
@@ -369,7 +369,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="sidebar_count">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>185</x>
             <y>250</y>
             <width>90</width>
             <height>25</height>
@@ -387,7 +387,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLabel" name="label_3">
           <property name="geometry">
            <rect>
-            <x>300</x>
+            <x>305</x>
             <y>70</y>
             <width>90</width>
             <height>25</height>
@@ -427,7 +427,7 @@ background-color: rgb(255, 255, 255);</string>
          <widget class="QLabel" name="label_7">
           <property name="geometry">
            <rect>
-            <x>270</x>
+            <x>275</x>
             <y>190</y>
             <width>30</width>
             <height>25</height>
@@ -447,7 +447,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="sidebar_limit">
           <property name="geometry">
            <rect>
-            <x>300</x>
+            <x>305</x>
             <y>250</y>
             <width>90</width>
             <height>25</height>
@@ -485,7 +485,7 @@ background-color: rgb(255, 255, 255);</string>
          <widget class="QLabel" name="label_2">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>185</x>
             <y>70</y>
             <width>90</width>
             <height>25</height>
@@ -505,7 +505,7 @@ background-color: rgb(255, 255, 255);</string>
          <widget class="QLabel" name="label_8">
           <property name="geometry">
            <rect>
-            <x>270</x>
+            <x>275</x>
             <y>220</y>
             <width>30</width>
             <height>25</height>
@@ -525,7 +525,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="interstitial_count">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>185</x>
             <y>130</y>
             <width>90</width>
             <height>25</height>
@@ -543,7 +543,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="rate_count">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>185</x>
             <y>100</y>
             <width>90</width>
             <height>25</height>
@@ -561,7 +561,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="list_count">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>185</x>
             <y>160</y>
             <width>90</width>
             <height>25</height>
@@ -599,7 +599,7 @@ background-color: rgb(255, 255, 255);</string>
          <widget class="QLineEdit" name="carousel_count">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>185</x>
             <y>220</y>
             <width>90</width>
             <height>25</height>
@@ -673,7 +673,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="dialog_count">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>185</x>
             <y>190</y>
             <width>90</width>
             <height>25</height>
@@ -691,7 +691,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLabel" name="label_9">
           <property name="geometry">
            <rect>
-            <x>270</x>
+            <x>275</x>
             <y>250</y>
             <width>30</width>
             <height>25</height>
@@ -711,7 +711,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="rate_limit">
           <property name="geometry">
            <rect>
-            <x>300</x>
+            <x>305</x>
             <y>100</y>
             <width>90</width>
             <height>25</height>
@@ -767,7 +767,7 @@ background-color: rgb(255, 255, 255);</string>
          <widget class="QLabel" name="label_4">
           <property name="geometry">
            <rect>
-            <x>270</x>
+            <x>275</x>
             <y>100</y>
             <width>30</width>
             <height>25</height>
@@ -863,7 +863,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="carousel_limit">
           <property name="geometry">
            <rect>
-            <x>300</x>
+            <x>305</x>
             <y>220</y>
             <width>90</width>
             <height>25</height>
@@ -881,7 +881,7 @@ color: rgb(57, 61, 255);</string>
          <widget class="QLineEdit" name="interstitial_limit">
           <property name="geometry">
            <rect>
-            <x>300</x>
+            <x>305</x>
             <y>130</y>
             <width>90</width>
             <height>25</height>
