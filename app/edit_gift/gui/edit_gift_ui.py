@@ -88,60 +88,60 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(33)
         sizePolicy.setHeightForWidth(self.frame_3.sizePolicy().hasHeightForWidth())
         self.frame_3.setSizePolicy(sizePolicy)
-        self.frame_3.setMinimumSize(QtCore.QSize(400, 320))
-        self.frame_3.setMaximumSize(QtCore.QSize(400, 320))
+        self.frame_3.setMinimumSize(QtCore.QSize(400, 350))
+        self.frame_3.setMaximumSize(QtCore.QSize(400, 350))
         self.frame_3.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_3.setObjectName("frame_3")
         self.dialog_limit = QtWidgets.QLineEdit(self.frame_3)
-        self.dialog_limit.setGeometry(QtCore.QRect(305, 190, 90, 25))
+        self.dialog_limit.setGeometry(QtCore.QRect(305, 220, 90, 25))
         self.dialog_limit.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.dialog_limit.setAlignment(QtCore.Qt.AlignCenter)
         self.dialog_limit.setObjectName("dialog_limit")
         self.label_6 = QtWidgets.QLabel(self.frame_3)
-        self.label_6.setGeometry(QtCore.QRect(275, 160, 30, 25))
+        self.label_6.setGeometry(QtCore.QRect(275, 190, 30, 25))
         self.label_6.setStyleSheet("font: 8pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
         self.list_limit = QtWidgets.QLineEdit(self.frame_3)
-        self.list_limit.setGeometry(QtCore.QRect(305, 160, 90, 25))
+        self.list_limit.setGeometry(QtCore.QRect(305, 190, 90, 25))
         self.list_limit.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.list_limit.setAlignment(QtCore.Qt.AlignCenter)
         self.list_limit.setObjectName("list_limit")
         self.label_5 = QtWidgets.QLabel(self.frame_3)
-        self.label_5.setGeometry(QtCore.QRect(275, 130, 30, 25))
+        self.label_5.setGeometry(QtCore.QRect(275, 160, 30, 25))
         self.label_5.setStyleSheet("font: 8pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
         self.dialog_title = QtWidgets.QLabel(self.frame_3)
-        self.dialog_title.setGeometry(QtCore.QRect(10, 190, 80, 25))
+        self.dialog_title.setGeometry(QtCore.QRect(10, 220, 80, 25))
         self.dialog_title.setStyleSheet("font: 10pt \"微软雅黑\";\n"
 "background-color: rgb(255, 255, 255);")
         self.dialog_title.setAlignment(QtCore.Qt.AlignCenter)
         self.dialog_title.setObjectName("dialog_title")
         self.dialog_index = QtWidgets.QLineEdit(self.frame_3)
-        self.dialog_index.setGeometry(QtCore.QRect(90, 190, 90, 25))
+        self.dialog_index.setGeometry(QtCore.QRect(90, 220, 90, 25))
         self.dialog_index.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.dialog_index.setAlignment(QtCore.Qt.AlignCenter)
         self.dialog_index.setObjectName("dialog_index")
         self.interstitial_index = QtWidgets.QLineEdit(self.frame_3)
-        self.interstitial_index.setGeometry(QtCore.QRect(90, 130, 90, 25))
+        self.interstitial_index.setGeometry(QtCore.QRect(90, 160, 90, 25))
         self.interstitial_index.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.interstitial_index.setAlignment(QtCore.Qt.AlignCenter)
         self.interstitial_index.setObjectName("interstitial_index")
         self.sidebar_count = QtWidgets.QLineEdit(self.frame_3)
-        self.sidebar_count.setGeometry(QtCore.QRect(185, 250, 90, 25))
+        self.sidebar_count.setGeometry(QtCore.QRect(185, 280, 90, 25))
         self.sidebar_count.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
@@ -160,20 +160,20 @@ class Ui_Form(object):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.label_7 = QtWidgets.QLabel(self.frame_3)
-        self.label_7.setGeometry(QtCore.QRect(275, 190, 30, 25))
+        self.label_7.setGeometry(QtCore.QRect(275, 220, 30, 25))
         self.label_7.setStyleSheet("font: 8pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.label_7.setAlignment(QtCore.Qt.AlignCenter)
         self.label_7.setObjectName("label_7")
         self.sidebar_limit = QtWidgets.QLineEdit(self.frame_3)
-        self.sidebar_limit.setGeometry(QtCore.QRect(305, 250, 90, 25))
+        self.sidebar_limit.setGeometry(QtCore.QRect(305, 280, 90, 25))
         self.sidebar_limit.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.sidebar_limit.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_limit.setObjectName("sidebar_limit")
         self.carousel_title = QtWidgets.QLabel(self.frame_3)
-        self.carousel_title.setGeometry(QtCore.QRect(10, 220, 80, 25))
+        self.carousel_title.setGeometry(QtCore.QRect(10, 250, 80, 25))
         self.carousel_title.setStyleSheet("font: 10pt \"微软雅黑\";\n"
 "background-color: rgb(255, 255, 255);")
         self.carousel_title.setAlignment(QtCore.Qt.AlignCenter)
@@ -185,13 +185,13 @@ class Ui_Form(object):
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
         self.label_8 = QtWidgets.QLabel(self.frame_3)
-        self.label_8.setGeometry(QtCore.QRect(275, 220, 30, 25))
+        self.label_8.setGeometry(QtCore.QRect(275, 250, 30, 25))
         self.label_8.setStyleSheet("font: 8pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.label_8.setAlignment(QtCore.Qt.AlignCenter)
         self.label_8.setObjectName("label_8")
         self.interstitial_count = QtWidgets.QLineEdit(self.frame_3)
-        self.interstitial_count.setGeometry(QtCore.QRect(185, 130, 90, 25))
+        self.interstitial_count.setGeometry(QtCore.QRect(185, 160, 90, 25))
         self.interstitial_count.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
@@ -205,20 +205,20 @@ class Ui_Form(object):
         self.rate_count.setAlignment(QtCore.Qt.AlignCenter)
         self.rate_count.setObjectName("rate_count")
         self.list_count = QtWidgets.QLineEdit(self.frame_3)
-        self.list_count.setGeometry(QtCore.QRect(185, 160, 90, 25))
+        self.list_count.setGeometry(QtCore.QRect(185, 190, 90, 25))
         self.list_count.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.list_count.setAlignment(QtCore.Qt.AlignCenter)
         self.list_count.setObjectName("list_count")
         self.sidebar_title = QtWidgets.QLabel(self.frame_3)
-        self.sidebar_title.setGeometry(QtCore.QRect(10, 250, 80, 25))
+        self.sidebar_title.setGeometry(QtCore.QRect(10, 280, 80, 25))
         self.sidebar_title.setStyleSheet("font: 10pt \"微软雅黑\";\n"
 "background-color: rgb(255, 255, 255);")
         self.sidebar_title.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_title.setObjectName("sidebar_title")
         self.carousel_count = QtWidgets.QLineEdit(self.frame_3)
-        self.carousel_count.setGeometry(QtCore.QRect(185, 220, 90, 25))
+        self.carousel_count.setGeometry(QtCore.QRect(185, 250, 90, 25))
         self.carousel_count.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
@@ -232,27 +232,27 @@ class Ui_Form(object):
         self.rate_index.setAlignment(QtCore.Qt.AlignCenter)
         self.rate_index.setObjectName("rate_index")
         self.list_title = QtWidgets.QLabel(self.frame_3)
-        self.list_title.setGeometry(QtCore.QRect(10, 160, 80, 25))
+        self.list_title.setGeometry(QtCore.QRect(10, 190, 80, 25))
         self.list_title.setStyleSheet("font: 10pt \"微软雅黑\";\n"
 "background-color: rgb(255, 255, 255);")
         self.list_title.setAlignment(QtCore.Qt.AlignCenter)
         self.list_title.setObjectName("list_title")
         self.wall_index = QtWidgets.QLineEdit(self.frame_3)
-        self.wall_index.setGeometry(QtCore.QRect(90, 280, 90, 25))
+        self.wall_index.setGeometry(QtCore.QRect(90, 310, 90, 25))
         self.wall_index.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.wall_index.setAlignment(QtCore.Qt.AlignCenter)
         self.wall_index.setObjectName("wall_index")
         self.dialog_count = QtWidgets.QLineEdit(self.frame_3)
-        self.dialog_count.setGeometry(QtCore.QRect(185, 190, 90, 25))
+        self.dialog_count.setGeometry(QtCore.QRect(185, 220, 90, 25))
         self.dialog_count.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.dialog_count.setAlignment(QtCore.Qt.AlignCenter)
         self.dialog_count.setObjectName("dialog_count")
         self.label_9 = QtWidgets.QLabel(self.frame_3)
-        self.label_9.setGeometry(QtCore.QRect(275, 250, 30, 25))
+        self.label_9.setGeometry(QtCore.QRect(275, 280, 30, 25))
         self.label_9.setStyleSheet("font: 8pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.label_9.setAlignment(QtCore.Qt.AlignCenter)
@@ -265,14 +265,14 @@ class Ui_Form(object):
         self.rate_limit.setAlignment(QtCore.Qt.AlignCenter)
         self.rate_limit.setObjectName("rate_limit")
         self.list_index = QtWidgets.QLineEdit(self.frame_3)
-        self.list_index.setGeometry(QtCore.QRect(90, 160, 90, 25))
+        self.list_index.setGeometry(QtCore.QRect(90, 190, 90, 25))
         self.list_index.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.list_index.setAlignment(QtCore.Qt.AlignCenter)
         self.list_index.setObjectName("list_index")
         self.wall_title = QtWidgets.QLabel(self.frame_3)
-        self.wall_title.setGeometry(QtCore.QRect(10, 280, 80, 25))
+        self.wall_title.setGeometry(QtCore.QRect(10, 310, 80, 25))
         self.wall_title.setStyleSheet("font: 10pt \"微软雅黑\";\n"
 "background-color: rgb(255, 255, 255);")
         self.wall_title.setAlignment(QtCore.Qt.AlignCenter)
@@ -290,34 +290,34 @@ class Ui_Form(object):
         self.rate_title.setAlignment(QtCore.Qt.AlignCenter)
         self.rate_title.setObjectName("rate_title")
         self.carousel_index = QtWidgets.QLineEdit(self.frame_3)
-        self.carousel_index.setGeometry(QtCore.QRect(90, 220, 90, 25))
+        self.carousel_index.setGeometry(QtCore.QRect(90, 250, 90, 25))
         self.carousel_index.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.carousel_index.setAlignment(QtCore.Qt.AlignCenter)
         self.carousel_index.setObjectName("carousel_index")
         self.interstitial_title = QtWidgets.QLabel(self.frame_3)
-        self.interstitial_title.setGeometry(QtCore.QRect(10, 130, 80, 25))
+        self.interstitial_title.setGeometry(QtCore.QRect(10, 160, 80, 25))
         self.interstitial_title.setStyleSheet("font: 10pt \"微软雅黑\";\n"
 "background-color: rgb(255, 255, 255);")
         self.interstitial_title.setAlignment(QtCore.Qt.AlignCenter)
         self.interstitial_title.setObjectName("interstitial_title")
         self.sidebar_index = QtWidgets.QLineEdit(self.frame_3)
-        self.sidebar_index.setGeometry(QtCore.QRect(90, 250, 90, 25))
+        self.sidebar_index.setGeometry(QtCore.QRect(90, 280, 90, 25))
         self.sidebar_index.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.sidebar_index.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_index.setObjectName("sidebar_index")
         self.carousel_limit = QtWidgets.QLineEdit(self.frame_3)
-        self.carousel_limit.setGeometry(QtCore.QRect(305, 220, 90, 25))
+        self.carousel_limit.setGeometry(QtCore.QRect(305, 250, 90, 25))
         self.carousel_limit.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
         self.carousel_limit.setAlignment(QtCore.Qt.AlignCenter)
         self.carousel_limit.setObjectName("carousel_limit")
         self.interstitial_limit = QtWidgets.QLineEdit(self.frame_3)
-        self.interstitial_limit.setGeometry(QtCore.QRect(305, 130, 90, 25))
+        self.interstitial_limit.setGeometry(QtCore.QRect(305, 160, 90, 25))
         self.interstitial_limit.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 75 12pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
@@ -328,6 +328,39 @@ class Ui_Form(object):
         self.label_13.setStyleSheet("font: 20pt \"微软雅黑\";")
         self.label_13.setAlignment(QtCore.Qt.AlignCenter)
         self.label_13.setObjectName("label_13")
+        self.banner_title = QtWidgets.QLabel(self.frame_3)
+        self.banner_title.setGeometry(QtCore.QRect(10, 130, 80, 25))
+        self.banner_title.setStyleSheet("font: 10pt \"微软雅黑\";\n"
+"background-color: rgb(255, 255, 255);")
+        self.banner_title.setAlignment(QtCore.Qt.AlignCenter)
+        self.banner_title.setObjectName("banner_title")
+        self.banner_index = QtWidgets.QLineEdit(self.frame_3)
+        self.banner_index.setGeometry(QtCore.QRect(90, 130, 90, 25))
+        self.banner_index.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 75 12pt \"微软雅黑\";\n"
+"color: rgb(57, 61, 255);")
+        self.banner_index.setAlignment(QtCore.Qt.AlignCenter)
+        self.banner_index.setObjectName("banner_index")
+        self.banner_count = QtWidgets.QLineEdit(self.frame_3)
+        self.banner_count.setGeometry(QtCore.QRect(185, 130, 90, 25))
+        self.banner_count.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 75 12pt \"微软雅黑\";\n"
+"color: rgb(57, 61, 255);")
+        self.banner_count.setAlignment(QtCore.Qt.AlignCenter)
+        self.banner_count.setObjectName("banner_count")
+        self.banner_limit = QtWidgets.QLineEdit(self.frame_3)
+        self.banner_limit.setGeometry(QtCore.QRect(305, 130, 90, 25))
+        self.banner_limit.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 75 12pt \"微软雅黑\";\n"
+"color: rgb(57, 61, 255);")
+        self.banner_limit.setAlignment(QtCore.Qt.AlignCenter)
+        self.banner_limit.setObjectName("banner_limit")
+        self.label_10 = QtWidgets.QLabel(self.frame_3)
+        self.label_10.setGeometry(QtCore.QRect(275, 130, 30, 25))
+        self.label_10.setStyleSheet("font: 8pt \"微软雅黑\";\n"
+"color: rgb(57, 61, 255);")
+        self.label_10.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_10.setObjectName("label_10")
         self.verticalLayout_2.addWidget(self.frame_3)
         self.widget = QtWidgets.QWidget(Form)
         self.widget.setStyleSheet("background-color: rgb(247, 247, 247);")
@@ -347,7 +380,7 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.edit_gift_wall_mode.setText(_translate("Form", "编辑GiftWall模式"))
         self.check_outputs_mode.setText(_translate("Form", "检查Outputs模式"))
-        self.server_url_1.setText(_translate("Form", "https://appgiftwall.oss-us-west-1.aliyuncs.com/"))
+        self.server_url_1.setText(_translate("Form", "https://giftwallcdn.oss-us-west-1.aliyuncs.com/"))
         self.server_url_2.setText(_translate("Form", "https://app.ijoysoftconnect.com/"))
         self.label_6.setText(_translate("Form", "次"))
         self.label_5.setText(_translate("Form", "次"))
@@ -366,3 +399,5 @@ class Ui_Form(object):
         self.rate_title.setText(_translate("Form", "rate"))
         self.interstitial_title.setText(_translate("Form", "interstitial"))
         self.label_13.setText(_translate("Form", "GiftWall配置"))
+        self.banner_title.setText(_translate("Form", "banner"))
+        self.label_10.setText(_translate("Form", "次"))

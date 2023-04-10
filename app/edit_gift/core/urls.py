@@ -1,5 +1,5 @@
 # 阿里云服务器网址
-ALIYUN_SERVER_URL = "https://appgiftwall.oss-us-west-1.aliyuncs.com/"
+ALIYUN_SERVER_URL = "https://giftwallcdn.oss-us-west-1.aliyuncs.com/"
 IJOYSOFT_SERVER_URL = "https://app.ijoysoftconnect.com/"
 BASE_URL = ALIYUN_SERVER_URL
 # 广告配置总表

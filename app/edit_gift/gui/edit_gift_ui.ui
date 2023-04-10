@@ -183,7 +183,7 @@ color: rgb(0, 0, 0);</string>
 color: rgb(0, 0, 0);</string>
           </property>
           <property name="text">
-           <string>https://appgiftwall.oss-us-west-1.aliyuncs.com/</string>
+           <string>https://giftwallcdn.oss-us-west-1.aliyuncs.com/</string>
           </property>
          </widget>
          <widget class="QRadioButton" name="server_url_2">
@@ -216,13 +216,13 @@ color: rgb(0, 0, 0);</string>
          <property name="minimumSize">
           <size>
            <width>400</width>
-           <height>320</height>
+           <height>350</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>400</width>
-           <height>320</height>
+           <height>350</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -238,7 +238,7 @@ color: rgb(0, 0, 0);</string>
           <property name="geometry">
            <rect>
             <x>305</x>
-            <y>190</y>
+            <y>220</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -256,7 +256,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>275</x>
-            <y>160</y>
+            <y>190</y>
             <width>30</width>
             <height>25</height>
            </rect>
@@ -276,7 +276,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>305</x>
-            <y>160</y>
+            <y>190</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -294,7 +294,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>275</x>
-            <y>130</y>
+            <y>160</y>
             <width>30</width>
             <height>25</height>
            </rect>
@@ -314,7 +314,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>190</y>
+            <y>220</y>
             <width>80</width>
             <height>25</height>
            </rect>
@@ -334,7 +334,7 @@ background-color: rgb(255, 255, 255);</string>
           <property name="geometry">
            <rect>
             <x>90</x>
-            <y>190</y>
+            <y>220</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -352,7 +352,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>90</x>
-            <y>130</y>
+            <y>160</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -370,7 +370,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>185</x>
-            <y>250</y>
+            <y>280</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -428,7 +428,7 @@ background-color: rgb(255, 255, 255);</string>
           <property name="geometry">
            <rect>
             <x>275</x>
-            <y>190</y>
+            <y>220</y>
             <width>30</width>
             <height>25</height>
            </rect>
@@ -448,7 +448,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>305</x>
-            <y>250</y>
+            <y>280</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -466,7 +466,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>220</y>
+            <y>250</y>
             <width>80</width>
             <height>25</height>
            </rect>
@@ -506,7 +506,7 @@ background-color: rgb(255, 255, 255);</string>
           <property name="geometry">
            <rect>
             <x>275</x>
-            <y>220</y>
+            <y>250</y>
             <width>30</width>
             <height>25</height>
            </rect>
@@ -526,7 +526,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>185</x>
-            <y>130</y>
+            <y>160</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -562,7 +562,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>185</x>
-            <y>160</y>
+            <y>190</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -580,7 +580,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>250</y>
+            <y>280</y>
             <width>80</width>
             <height>25</height>
            </rect>
@@ -600,7 +600,7 @@ background-color: rgb(255, 255, 255);</string>
           <property name="geometry">
            <rect>
             <x>185</x>
-            <y>220</y>
+            <y>250</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -636,7 +636,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>160</y>
+            <y>190</y>
             <width>80</width>
             <height>25</height>
            </rect>
@@ -656,7 +656,7 @@ background-color: rgb(255, 255, 255);</string>
           <property name="geometry">
            <rect>
             <x>90</x>
-            <y>280</y>
+            <y>310</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -674,7 +674,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>185</x>
-            <y>190</y>
+            <y>220</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -692,7 +692,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>275</x>
-            <y>250</y>
+            <y>280</y>
             <width>30</width>
             <height>25</height>
            </rect>
@@ -730,7 +730,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>90</x>
-            <y>160</y>
+            <y>190</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -748,7 +748,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>280</y>
+            <y>310</y>
             <width>80</width>
             <height>25</height>
            </rect>
@@ -808,7 +808,7 @@ background-color: rgb(255, 255, 255);</string>
           <property name="geometry">
            <rect>
             <x>90</x>
-            <y>220</y>
+            <y>250</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -826,7 +826,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>130</y>
+            <y>160</y>
             <width>80</width>
             <height>25</height>
            </rect>
@@ -846,7 +846,7 @@ background-color: rgb(255, 255, 255);</string>
           <property name="geometry">
            <rect>
             <x>90</x>
-            <y>250</y>
+            <y>280</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -864,7 +864,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>305</x>
-            <y>220</y>
+            <y>250</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -882,7 +882,7 @@ color: rgb(57, 61, 255);</string>
           <property name="geometry">
            <rect>
             <x>305</x>
-            <y>130</y>
+            <y>160</y>
             <width>90</width>
             <height>25</height>
            </rect>
@@ -910,6 +910,100 @@ color: rgb(57, 61, 255);</string>
           </property>
           <property name="text">
            <string>GiftWall配置</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLabel" name="banner_title">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>130</y>
+            <width>80</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 10pt &quot;微软雅黑&quot;;
+background-color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="text">
+           <string>banner</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="banner_index">
+          <property name="geometry">
+           <rect>
+            <x>90</x>
+            <y>130</y>
+            <width>90</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);
+font: 75 12pt &quot;微软雅黑&quot;;
+color: rgb(57, 61, 255);</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="banner_count">
+          <property name="geometry">
+           <rect>
+            <x>185</x>
+            <y>130</y>
+            <width>90</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);
+font: 75 12pt &quot;微软雅黑&quot;;
+color: rgb(57, 61, 255);</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="banner_limit">
+          <property name="geometry">
+           <rect>
+            <x>305</x>
+            <y>130</y>
+            <width>90</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);
+font: 75 12pt &quot;微软雅黑&quot;;
+color: rgb(57, 61, 255);</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_10">
+          <property name="geometry">
+           <rect>
+            <x>275</x>
+            <y>130</y>
+            <width>30</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 8pt &quot;微软雅黑&quot;;
+color: rgb(57, 61, 255);</string>
+          </property>
+          <property name="text">
+           <string>次</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

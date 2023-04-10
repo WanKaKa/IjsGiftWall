@@ -22,9 +22,10 @@ from app.edit_gift.gui import table_widget_ui, edit_gift_ui
 
 DEFAULT_GIFT_CONFIG_LIST = {
     xml_ex.TARGET_RATE: entity.GiftConfig(target=xml_ex.TARGET_RATE, limit='5'),
-    xml_ex.TARGET_INTERSTITIAL: entity.GiftConfig(target=xml_ex.TARGET_INTERSTITIAL, count='3'),
-    xml_ex.TARGET_LIST: entity.GiftConfig(target=xml_ex.TARGET_LIST),
-    xml_ex.TARGET_DIALOG: entity.GiftConfig(target=xml_ex.TARGET_DIALOG, limit='2'),
+    xml_ex.TARGET_BANNER: entity.GiftConfig(target=xml_ex.TARGET_BANNER, count='0', limit='3'),
+    xml_ex.TARGET_INTERSTITIAL: entity.GiftConfig(target=xml_ex.TARGET_INTERSTITIAL, count='0', limit='3'),
+    xml_ex.TARGET_LIST: entity.GiftConfig(target=xml_ex.TARGET_LIST, count='0', limit='3'),
+    xml_ex.TARGET_DIALOG: entity.GiftConfig(target=xml_ex.TARGET_DIALOG, limit='1'),
     xml_ex.TARGET_CAROUSEL: entity.GiftConfig(target=xml_ex.TARGET_CAROUSEL, count='10000'),
     xml_ex.TARGET_SIDEBAR: entity.GiftConfig(target=xml_ex.TARGET_SIDEBAR, count='3'),
     xml_ex.TARGET_WALL: entity.GiftConfig(target=xml_ex.TARGET_WALL, count=None, limit=None),
@@ -115,6 +116,11 @@ class QEditGiftWidget(QWidget):
         self.ui.rate_count.setText(value.count)
         self.ui.rate_limit.setText(value.limit)
 
+        value = add_gift_config_list[xml_ex.TARGET_BANNER]
+        self.ui.banner_index.setText(value.index)
+        self.ui.banner_count.setText(value.count)
+        self.ui.banner_limit.setText(value.limit)
+
         value = add_gift_config_list[xml_ex.TARGET_INTERSTITIAL]
         self.ui.interstitial_index.setText(value.index)
         self.ui.interstitial_count.setText(value.count)
@@ -171,6 +177,12 @@ class QEditGiftWidget(QWidget):
         value.count = self.ui.rate_count.text()
         value.limit = self.ui.rate_limit.text()
         add_gift_config_list[xml_ex.TARGET_RATE] = value
+
+        value = add_gift_config_list[xml_ex.TARGET_BANNER]
+        value.index = self.ui.banner_index.text()
+        value.count = self.ui.banner_count.text()
+        value.limit = self.ui.banner_limit.text()
+        add_gift_config_list[xml_ex.TARGET_BANNER] = value
 
         value = add_gift_config_list[xml_ex.TARGET_INTERSTITIAL]
         value.index = self.ui.interstitial_index.text()

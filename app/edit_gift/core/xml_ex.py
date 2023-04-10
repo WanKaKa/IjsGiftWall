@@ -15,6 +15,7 @@ ATTRIBUTE_LIMIT = "limit"
 # 配置参数target的值
 TARGET_WALL = "wall"
 TARGET_RATE = "rate"
+TARGET_BANNER = "banner"
 TARGET_LIST = "list"
 TARGET_DIALOG = "dialog"
 TARGET_CAROUSEL = "carousel"
@@ -116,6 +117,7 @@ def create_gift_wall_files(file_name, language_list, config_list, entity_list):
             file.write("\n")
 
             write_config_item(file, config_list[TARGET_RATE])
+            write_config_item(file, config_list[TARGET_BANNER])
             write_config_item(file, config_list[TARGET_INTERSTITIAL])
             write_config_item(file, config_list[TARGET_LIST])
             write_config_item(file, config_list[TARGET_DIALOG])
