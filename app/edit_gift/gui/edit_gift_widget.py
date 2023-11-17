@@ -350,6 +350,7 @@ class QEditGiftWidget(QWidget):
                             for item2 in download.overall_gift_entity.item_list:
                                 if utils.compare_entity(item1, item2):
                                     add_gift_item_list.append(item2)
+                                    break
                     if gift_entity.config_list:
                         add_gift_config_list = deepcopy(gift_entity.config_list)
                     self.content.set_table_widget()
