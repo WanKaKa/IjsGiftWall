@@ -8,8 +8,9 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
 from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QStyle, QFileDialog
 from PyQt5 import QtCore
 
+from app.edit_gift.core.download import DownloadConfig
 from database import json_ex
-from app.edit_gift.core import entity, download, urls, xml_ex
+from app.edit_gift.core import entity, download, urls, xml_ex, downloader
 from util import path_ex, icon, utils
 
 from app.edit_gift.gui.dialog.add_gift_dialog import QAddGiftDialog
@@ -314,14 +315,19 @@ class QEditGiftWidget(QWidget):
                               (threading.currentThread().name, time.time() - self.download_start_time))
                         json_ex.put_config_download_time(time.time())
                         download.analysis_gift_data()
-                    download.DownloadIcon(self)
+                        download.DownloadIcon(self)
+                    else:
+                        self.hide_progress_dialog()
+                        # 开始下载之前下载失败的文件
+                        DownloadConfig(self, value["error_list"])
+
                 # 图标下载完成
                 if value["type"] == "icon":
                     self.hide_progress_dialog()
                     if value["success"]:
                         print("图标下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
-                        json_ex.put_icon_download_time(time.time())
+                    json_ex.put_icon_download_time(time.time())
 
     def show_add_gift_wall_dialog(self):
         dialog = QAddGiftDialog(self, add_gift_item_list=add_gift_item_list)

@@ -15,7 +15,15 @@ overall_gift_entity = entity.OverallGiftEntity()
 
 # 初始化服务器GiftWall数据
 def init_gift_data(view_):
-    DownloadConfig(view_)
+    # 解析需要下载的配置列表
+    file_path_list = [urls.OVERALL_XML_NAME]
+    for language_ in urls.LANGUAGE_LIST:
+        language_ = language_ + '/' if language_ != urls.LANGUAGE_LIST[0] else ""
+        if not os.path.exists(path_ex.get_download() + language_):
+            os.makedirs(path_ex.get_download() + language_)
+        for name in urls.XML_NAME_LIST:
+            file_path_list.append(language_ + name)
+    DownloadConfig(view_, file_path_list)
 
 
 # 下载数据成功后解析数据
@@ -42,7 +50,7 @@ def analysis_gift_data():
 
 class DownloadConfig:
 
-    def __init__(self, view_):
+    def __init__(self, view_, file_path_list):
         self.view_ = view_
         self.view_.download_start_time = time.time()
         if is_downloaded_config():
@@ -51,14 +59,6 @@ class DownloadConfig:
             return
 
         self.view_.show_progress_dialog(title="为便捷而生", message="正在下载配置文件，请稍等...")
-        # 解析需要下载的配置列表
-        file_path_list = [urls.OVERALL_XML_NAME]
-        for language_ in urls.LANGUAGE_LIST:
-            language_ = language_ + '/' if language_ != urls.LANGUAGE_LIST[0] else ""
-            if not os.path.exists(path_ex.get_download() + language_):
-                os.makedirs(path_ex.get_download() + language_)
-            for name in urls.XML_NAME_LIST:
-                file_path_list.append(language_ + name)
         # 开始下载
         downloader_ = downloader.Downloader(urls.BASE_URL, file_path_list, download_type="config")
         downloader_.my_signal.connect(self.view_.progress_callback)
