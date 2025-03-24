@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>972</width>
-    <height>168</height>
+    <height>208</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -297,13 +297,13 @@ background-color: rgb(255, 255, 255);</string>
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>80</height>
+         <height>120</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>80</height>
+         <height>120</height>
         </size>
        </property>
        <property name="styleSheet">
@@ -319,7 +319,7 @@ background-color: rgb(255, 255, 255);</string>
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>20</y>
+          <y>40</y>
           <width>70</width>
           <height>40</height>
          </rect>
@@ -363,7 +363,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>RadioButton</string>
         </property>
        </widget>
-       <widget class="QRadioButton" name="file_name_radio_2">
+       <widget class="QRadioButton" name="file_name_radio_7">
         <property name="geometry">
          <rect>
           <x>70</x>
@@ -379,74 +379,10 @@ background-color: rgb(255, 255, 255);</string>
          <string>RadioButton</string>
         </property>
        </widget>
-       <widget class="QRadioButton" name="file_name_radio_3">
+       <widget class="QRadioButton" name="file_name_radio_2">
         <property name="geometry">
          <rect>
           <x>220</x>
-          <y>0</y>
-          <width>150</width>
-          <height>40</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
-        </property>
-        <property name="text">
-         <string>RadioButton</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="file_name_radio_4">
-        <property name="geometry">
-         <rect>
-          <x>220</x>
-          <y>40</y>
-          <width>150</width>
-          <height>40</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
-        </property>
-        <property name="text">
-         <string>RadioButton</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="file_name_radio_5">
-        <property name="geometry">
-         <rect>
-          <x>370</x>
-          <y>0</y>
-          <width>150</width>
-          <height>40</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
-        </property>
-        <property name="text">
-         <string>RadioButton</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="file_name_radio_6">
-        <property name="geometry">
-         <rect>
-          <x>370</x>
-          <y>40</y>
-          <width>150</width>
-          <height>40</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
-        </property>
-        <property name="text">
-         <string>RadioButton</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="file_name_radio_7">
-        <property name="geometry">
-         <rect>
-          <x>520</x>
           <y>0</y>
           <width>150</width>
           <height>40</height>
@@ -462,8 +398,24 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_8">
         <property name="geometry">
          <rect>
-          <x>520</x>
+          <x>220</x>
           <y>40</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_3">
+        <property name="geometry">
+         <rect>
+          <x>370</x>
+          <y>0</y>
           <width>150</width>
           <height>40</height>
          </rect>
@@ -478,7 +430,23 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_9">
         <property name="geometry">
          <rect>
-          <x>670</x>
+          <x>370</x>
+          <y>40</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_4">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
           <y>0</y>
           <width>150</width>
           <height>40</height>
@@ -494,6 +462,38 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QRadioButton" name="file_name_radio_10">
         <property name="geometry">
          <rect>
+          <x>520</x>
+          <y>40</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_5">
+        <property name="geometry">
+         <rect>
+          <x>670</x>
+          <y>0</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_11">
+        <property name="geometry">
+         <rect>
           <x>670</x>
           <y>40</y>
           <width>150</width>
@@ -507,7 +507,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>RadioButton</string>
         </property>
        </widget>
-       <widget class="QRadioButton" name="file_name_radio_11">
+       <widget class="QRadioButton" name="file_name_radio_6">
         <property name="geometry">
          <rect>
           <x>820</x>
@@ -528,6 +528,102 @@ background-color: rgb(255, 255, 255);</string>
          <rect>
           <x>820</x>
           <y>40</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_13">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>80</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_14">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>80</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_15">
+        <property name="geometry">
+         <rect>
+          <x>370</x>
+          <y>80</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_16">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>80</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_17">
+        <property name="geometry">
+         <rect>
+          <x>670</x>
+          <y>80</y>
+          <width>150</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="file_name_radio_18">
+        <property name="geometry">
+         <rect>
+          <x>820</x>
+          <y>80</y>
           <width>150</width>
           <height>40</height>
          </rect>

@@ -22,6 +22,8 @@ def init_gift_data(view_):
         if not os.path.exists(path_ex.get_download() + language_):
             os.makedirs(path_ex.get_download() + language_)
         for name in urls.XML_NAME_LIST:
+            if not name:
+                continue
             file_path_list.append(language_ + name)
     DownloadConfig(view_, file_path_list)
 
@@ -41,6 +43,8 @@ def analysis_gift_data():
             language_ = urls.LANGUAGE_LIST[i]
             language_ = language_ + '\\' if language_ != urls.LANGUAGE_LIST[0] else ""
             for path in urls.XML_NAME_LIST:
+                if not path:
+                    continue
                 gift_entity = xml_ex.analysis_gift_xml(path_ex.get_download() + language_ + path)
                 if gift_entity:
                     gift_entity_list[urls.LANGUAGE_LIST[i]][path] = gift_entity

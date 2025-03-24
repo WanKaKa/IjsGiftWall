@@ -14,8 +14,35 @@ XML_NAME_LIST = [
     "giftListCamera.xml",
     "giftListBrowser.xml",
     "giftListGeneral.xml",
-    "giftListVEditor.xml",
-    "giftListGame.xml"
+    "giftListGame.xml",
+    "",
+    "",
+    "",
+    "giftAdMusic.xml",
+    "giftAdCamera.xml",
+    "giftAdGallery.xml",
+    "giftAdGeneral.xml",
+    "giftAdVideo.xml",
+    "",
+]
+XML_NAME_LIST_2 = [
+    "giftListMusic.xml",
+    "giftListMusicteneq.xml",
+    "giftListMusiceq.xml",
+    "giftListVideo.xml",
+    "giftListGallery.xml",
+    "giftListCamera.xml",
+    "giftListBrowser.xml",
+    "giftListGeneral.xml",
+    "giftListGame.xml",
+    "",
+    "",
+    "giftAdMusic.xml",
+    "giftAdCamera.xml",
+    "giftAdGallery.xml",
+    "giftAdGeneral.xml",
+    "giftAdVideo.xml",
+    "",
 ]
 # 地区
 LANGUAGE_LIST = [

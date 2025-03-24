@@ -25,7 +25,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         self.modify_gift_callback = None
 
         self.__server_gift_wall_file = [self.__OVERALL_GIFT_WALL_FILE_NAME]
-        for file in urls.XML_NAME_LIST:
+        for file in urls.XML_NAME_LIST_2:
             self.__server_gift_wall_file.append(file)
         self.__show_gift_item_list = []
 
@@ -45,17 +45,23 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         ]
         self.__file_name_radio_list = [
             self.file_name_radio_1,
-            self.file_name_radio_3,
-            self.file_name_radio_5,
-            self.file_name_radio_7,
-            self.file_name_radio_9,
-            self.file_name_radio_11,
             self.file_name_radio_2,
+            self.file_name_radio_3,
             self.file_name_radio_4,
+            self.file_name_radio_5,
             self.file_name_radio_6,
+            self.file_name_radio_7,
             self.file_name_radio_8,
+            self.file_name_radio_9,
             self.file_name_radio_10,
+            self.file_name_radio_11,
             self.file_name_radio_12,
+            self.file_name_radio_13,
+            self.file_name_radio_14,
+            self.file_name_radio_15,
+            self.file_name_radio_16,
+            self.file_name_radio_17,
+            self.file_name_radio_18,
         ]
         self.__init_view()
 
@@ -86,10 +92,9 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
             radio_list[i].toggled.connect(
                 lambda: self.__radio_button_click(type_value, radio_list))
         # 隐藏多出来的按钮
-        if len(radio_list) > len(string_list):
-            for i in range(len(radio_list)):
-                if i >= len(string_list):
-                    radio_list[i].hide()
+        for i in range(len(string_list)):
+            if not string_list[i]:
+                radio_list[i].hide()
 
     def __radio_button_click(self, type_value, radio_button_list):
         if radio_button_list:

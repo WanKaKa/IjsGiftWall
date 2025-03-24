@@ -10,7 +10,7 @@ from PyQt5 import QtCore
 
 from app.edit_gift.core.download import DownloadConfig
 from database import json_ex
-from app.edit_gift.core import entity, download, urls, xml_ex, downloader
+from app.edit_gift.core import entity, download, urls, xml_ex
 from util import path_ex, icon, utils
 
 from app.edit_gift.gui.dialog.add_gift_dialog import QAddGiftDialog
@@ -550,17 +550,23 @@ class QCheckLanguage(QWidget):
 
         self.file_name_radio_list = [
             self.ui.file_name_radio_1,
-            self.ui.file_name_radio_3,
-            self.ui.file_name_radio_5,
-            self.ui.file_name_radio_7,
-            self.ui.file_name_radio_9,
-            self.ui.file_name_radio_11,
             self.ui.file_name_radio_2,
+            self.ui.file_name_radio_3,
             self.ui.file_name_radio_4,
+            self.ui.file_name_radio_5,
             self.ui.file_name_radio_6,
+            self.ui.file_name_radio_7,
             self.ui.file_name_radio_8,
+            self.ui.file_name_radio_9,
             self.ui.file_name_radio_10,
+            self.ui.file_name_radio_11,
             self.ui.file_name_radio_12,
+            self.ui.file_name_radio_13,
+            self.ui.file_name_radio_14,
+            self.ui.file_name_radio_15,
+            self.ui.file_name_radio_16,
+            self.ui.file_name_radio_17,
+            self.ui.file_name_radio_18,
         ]
         self.language_radio_list = [
             self.ui.language_radio_1,
@@ -590,10 +596,9 @@ class QCheckLanguage(QWidget):
             radio_list[i].toggled.connect(
                 lambda: self.__radio_button_click(label, radio_list))
         # 隐藏多出来的按钮
-        if len(radio_list) > len(string_list):
-            for i in range(len(radio_list)):
-                if i >= len(string_list):
-                    radio_list[i].hide()
+        for i in range(len(string_list)):
+            if not string_list[i]:
+                radio_list[i].hide()
 
     def __radio_button_click(self, label, radio_button_list):
         if radio_button_list:
@@ -703,6 +708,11 @@ class QCheckOperation(QWidget):
 class QOutFileDialog:
     def __init__(self, view_: QEditGiftWidget, string_list):
         self.__view = view_
+        string_list_modify = []
+        for name in string_list:
+            if not name:
+                continue
+            string_list_modify.append(name)
 
         out_file_dialog = QSingleSelectDialog(self.__view)
         out_file_dialog.setWindowTitle("选择字符")
@@ -724,20 +734,23 @@ class QOutFileDialog:
             out_file_dialog.radioButton_13,
             out_file_dialog.radioButton_14,
             out_file_dialog.radioButton_15,
-            out_file_dialog.radioButton_16
+            out_file_dialog.radioButton_16,
+            out_file_dialog.radioButton_17,
+            out_file_dialog.radioButton_18,
         ]
         # 设置按钮状态和点击事件
         _translate = QtCore.QCoreApplication.translate
-        for i in range(len(string_list)):
+        for i in range(len(string_list_modify)):
             utils.set_radio_button_style_10pt(out_file_radio_button_list[i], False)
-            out_file_radio_button_list[i].setText(_translate("Form", string_list[i]))
-            out_file_radio_button_list[i].setChecked(self.__view.edit_language.ui.file_name.text() == string_list[i])
+            out_file_radio_button_list[i].setText(_translate("Form", string_list_modify[i]))
+            out_file_radio_button_list[i].setChecked(
+                self.__view.edit_language.ui.file_name.text() == string_list_modify[i])
             out_file_radio_button_list[i].toggled.connect(
                 lambda: self.__set_out_file(out_file_dialog, out_file_radio_button_list))
         # 隐藏多出来的按钮
-        if len(out_file_radio_button_list) > len(string_list):
+        if len(out_file_radio_button_list) > len(string_list_modify):
             for i in range(len(out_file_radio_button_list)):
-                if i >= len(string_list):
+                if i >= len(string_list_modify):
                     out_file_radio_button_list[i].hide()
         out_file_dialog.exec()
 
