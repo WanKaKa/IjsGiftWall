@@ -15,6 +15,8 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(1200, 840)
+        Dialog.setMinimumSize(QtCore.QSize(1200, 0))
+        Dialog.setMaximumSize(QtCore.QSize(1200, 16777215))
         self.formLayout = QtWidgets.QFormLayout(Dialog)
         self.formLayout.setObjectName("formLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -188,19 +190,26 @@ class Ui_Dialog(object):
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.add_all = QtWidgets.QPushButton(self.frame)
-        self.add_all.setGeometry(QtCore.QRect(1010, 10, 160, 40))
+        self.add_all.setGeometry(QtCore.QRect(840, 10, 160, 40))
         self.add_all.setMinimumSize(QtCore.QSize(0, 0))
         self.add_all.setStyleSheet("font: 12pt \"微软雅黑\";\n"
 "color: rgb(255, 255, 255);\n"
 "background-color: rgb(57, 61, 255);")
         self.add_all.setObjectName("add_all")
         self.add = QtWidgets.QPushButton(self.frame)
-        self.add.setGeometry(QtCore.QRect(840, 10, 160, 40))
+        self.add.setGeometry(QtCore.QRect(670, 10, 160, 40))
         self.add.setMinimumSize(QtCore.QSize(0, 0))
         self.add.setStyleSheet("font: 12pt \"微软雅黑\";\n"
 "color: rgb(255, 255, 255);\n"
 "background-color: rgb(57, 61, 255);")
         self.add.setObjectName("add")
+        self.close_button = QtWidgets.QPushButton(self.frame)
+        self.close_button.setGeometry(QtCore.QRect(1010, 10, 160, 40))
+        self.close_button.setMinimumSize(QtCore.QSize(0, 0))
+        self.close_button.setStyleSheet("font: 12pt \"微软雅黑\";\n"
+"color: rgb(255, 255, 255);\n"
+"background-color: rgb(255, 0, 0);")
+        self.close_button.setObjectName("close_button")
         self.verticalLayout.addWidget(self.frame)
         self.formLayout.setLayout(0, QtWidgets.QFormLayout.SpanningRole, self.verticalLayout)
 
@@ -244,3 +253,4 @@ class Ui_Dialog(object):
         self.file_name_radio_18.setText(_translate("Dialog", "RadioButton"))
         self.add_all.setText(_translate("Dialog", "一键全选添加"))
         self.add.setText(_translate("Dialog", "添加"))
+        self.close_button.setText(_translate("Dialog", "关闭"))

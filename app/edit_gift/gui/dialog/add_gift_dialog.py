@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
-from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog
+from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog, QApplication
 from PyQt5 import QtCore
 
 from app.edit_gift.core import download, urls
@@ -18,6 +18,10 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
     def __init__(self, parent=None, add_gift_item_list=None):
         super(QAddGiftDialog, self).__init__(parent)
         self.setupUi(self)
+
+        # 获取屏幕的高度
+        screen = QApplication.primaryScreen()
+        self.resize(1200, screen.availableGeometry().height() - 64)
 
         self.add_gift_item_list = add_gift_item_list
         self.add_single_gift_callback = None
@@ -70,6 +74,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         self.tableWidget.itemDoubleClicked.connect(self.__table_widget_item_double_click)
         self.add.clicked.connect(self.__add_gift_wall)
         self.add_all.clicked.connect(self.__add_all_gift_wall)
+        self.close_button.clicked.connect(self.close)
 
     def __init_view(self):
         self.__init_radio_button(0, self.__language_radio_list, urls.LANGUAGE_LIST)
