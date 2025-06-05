@@ -23,7 +23,7 @@ XML_NAME_LIST = [
     "giftAdGallery.xml",
     "giftAdGeneral.xml",
     "giftAdVideo.xml",
-    "",
+    "giftAdMusiceq.xml",
 ]
 XML_NAME_LIST_2 = [
     "giftListMusic.xml",
@@ -42,7 +42,7 @@ XML_NAME_LIST_2 = [
     "giftAdGallery.xml",
     "giftAdGeneral.xml",
     "giftAdVideo.xml",
-    "",
+    "giftAdMusiceq.xml",
 ]
 # 地区
 LANGUAGE_LIST = [
