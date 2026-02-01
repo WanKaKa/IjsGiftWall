@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog
 
-from app.edit_gift.gui.dialog import single_select_ui
+from app.edit_gift.gui.qt5.dialog import single_select_ui
 
 
 class QSingleSelectDialog(QDialog, single_select_ui.Ui_Form):

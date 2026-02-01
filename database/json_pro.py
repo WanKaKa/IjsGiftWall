@@ -1,7 +1,7 @@
 import os
 import json
 
-from util import path_ex
+from util import path_pro
 
 # json数据文件名
 normal_json_name = "normal_json_name.json"
@@ -69,7 +69,7 @@ def put_selected_server_url(value):
 
 
 def get():
-    path = path_ex.get_database() + normal_json_name
+    path = path_pro.get_database() + normal_json_name
     if not os.path.exists(path):
         return None
     file = open(path, mode='r', encoding='utf-8')
@@ -82,6 +82,6 @@ def save(key, value):
     temp_data = get()
     temp_data = temp_data if temp_data else {}
     temp_data[key] = value
-    file = open(path_ex.get_database() + normal_json_name, mode='w', encoding='utf-8')
+    file = open(path_pro.get_database() + normal_json_name, mode='w', encoding='utf-8')
     json.dump(temp_data, file, indent=4, ensure_ascii=False)
     file.close()

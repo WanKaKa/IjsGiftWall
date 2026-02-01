@@ -4,9 +4,9 @@ from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog, QAppli
 from PyQt5 import QtCore
 
 from app.edit_gift.core import download, urls
-from util import path_ex, utils
+from util import path_pro, utils
 
-from app.edit_gift.gui.dialog import add_gift_ui
+from app.edit_gift.gui.qt5.dialog import add_gift_ui
 
 
 class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
@@ -165,7 +165,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         self.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon_ = QIcon(path_ex.get_download() + entity_.icon_image_path)
+        icon_ = QIcon(path_pro.get_download() + entity_.icon_image_path)
         item.setIcon(icon_)
         self.tableWidget.setItem(index, 1, item)
 
@@ -189,7 +189,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         item = None
         if entity_.poster_path:
             item = QTableWidgetItem()
-            icon_ = QIcon(path_ex.get_download() + entity_.poster_path)
+            icon_ = QIcon(path_pro.get_download() + entity_.poster_path)
             item.setIcon(QIcon(icon_))
         self.tableWidget.setItem(index, 5, item)
 

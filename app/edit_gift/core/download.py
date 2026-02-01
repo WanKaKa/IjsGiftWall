@@ -1,9 +1,9 @@
 import os
 import time
 
-from database import json_ex
-from app.edit_gift.core import entity, urls, downloader, xml_ex
-from util import path_ex
+from database import json_pro
+from app.edit_gift.core import entity, urls, downloader, xml_pro
+from util import path_pro
 
 # 每个地区对应的表数据
 gift_entity_list = {}
@@ -19,8 +19,8 @@ def init_gift_data(view_):
     file_path_list = [urls.OVERALL_XML_NAME]
     for language_ in urls.LANGUAGE_LIST:
         language_ = language_ + '/' if language_ != urls.LANGUAGE_LIST[0] else ""
-        if not os.path.exists(path_ex.get_download() + language_):
-            os.makedirs(path_ex.get_download() + language_)
+        if not os.path.exists(path_pro.get_download() + language_):
+            os.makedirs(path_pro.get_download() + language_)
         for name in urls.XML_NAME_LIST:
             if not name:
                 continue
@@ -33,8 +33,8 @@ def analysis_gift_data():
     if is_downloaded_config():
         # 总表数据
         global overall_gift_entity
-        overall_gift_entity = xml_ex.analysis_overall_gift_xml(
-            path_ex.get_download() + urls.OVERALL_XML_NAME)
+        overall_gift_entity = xml_pro.analysis_overall_gift_xml(
+            path_pro.get_download() + urls.OVERALL_XML_NAME)
         if overall_gift_entity:
             print("总表 - 产品数量 = %d" % len(overall_gift_entity.item_list))
         # 各地区表数据
@@ -45,7 +45,7 @@ def analysis_gift_data():
             for path in urls.XML_NAME_LIST:
                 if not path:
                     continue
-                gift_entity = xml_ex.analysis_gift_xml(path_ex.get_download() + language_ + path)
+                gift_entity = xml_pro.analysis_gift_xml(path_pro.get_download() + language_ + path)
                 if gift_entity:
                     gift_entity_list[urls.LANGUAGE_LIST[i]][path] = gift_entity
             language_ = urls.LANGUAGE_LIST[i]
@@ -82,12 +82,12 @@ class DownloadIcon:
         file_path_list = []
         for item in overall_gift_entity.item_list:
             if item.icon_image_path:
-                dir_path = os.path.dirname(path_ex.get_download() + item.icon_image_path)
+                dir_path = os.path.dirname(path_pro.get_download() + item.icon_image_path)
                 if not os.path.exists(dir_path):
                     os.makedirs(dir_path)
                 file_path_list.append(item.icon_image_path)
             if item.poster_path:
-                dir_path = os.path.dirname(path_ex.get_download() + item.poster_path)
+                dir_path = os.path.dirname(path_pro.get_download() + item.poster_path)
                 if not os.path.exists(dir_path):
                     os.makedirs(dir_path)
                 file_path_list.append(item.poster_path)
@@ -98,8 +98,8 @@ class DownloadIcon:
 
 
 def is_downloaded_config():
-    return json_ex.get_config_download_time() > 0
+    return json_pro.get_config_download_time() > 0
 
 
 def is_downloaded_icon():
-    return json_ex.get_icon_download_time() > 0
+    return json_pro.get_icon_download_time() > 0

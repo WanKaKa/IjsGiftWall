@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog
 
-from app.edit_gift.gui.dialog import progress_ui
+from app.edit_gift.gui.qt5.dialog import progress_ui
 
 
 class QProgressDialog(QDialog, progress_ui.Ui_Dialog):

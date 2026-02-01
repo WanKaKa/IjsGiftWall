@@ -9,27 +9,27 @@ from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessa
 from PyQt5 import QtCore
 
 from app.edit_gift.core.download import DownloadConfig
-from database import json_ex
-from app.edit_gift.core import entity, download, urls, xml_ex
-from util import path_ex, icon, utils
+from database import json_pro
+from app.edit_gift.core import entity, download, urls, xml_pro
+from util import path_pro, icon, utils
 
-from app.edit_gift.gui.dialog.add_gift_dialog import QAddGiftDialog
-from app.edit_gift.gui.dialog.progress_dialog import QProgressDialog
-from app.edit_gift.gui.dialog.single_select_dialog import QSingleSelectDialog
-from app.edit_gift.gui.dialog.multiple_select_dialog import QMultipleSelectDialog
-from app.edit_gift.gui.dialog.see_image_dialog import QSeeImageDialog
-from app.edit_gift.gui.operation import edit_language_ui, check_language_ui, edit_button_ui, check_button_ui
-from app.edit_gift.gui import table_widget_ui, edit_gift_ui
+from app.edit_gift.gui.add_gift_dialog import QAddGiftDialog
+from app.edit_gift.gui.progress_dialog import QProgressDialog
+from app.edit_gift.gui.single_select_dialog import QSingleSelectDialog
+from app.edit_gift.gui.multiple_select_dialog import QMultipleSelectDialog
+from app.edit_gift.gui.see_image_dialog import QSeeImageDialog
+from app.edit_gift.gui.qt5.operation import edit_language_ui, edit_button_ui, check_button_ui, check_language_ui
+from app.edit_gift.gui.qt5 import table_widget_ui, edit_gift_ui
 
 DEFAULT_GIFT_CONFIG_LIST = {
-    xml_ex.TARGET_RATE: entity.GiftConfig(target=xml_ex.TARGET_RATE, limit='5'),
-    xml_ex.TARGET_BANNER: entity.GiftConfig(target=xml_ex.TARGET_BANNER, count='0', limit='3'),
-    xml_ex.TARGET_INTERSTITIAL: entity.GiftConfig(target=xml_ex.TARGET_INTERSTITIAL, count='0', limit='3'),
-    xml_ex.TARGET_LIST: entity.GiftConfig(target=xml_ex.TARGET_LIST, count='0', limit='3'),
-    xml_ex.TARGET_DIALOG: entity.GiftConfig(target=xml_ex.TARGET_DIALOG, limit='1'),
-    xml_ex.TARGET_CAROUSEL: entity.GiftConfig(target=xml_ex.TARGET_CAROUSEL, count='10000'),
-    xml_ex.TARGET_SIDEBAR: entity.GiftConfig(target=xml_ex.TARGET_SIDEBAR, count='3'),
-    xml_ex.TARGET_WALL: entity.GiftConfig(target=xml_ex.TARGET_WALL, count=None, limit=None),
+    xml_pro.TARGET_RATE: entity.GiftConfig(target=xml_pro.TARGET_RATE, limit='5'),
+    xml_pro.TARGET_BANNER: entity.GiftConfig(target=xml_pro.TARGET_BANNER, count='0', limit='3'),
+    xml_pro.TARGET_INTERSTITIAL: entity.GiftConfig(target=xml_pro.TARGET_INTERSTITIAL, count='0', limit='3'),
+    xml_pro.TARGET_LIST: entity.GiftConfig(target=xml_pro.TARGET_LIST, count='0', limit='3'),
+    xml_pro.TARGET_DIALOG: entity.GiftConfig(target=xml_pro.TARGET_DIALOG, limit='1'),
+    xml_pro.TARGET_CAROUSEL: entity.GiftConfig(target=xml_pro.TARGET_CAROUSEL, count='10000'),
+    xml_pro.TARGET_SIDEBAR: entity.GiftConfig(target=xml_pro.TARGET_SIDEBAR, count='3'),
+    xml_pro.TARGET_WALL: entity.GiftConfig(target=xml_pro.TARGET_WALL, count=None, limit=None),
 }
 
 # 0: 编辑模式 1: 查看模式
@@ -65,7 +65,7 @@ class QEditGiftWidget(QWidget):
         self.ui.server_url_1.toggled.connect(lambda: self.switch_server_url())
         self.ui.server_url_2.toggled.connect(lambda: self.switch_server_url())
 
-        if urls.ALIYUN_SERVER_URL == json_ex.get_selected_server_url():
+        if urls.ALIYUN_SERVER_URL == json_pro.get_selected_server_url():
             self.ui.server_url_1.setChecked(True)
         else:
             self.ui.server_url_2.setChecked(True)
@@ -112,42 +112,42 @@ class QEditGiftWidget(QWidget):
             self.check_operation.setVisible(True)
 
     def set_gift_config_view(self):
-        value = add_gift_config_list[xml_ex.TARGET_RATE]
+        value = add_gift_config_list[xml_pro.TARGET_RATE]
         self.ui.rate_index.setText(value.index)
         self.ui.rate_count.setText(value.count)
         self.ui.rate_limit.setText(value.limit)
 
-        value = add_gift_config_list[xml_ex.TARGET_BANNER]
+        value = add_gift_config_list[xml_pro.TARGET_BANNER]
         self.ui.banner_index.setText(value.index)
         self.ui.banner_count.setText(value.count)
         self.ui.banner_limit.setText(value.limit)
 
-        value = add_gift_config_list[xml_ex.TARGET_INTERSTITIAL]
+        value = add_gift_config_list[xml_pro.TARGET_INTERSTITIAL]
         self.ui.interstitial_index.setText(value.index)
         self.ui.interstitial_count.setText(value.count)
         self.ui.interstitial_limit.setText(value.limit)
 
-        value = add_gift_config_list[xml_ex.TARGET_LIST]
+        value = add_gift_config_list[xml_pro.TARGET_LIST]
         self.ui.list_index.setText(value.index)
         self.ui.list_count.setText(value.count)
         self.ui.list_limit.setText(value.limit)
 
-        value = add_gift_config_list[xml_ex.TARGET_DIALOG]
+        value = add_gift_config_list[xml_pro.TARGET_DIALOG]
         self.ui.dialog_index.setText(value.index)
         self.ui.dialog_count.setText(value.count)
         self.ui.dialog_limit.setText(value.limit)
 
-        value = add_gift_config_list[xml_ex.TARGET_CAROUSEL]
+        value = add_gift_config_list[xml_pro.TARGET_CAROUSEL]
         self.ui.carousel_index.setText(value.index)
         self.ui.carousel_count.setText(value.count)
         self.ui.carousel_limit.setText(value.limit)
 
-        value = add_gift_config_list[xml_ex.TARGET_SIDEBAR]
+        value = add_gift_config_list[xml_pro.TARGET_SIDEBAR]
         self.ui.sidebar_index.setText(value.index)
         self.ui.sidebar_count.setText(value.count)
         self.ui.sidebar_limit.setText(value.limit)
 
-        value = add_gift_config_list[xml_ex.TARGET_WALL]
+        value = add_gift_config_list[xml_pro.TARGET_WALL]
         self.ui.wall_index.setText(value.index)
 
     def save_gift_wall_file(self):
@@ -163,7 +163,7 @@ class QEditGiftWidget(QWidget):
         if not self.get_gift_config_list():
             QMessageBox.information(self, '提示', 'GiftWall配置输入不正确!')
             return
-        xml_ex.create_gift_wall_files(self.edit_language.ui.file_name.text(),
+        xml_pro.create_gift_wall_files(self.edit_language.ui.file_name.text(),
                                       self.edit_language.ui.language.text().split(","),
                                       add_gift_config_list, add_gift_item_list)
         # 每次生成文件后，更新输出文件夹中的文件夹集合
@@ -173,51 +173,51 @@ class QEditGiftWidget(QWidget):
     def get_gift_config_list(self):
         if not self.is_gift_config_valid():
             return False
-        value = add_gift_config_list[xml_ex.TARGET_RATE]
+        value = add_gift_config_list[xml_pro.TARGET_RATE]
         value.index = self.ui.rate_index.text()
         value.count = self.ui.rate_count.text()
         value.limit = self.ui.rate_limit.text()
-        add_gift_config_list[xml_ex.TARGET_RATE] = value
+        add_gift_config_list[xml_pro.TARGET_RATE] = value
 
-        value = add_gift_config_list[xml_ex.TARGET_BANNER]
+        value = add_gift_config_list[xml_pro.TARGET_BANNER]
         value.index = self.ui.banner_index.text()
         value.count = self.ui.banner_count.text()
         value.limit = self.ui.banner_limit.text()
-        add_gift_config_list[xml_ex.TARGET_BANNER] = value
+        add_gift_config_list[xml_pro.TARGET_BANNER] = value
 
-        value = add_gift_config_list[xml_ex.TARGET_INTERSTITIAL]
+        value = add_gift_config_list[xml_pro.TARGET_INTERSTITIAL]
         value.index = self.ui.interstitial_index.text()
         value.count = self.ui.interstitial_count.text()
         value.limit = self.ui.interstitial_limit.text()
-        add_gift_config_list[xml_ex.TARGET_INTERSTITIAL] = value
+        add_gift_config_list[xml_pro.TARGET_INTERSTITIAL] = value
 
-        value = add_gift_config_list[xml_ex.TARGET_LIST]
+        value = add_gift_config_list[xml_pro.TARGET_LIST]
         value.index = self.ui.list_index.text()
         value.count = self.ui.list_count.text()
         value.limit = self.ui.list_limit.text()
-        add_gift_config_list[xml_ex.TARGET_LIST] = value
+        add_gift_config_list[xml_pro.TARGET_LIST] = value
 
-        value = add_gift_config_list[xml_ex.TARGET_DIALOG]
+        value = add_gift_config_list[xml_pro.TARGET_DIALOG]
         value.index = self.ui.dialog_index.text()
         value.count = self.ui.dialog_count.text()
         value.limit = self.ui.dialog_limit.text()
-        add_gift_config_list[xml_ex.TARGET_DIALOG] = value
+        add_gift_config_list[xml_pro.TARGET_DIALOG] = value
 
-        value = add_gift_config_list[xml_ex.TARGET_CAROUSEL]
+        value = add_gift_config_list[xml_pro.TARGET_CAROUSEL]
         value.index = self.ui.carousel_index.text()
         value.count = self.ui.carousel_count.text()
         value.limit = self.ui.carousel_limit.text()
-        add_gift_config_list[xml_ex.TARGET_CAROUSEL] = value
+        add_gift_config_list[xml_pro.TARGET_CAROUSEL] = value
 
-        value = add_gift_config_list[xml_ex.TARGET_SIDEBAR]
+        value = add_gift_config_list[xml_pro.TARGET_SIDEBAR]
         value.index = self.ui.sidebar_index.text()
         value.count = self.ui.sidebar_count.text()
         value.limit = self.ui.sidebar_limit.text()
-        add_gift_config_list[xml_ex.TARGET_SIDEBAR] = value
+        add_gift_config_list[xml_pro.TARGET_SIDEBAR] = value
 
-        value = add_gift_config_list[xml_ex.TARGET_WALL]
+        value = add_gift_config_list[xml_pro.TARGET_WALL]
         value.index = self.ui.wall_index.text()
-        add_gift_config_list[xml_ex.TARGET_WALL] = value
+        add_gift_config_list[xml_pro.TARGET_WALL] = value
         return True
 
     def is_gift_config_valid(self):
@@ -266,14 +266,14 @@ class QEditGiftWidget(QWidget):
             urls.BASE_URL = urls.IJOYSOFT_SERVER_URL
         else:
             urls.BASE_URL = urls.ALIYUN_SERVER_URL
-        json_ex.put_selected_server_url(urls.BASE_URL)
+        json_pro.put_selected_server_url(urls.BASE_URL)
         print("选择的服务器 = %s" % urls.BASE_URL)
 
     def delete_dir(self):
         reply = QMessageBox.question(
             self, '清空Outputs', '确定清空Outputs吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            utils.delete_dir(path_ex.get_outputs())
+            utils.delete_dir(path_pro.get_outputs())
             self.check_language.set_radio_button_color()
             self.load_outputs_xml_file()
             QMessageBox.information(self, '提示', 'Outputs已清空!')
@@ -313,7 +313,7 @@ class QEditGiftWidget(QWidget):
                     if value["success"]:
                         print("配置表下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
-                        json_ex.put_config_download_time(time.time())
+                        json_pro.put_config_download_time(time.time())
                         download.analysis_gift_data()
                         download.DownloadIcon(self)
                     else:
@@ -327,7 +327,7 @@ class QEditGiftWidget(QWidget):
                     if value["success"]:
                         print("图标下载完成 线程名称 = %s 时间 = %f" %
                               (threading.currentThread().name, time.time() - self.download_start_time))
-                    json_ex.put_icon_download_time(time.time())
+                    json_pro.put_icon_download_time(time.time())
 
     def show_add_gift_wall_dialog(self):
         dialog = QAddGiftDialog(self, add_gift_item_list=add_gift_item_list)
@@ -344,7 +344,7 @@ class QEditGiftWidget(QWidget):
 
     def load_signal_xml_file(self, path, tip_enable=True):
         if path:
-            gift_entity = xml_ex.analysis_gift_xml(path)
+            gift_entity = xml_pro.analysis_gift_xml(path)
             global add_gift_item_list
             global add_gift_config_list
             add_gift_item_list.clear()
@@ -376,7 +376,7 @@ class QEditGiftWidget(QWidget):
             name = self.edit_language.ui.file_name.text()
             language = self.edit_language.ui.language.text()
             if name and language:
-                path = path_ex.get_outputs() + \
+                path = path_pro.get_outputs() + \
                        (language if urls.LANGUAGE_LIST[0] != language else "") + "\\" + name
                 self.load_signal_xml_file(path, tip_enable=False)
 
@@ -434,7 +434,7 @@ class QKevinTableWidget(QWidget):
         self.ui.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon_ = QIcon(path_ex.get_download() + entity_.icon_image_path)
+        icon_ = QIcon(path_pro.get_download() + entity_.icon_image_path)
         item.setIcon(icon_)
         self.ui.tableWidget.setItem(index, 1, item)
 
@@ -458,7 +458,7 @@ class QKevinTableWidget(QWidget):
         item = None
         if entity_.poster_path:
             item = QTableWidgetItem()
-            icon_ = QIcon(path_ex.get_download() + entity_.poster_path)
+            icon_ = QIcon(path_pro.get_download() + entity_.poster_path)
             item.setIcon(QIcon(icon_))
         self.ui.tableWidget.setItem(index, 5, item)
 
@@ -471,14 +471,14 @@ class QKevinTableWidget(QWidget):
         image_dialog.setWindowTitle("为便捷而生")
         image_dialog.setWindowIcon(icon.get_logo())
         if add_gift_item_list[row].icon_image_path:
-            icon_image_path = path_ex.get_download() + add_gift_item_list[row].icon_image_path
+            icon_image_path = path_pro.get_download() + add_gift_item_list[row].icon_image_path
             if os.path.exists(icon_image_path):
                 pix_map = QPixmap(icon_image_path)
                 if pix_map.width() >= 180:
                     pix_map = pix_map.scaled(160, 160, Qt.KeepAspectRatio | Qt.SmoothTransformation)
                 image_dialog.icon.setPixmap(pix_map)
         if add_gift_item_list[row].poster_path:
-            poster_path = path_ex.get_download() + add_gift_item_list[row].poster_path
+            poster_path = path_pro.get_download() + add_gift_item_list[row].poster_path
             if os.path.exists(poster_path):
                 pix_map = QPixmap(poster_path)
                 if pix_map.height() >= 800:
@@ -621,7 +621,7 @@ class QCheckLanguage(QWidget):
             language = self.__view.edit_language.ui.language.text()
             dir_name = language if language != urls.LANGUAGE_LIST[0] else ""
             utils.set_radio_button_style_8pt(
-                radio, language and not os.path.exists(path_ex.get_outputs() + dir_name + "\\" + radio.text()))
+                radio, language and not os.path.exists(path_pro.get_outputs() + dir_name + "\\" + radio.text()))
 
     def show(self):
         self.setVisible(True)
@@ -654,26 +654,26 @@ class QEditOperation(QWidget):
         self.ui.import_gift_wall.clicked.connect(self.__import_gift_wall)
         self.ui.create_gift_wall_file.clicked.connect(self.__save_gift_wall_file)
 
-        self.ui.open_outputs.clicked.connect(lambda: os.system("start " + path_ex.get_outputs()))
+        self.ui.open_outputs.clicked.connect(lambda: os.system("start " + path_pro.get_outputs()))
         self.ui.clear_outputs.clicked.connect(self.__view.delete_dir)
 
     def __reload_data_config(self):
         reply = QMessageBox.question(
             self.__view, '重新下载', '确认重新下载服务器配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            json_ex.put_config_download_time(0)
+            json_pro.put_config_download_time(0)
             download.init_gift_data(self.__view)
 
     def __reload_data(self):
         reply = QMessageBox.question(
             self.__view, '重新下载', '确认重新下载服务器数据吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            json_ex.put_config_download_time(0)
-            json_ex.put_icon_download_time(0)
+            json_pro.put_config_download_time(0)
+            json_pro.put_icon_download_time(0)
             download.init_gift_data(self.__view)
 
     def __import_gift_wall(self):
-        file_name, file_type = QFileDialog.getOpenFileName(self.__view, "选取文件", path_ex.get_outputs())
+        file_name, file_type = QFileDialog.getOpenFileName(self.__view, "选取文件", path_pro.get_outputs())
         self.__view.load_signal_xml_file(file_name)
 
     def __save_gift_wall_file(self):
@@ -691,7 +691,7 @@ class QCheckOperation(QWidget):
         self.__view = parent
         self.setMinimumSize(400, 110)
 
-        self.ui.open_outputs_2.clicked.connect(lambda: os.system("start " + path_ex.get_outputs()))
+        self.ui.open_outputs_2.clicked.connect(lambda: os.system("start " + path_pro.get_outputs()))
         self.ui.clear_outputs_2.clicked.connect(self.__view.delete_dir)
 
         self.ui.save.clicked.connect(self.__view.save_gift_wall_file)

@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QEvent
 from PyQt5.QtWidgets import QDialog, QApplication
 
-from app.edit_gift.gui.dialog import see_image_ui
+from app.edit_gift.gui.qt5.dialog import see_image_ui
 
 
 class QSeeImageDialog(QDialog, see_image_ui.Ui_Form):
