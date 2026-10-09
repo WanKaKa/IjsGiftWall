@@ -33,6 +33,13 @@ TAG_PACKAGE_NAME = "packageName"
 TAG_MARKET_URL = "marketUrl"
 TAG_APP_TYPE = "apptype"
 TAG_PROJECT_NAME = "projectName"
+TAG_SHOW_TARGET = "showTarget"
+# showTarget 可选值（根据 download 下 XML 统计结果内置，点击时不再遍历）
+# 第一项为空表示不设置 showTarget
+SHOW_TARGET_LIST = [
+    "",
+    "equalizer",
+]
 
 
 def analysis_overall_gift_xml(path):
@@ -54,6 +61,7 @@ def analysis_overall_gift_xml(path):
         overall_gift_item.market_url = analysis_xml_item(item, TAG_MARKET_URL)
         overall_gift_item.poster_path = analysis_xml_item(item, TAG_POSTER_PATH)
         overall_gift_item.app_type = analysis_xml_item(item, TAG_APP_TYPE)
+        overall_gift_item.show_target = analysis_xml_item(item, TAG_SHOW_TARGET)
         overall_gift_item.project_name = analysis_xml_item(item, TAG_PROJECT_NAME)
         overall_gift_entity.item_list.append(overall_gift_item)
     return overall_gift_entity
@@ -88,6 +96,7 @@ def analysis_gift_xml(path):
             gift_item.market_url = analysis_xml_item(item, TAG_MARKET_URL)
             gift_item.poster_path = analysis_xml_item(item, TAG_POSTER_PATH)
             gift_item.app_type = analysis_xml_item(item, TAG_APP_TYPE)
+            gift_item.show_target = analysis_xml_item(item, TAG_SHOW_TARGET)
             gift_entity.item_list.append(gift_item)
         return gift_entity
     except Exception as e:
@@ -103,35 +112,81 @@ def analysis_xml_item(content, name):
     return items[0].childNodes[0].data
 
 
+def get_gift_wall_file_path(file_name, language):
+    dir_path = path_pro.get_outputs() + (language + "\\" if urls.LANGUAGE_LIST[0] != language else "")
+    return dir_path, dir_path + file_name
+
+
+def write_gift_wall_file(file_path, config_list, entity_list):
+    file = open(file_path, mode='w', encoding='utf-8')
+    file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+    file.write("\n")
+    file.write("<" + TAG_GIFT_LIST + ">")
+    file.write("\n")
+    file.write("\n")
+
+    write_config_item(file, config_list[TARGET_RATE])
+    write_config_item(file, config_list[TARGET_BANNER])
+    write_config_item(file, config_list[TARGET_INTERSTITIAL])
+    write_config_item(file, config_list[TARGET_LIST])
+    write_config_item(file, config_list[TARGET_DIALOG])
+    write_config_item(file, config_list[TARGET_CAROUSEL])
+    write_config_item(file, config_list[TARGET_SIDEBAR])
+    write_config_item(file, config_list[TARGET_WALL])
+    file.write("\n")
+
+    for entity_value in entity_list:
+        write_entity_item(file, entity_value)
+
+    file.write("</" + TAG_GIFT_LIST + ">")
+    file.write("\n")
+    file.close()
+
+
 def create_gift_wall_files(file_name, language_list, config_list, entity_list):
     for language in language_list:
         if language:
-            dir_path = path_pro.get_outputs() + (language + "\\" if urls.LANGUAGE_LIST[0] != language else "")
+            dir_path, file_path = get_gift_wall_file_path(file_name, language)
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
-            file = open(dir_path + file_name, mode='w', encoding='utf-8')
-            file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-            file.write("\n")
-            file.write("<" + TAG_GIFT_LIST + ">")
-            file.write("\n")
-            file.write("\n")
+            write_gift_wall_file(file_path, config_list, entity_list)
 
-            write_config_item(file, config_list[TARGET_RATE])
-            write_config_item(file, config_list[TARGET_BANNER])
-            write_config_item(file, config_list[TARGET_INTERSTITIAL])
-            write_config_item(file, config_list[TARGET_LIST])
-            write_config_item(file, config_list[TARGET_DIALOG])
-            write_config_item(file, config_list[TARGET_CAROUSEL])
-            write_config_item(file, config_list[TARGET_SIDEBAR])
-            write_config_item(file, config_list[TARGET_WALL])
-            file.write("\n")
 
-            for entity_value in entity_list:
-                write_entity_item(file, entity_value)
+def append_gift_wall_files(file_name_list, language_list, config_list, entity_list):
+    """按文件名×地区写出；已存在则追加未重复数据，不存在则新建。"""
+    from util import utils
 
-            file.write("</" + TAG_GIFT_LIST + ">")
-            file.write("\n")
-            file.close()
+    for file_name in file_name_list:
+        if not file_name:
+            continue
+        for language in language_list:
+            if not language:
+                continue
+            dir_path, file_path = get_gift_wall_file_path(file_name, language)
+            if not os.path.exists(dir_path):
+                os.makedirs(dir_path)
+            if os.path.exists(file_path):
+                existing = analysis_gift_xml(file_path)
+                if existing:
+                    merged_config = deepcopy_config_list(existing.config_list, config_list)
+                    merged_items = list(existing.item_list) if existing.item_list else []
+                    for entity_value in entity_list:
+                        if not utils.is_entity_added(entity_value, merged_items):
+                            merged_items.append(entity_value)
+                    write_gift_wall_file(file_path, merged_config, merged_items)
+                    continue
+            write_gift_wall_file(file_path, config_list, entity_list)
+
+
+def deepcopy_config_list(existing_config_list, fallback_config_list):
+    result = {}
+    for target in (TARGET_RATE, TARGET_BANNER, TARGET_INTERSTITIAL, TARGET_LIST,
+                   TARGET_DIALOG, TARGET_CAROUSEL, TARGET_SIDEBAR, TARGET_WALL):
+        if existing_config_list and target in existing_config_list and existing_config_list[target]:
+            result[target] = existing_config_list[target]
+        else:
+            result[target] = fallback_config_list[target]
+    return result
 
 
 def write_config_item(file, config):
@@ -176,7 +231,11 @@ def write_entity_item(file, entity_):
     if entity_.app_type:
         value += "        <" + TAG_APP_TYPE + ">" + entity_.app_type + "</" + TAG_APP_TYPE + ">"
         value += "\n"
+    if entity_.show_target:
+        value += "        <" + TAG_SHOW_TARGET + ">" + entity_.show_target + "</" + TAG_SHOW_TARGET + ">"
+        value += "\n"
     value += "    </" + TAG_GIFT + ">"
     value += "\n"
     file.write(value)
     file.write("\n")
+

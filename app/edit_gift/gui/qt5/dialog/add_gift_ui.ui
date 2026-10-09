@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
+    <width>1360</width>
     <height>840</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1200</width>
+    <width>1360</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1200</width>
+    <width>1360</width>
     <height>16777215</height>
    </size>
   </property>
@@ -651,10 +651,10 @@ background-color: rgb(255, 255, 255);</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QPushButton" name="add_all">
+       <widget class="QPushButton" name="add_multiple">
         <property name="geometry">
          <rect>
-          <x>840</x>
+          <x>830</x>
           <y>10</y>
           <width>160</width>
           <height>40</height>
@@ -672,13 +672,13 @@ color: rgb(255, 255, 255);
 background-color: rgb(57, 61, 255);</string>
         </property>
         <property name="text">
-         <string>一键全选添加</string>
+         <string>添加到多个列表</string>
         </property>
        </widget>
        <widget class="QPushButton" name="add">
         <property name="geometry">
          <rect>
-          <x>670</x>
+          <x>1000</x>
           <y>10</y>
           <width>160</width>
           <height>40</height>
@@ -702,7 +702,7 @@ background-color: rgb(57, 61, 255);</string>
        <widget class="QPushButton" name="close_button">
         <property name="geometry">
          <rect>
-          <x>1010</x>
+          <x>1170</x>
           <y>10</y>
           <width>160</width>
           <height>40</height>

@@ -1,12 +1,16 @@
+from copy import deepcopy
+
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
-from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog, QApplication
+from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
+from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog, QApplication, QMessageBox
 from PyQt5 import QtCore
 
 from app.edit_gift.core import download, urls
-from util import path_pro, utils
+from util import path_pro, utils, icon
 
 from app.edit_gift.gui.qt5.dialog import add_gift_ui
+from app.edit_gift.gui.see_image_dialog import QSeeImageDialog
+from app.edit_gift.gui.add_to_multiple_dialog import QAddToMultipleDialog
 
 
 class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
@@ -19,9 +23,9 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         super(QAddGiftDialog, self).__init__(parent)
         self.setupUi(self)
 
-        # 获取屏幕的高度
+        # 获取屏幕的高度；加宽以完整显示 showTarget / 添加状态列
         screen = QApplication.primaryScreen()
-        self.resize(1200, screen.availableGeometry().height() - 64)
+        self.resize(1360, screen.availableGeometry().height() - 64)
 
         self.add_gift_item_list = add_gift_item_list
         self.add_single_gift_callback = None
@@ -73,7 +77,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         self.tableWidget.itemClicked.connect(self.__table_widget_item_click)
         self.tableWidget.itemDoubleClicked.connect(self.__table_widget_item_double_click)
         self.add.clicked.connect(self.__add_gift_wall)
-        self.add_all.clicked.connect(self.__add_all_gift_wall)
+        self.add_multiple.clicked.connect(self.__add_all_gift_wall)
         self.close_button.clicked.connect(self.close)
 
     def __init_view(self):
@@ -120,17 +124,19 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        self.tableWidget.setColumnCount(7)
-        self.tableWidget.setHorizontalHeaderLabels(['序号', '图标', '项目名', '产品名 类型', '包名', '推广图', "添加状态"])
+        self.tableWidget.setColumnCount(8)
+        self.tableWidget.setHorizontalHeaderLabels(
+            ['序号', '图标', '项目名', '产品名 类型', '包名', 'showTarget', '推广图', "添加状态"])
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.setIconSize(QSize(36, 36))
         self.tableWidget.setColumnWidth(0, 60)
         self.tableWidget.setColumnWidth(1, 60)
         self.tableWidget.setColumnWidth(2, 240)
         self.tableWidget.setColumnWidth(3, 270)
-        self.tableWidget.setColumnWidth(4, 320)
-        self.tableWidget.setColumnWidth(5, 60)
-        self.tableWidget.setColumnWidth(6, 120)
+        self.tableWidget.setColumnWidth(4, 280)
+        self.tableWidget.setColumnWidth(5, 120)
+        self.tableWidget.setColumnWidth(6, 60)
+        self.tableWidget.setColumnWidth(7, 120)
 
     def __set_table_widget(self):
         if self.__show_gift_item_list:
@@ -145,7 +151,9 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
                         for item1 in gift_entity.item_list:
                             for item2 in download.overall_gift_entity.item_list:
                                 if utils.compare_entity(item1, item2):
-                                    self.__show_gift_item_list.append(item2)
+                                    item = deepcopy(item2)
+                                    item.show_target = item1.show_target
+                                    self.__show_gift_item_list.append(item)
                                     break
         if self.__show_gift_item_list:
             self.tableWidget.setRowCount(len(self.__show_gift_item_list))
@@ -186,12 +194,19 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         item.setText(entity_.package_name)
         self.tableWidget.setItem(index, 4, item)
 
+        item = QTableWidgetItem()
+        item.setFont(QFont('微软雅黑', 10))
+        item.setForeground(QBrush(QColor(57, 61, 255)))
+        item.setText(entity_.show_target if entity_.show_target else "")
+        item.setTextAlignment(Qt.AlignCenter)
+        self.tableWidget.setItem(index, 5, item)
+
         item = None
         if entity_.poster_path:
             item = QTableWidgetItem()
             icon_ = QIcon(path_pro.get_download() + entity_.poster_path)
             item.setIcon(QIcon(icon_))
-        self.tableWidget.setItem(index, 5, item)
+        self.tableWidget.setItem(index, 6, item)
 
         self.__set_table_widget_item_state(index, utils.is_entity_added(entity_, self.add_gift_item_list))
 
@@ -201,7 +216,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         item.setForeground(QBrush(QColor(255, 0, 0)))
         item.setText("已添加" if state else "")
         item.setTextAlignment(Qt.AlignCenter)
-        self.tableWidget.setItem(index, 6, item)
+        self.tableWidget.setItem(index, 7, item)
 
     def __key_press_event(self, event):
         if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_A:
@@ -212,7 +227,8 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
                 if item.row() not in selected_rows:
                     selected_rows.append(item.row())
             for row in selected_rows:
-                if self.tableWidget.item(row, 6).text():
+                state_item = self.tableWidget.item(row, 7)
+                if state_item and state_item.text():
                     delete_entity = None
                     for entity_ in self.add_gift_item_list:
                         if utils.compare_entity(entity_, self.__show_gift_item_list[row]):
@@ -229,7 +245,45 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
             super().keyPressEvent(event)
 
     def __table_widget_item_click(self):
-        print(self.tableWidget.currentItem().text())
+        current_item = self.tableWidget.currentItem()
+        if not current_item:
+            return
+        row = current_item.row()
+        if not (0 <= row < len(self.__show_gift_item_list)):
+            return
+        entity_ = self.__show_gift_item_list[row]
+        column = current_item.column()
+        if column == 2:
+            text = entity_.project_name or ""
+            if text:
+                QApplication.clipboard().setText(text)
+                print("已复制项目名: %s" % text)
+        elif column == 3:
+            text = "产品名: " + (entity_.title if entity_.title else "") + \
+                   "\n类   型: " + (entity_.app_type if entity_.app_type else "")
+            QApplication.clipboard().setText(text)
+            print("已复制产品名和类型: %s" % text.replace("\n", " / "))
+        elif column == 4:
+            text = entity_.package_name or ""
+            if text:
+                QApplication.clipboard().setText(text)
+                print("已复制包名: %s" % text)
+        elif column == 6:
+            self.__show_poster_dialog(entity_)
+
+    def __show_poster_dialog(self, entity_):
+        if not entity_ or not entity_.poster_path:
+            return
+        dialog = QSeeImageDialog(self)
+        if entity_.icon_image_path:
+            icon_pixmap = QPixmap(path_pro.get_download() + entity_.icon_image_path)
+            dialog.icon.setPixmap(
+                icon_pixmap.scaled(dialog.icon.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        poster_pixmap = QPixmap(path_pro.get_download() + entity_.poster_path)
+        dialog.poster.setPixmap(
+            poster_pixmap.scaled(dialog.poster.maximumSize(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        dialog.setWindowTitle("推广图")
+        dialog.exec_()
 
     def __table_widget_item_double_click(self):
         row = self.tableWidget.currentItem().row()
@@ -249,14 +303,80 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         entity_ = self.__show_gift_item_list[row]
         if utils.is_entity_added(entity_, self.add_gift_item_list):
             return
-        self.add_gift_item_list.append(entity_)
+        # 添加时不拷贝 showTarget，需用户在主列表手动选择
+        new_entity = deepcopy(entity_)
+        new_entity.show_target = None
+        self.add_gift_item_list.append(new_entity)
         self.__set_table_widget_item_state(row, True)
         if self.add_single_gift_callback:
-            self.add_single_gift_callback(entity_)
+            self.add_single_gift_callback(new_entity)
 
     def __add_all_gift_wall(self):
-        self.tableWidget.selectAll()
-        self.__add_gift_wall()
+        selected_rows = []
+        for item in self.tableWidget.selectedItems():
+            if item.row() not in selected_rows:
+                selected_rows.append(item.row())
+        if not selected_rows:
+            QMessageBox.information(self, '提示', '请先勾选要添加的数据!')
+            return
+
+        default_file_names, default_languages = self.__get_main_selected_defaults()
+        dialog = QAddToMultipleDialog(
+            self,
+            default_file_names=default_file_names,
+            default_languages=default_languages,
+        )
+        dialog.setWindowIcon(icon.get_logo())
+        if dialog.exec_() != QDialog.Accepted:
+            return
+
+        file_names = dialog.get_selected_file_names()
+        languages = dialog.get_selected_languages()
+        if not file_names:
+            QMessageBox.information(self, '提示', '请选择文件名!')
+            return
+        if not languages:
+            QMessageBox.information(self, '提示', '请选择地区!')
+            return
+
+        entity_list = []
+        for row in selected_rows:
+            if not (0 <= row < len(self.__show_gift_item_list)):
+                continue
+            new_entity = deepcopy(self.__show_gift_item_list[row])
+            new_entity.show_target = None
+            entity_list.append(new_entity)
+        if not entity_list:
+            QMessageBox.information(self, '提示', '没有可添加的数据!')
+            return
+
+        if self.add_multiple_gift_callback:
+            self.add_multiple_gift_callback(entity_list, file_names, languages)
+
+        for row in selected_rows:
+            if 0 <= row < len(self.__show_gift_item_list):
+                self.__set_table_widget_item_state(
+                    row, utils.is_entity_added(self.__show_gift_item_list[row], self.add_gift_item_list))
+        self.tableWidget.clearSelection()
+
+    def __get_main_selected_defaults(self):
+        file_names = []
+        languages = []
+        parent = self.parent()
+        if parent and hasattr(parent, "edit_language"):
+            file_text = (parent.edit_language.ui.file_name.text() or "").strip()
+            if file_text:
+                for name in file_text.split(","):
+                    name = name.strip()
+                    if name:
+                        file_names.append(name)
+            language_text = (parent.edit_language.ui.language.text() or "").strip()
+            if language_text:
+                for language in language_text.split(","):
+                    language = language.strip()
+                    if language:
+                        languages.append(language)
+        return file_names, languages
 
     def set_add_single_gift_callback(self, callback=None):
         self.add_single_gift_callback = callback

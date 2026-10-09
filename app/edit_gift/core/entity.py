@@ -24,6 +24,7 @@ class GiftItem:
         self.poster_path = kwargs["poster_path"] if "poster_path" in kwargs else None
         self.app_type = kwargs["app_type"] if "app_type" in kwargs else None
         self.market_url = kwargs["market_url"] if "market_url" in kwargs else None
+        self.show_target = kwargs["show_target"] if "show_target" in kwargs else None
 
     def __str__(self):
         return "GiftEntity = {\n" \
@@ -35,8 +36,10 @@ class GiftItem:
                "    poster_path = %s;\n" \
                "    app_type = %s;\n" \
                "    market_url = %s;\n" \
+               "    show_target = %s;\n" \
                "} " % (self.id, self.title, self.detailed, self.icon_image_path,
-                       self.package_name, self.poster_path, self.app_type, self.market_url)
+                       self.package_name, self.poster_path, self.app_type, self.market_url,
+                       self.show_target)
 
 
 class GiftEntity:
@@ -60,9 +63,11 @@ class OverallGiftItem(GiftItem):
                "    poster_path = %s;\n" \
                "    app_type = %s;\n" \
                "    market_url = %s;\n" \
+               "    show_target = %s;\n" \
                "    project_name = %s;\n" \
                "} " % (self.id, self.title, self.detailed, self.icon_image_path, self.package_name,
-                       self.poster_path, self.app_type, self.market_url, self.project_name)
+                       self.poster_path, self.app_type, self.market_url, self.show_target,
+                       self.project_name)
 
 
 class OverallGiftEntity:

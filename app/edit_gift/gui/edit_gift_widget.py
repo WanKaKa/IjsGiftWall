@@ -3,9 +3,12 @@ import threading
 import time
 
 from copy import deepcopy
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
-from PyQt5.QtWidgets import QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QStyle, QFileDialog
+from PyQt5.QtCore import QSize, Qt, QUrl
+from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap, QDesktopServices
+from PyQt5.QtWidgets import (
+    QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QStyle, QFileDialog,
+    QApplication, QPushButton, QHBoxLayout, QVBoxLayout, QSizePolicy, QDialog, QLabel
+)
 from PyQt5 import QtCore
 
 from app.edit_gift.core.download import DownloadConfig
@@ -15,9 +18,9 @@ from util import path_pro, icon, utils
 
 from app.edit_gift.gui.add_gift_dialog import QAddGiftDialog
 from app.edit_gift.gui.progress_dialog import QProgressDialog
+from app.edit_gift.gui.see_image_dialog import QSeeImageDialog
 from app.edit_gift.gui.single_select_dialog import QSingleSelectDialog
 from app.edit_gift.gui.multiple_select_dialog import QMultipleSelectDialog
-from app.edit_gift.gui.see_image_dialog import QSeeImageDialog
 from app.edit_gift.gui.qt5.operation import edit_language_ui, edit_button_ui, check_button_ui, check_language_ui
 from app.edit_gift.gui.qt5 import table_widget_ui, edit_gift_ui
 
@@ -86,6 +89,9 @@ class QEditGiftWidget(QWidget):
         self.check_operation = QCheckOperation(parent=self)
         self.ui.edit_check_menu_layout.addWidget(self.check_operation)
 
+        # 用于判断检查模式下是否有未保存修改
+        self._saved_state = None
+
     def init_view(self):
         self.content.set_table_widget()
         if select_mode_type == 0:
@@ -96,6 +102,7 @@ class QEditGiftWidget(QWidget):
             self.ui.check_outputs_mode.setChecked(True)
         self.set_select_mode()
         self.set_gift_config_view()
+        self.mark_saved_state()
 
     def set_select_mode(self):
         if select_mode_type == 0:
@@ -150,25 +157,116 @@ class QEditGiftWidget(QWidget):
         value = add_gift_config_list[xml_pro.TARGET_WALL]
         self.ui.wall_index.setText(value.index)
 
-    def save_gift_wall_file(self):
+    def _config_ui_snapshot(self):
+        return (
+            self.ui.rate_index.text(), self.ui.rate_count.text(), self.ui.rate_limit.text(),
+            self.ui.banner_index.text(), self.ui.banner_count.text(), self.ui.banner_limit.text(),
+            self.ui.interstitial_index.text(), self.ui.interstitial_count.text(), self.ui.interstitial_limit.text(),
+            self.ui.list_index.text(), self.ui.list_count.text(), self.ui.list_limit.text(),
+            self.ui.dialog_index.text(), self.ui.dialog_count.text(), self.ui.dialog_limit.text(),
+            self.ui.carousel_index.text(), self.ui.carousel_count.text(), self.ui.carousel_limit.text(),
+            self.ui.sidebar_index.text(), self.ui.sidebar_count.text(), self.ui.sidebar_limit.text(),
+            self.ui.wall_index.text(),
+        )
+
+    def get_state_snapshot(self):
+        items = tuple(
+            (item.package_name or "", item.title or "", item.show_target or "")
+            for item in add_gift_item_list
+        )
+        return items, self._config_ui_snapshot()
+
+    def mark_saved_state(self):
+        self._saved_state = self.get_state_snapshot()
+
+    def has_unsaved_changes(self):
+        if self._saved_state is None:
+            return False
+        return self.get_state_snapshot() != self._saved_state
+
+    def confirm_unsaved_changes(self):
+        """左：取消修改(红)；右：保存修改(蓝)。关闭窗口视为中止切换。"""
+        dialog = QDialog(self)
+        dialog.setWindowTitle("提示")
+        dialog.setWindowIcon(icon.get_logo())
+        dialog.setMinimumWidth(360)
+        root = QVBoxLayout(dialog)
+        root.setContentsMargins(24, 16, 24, 20)
+        root.setSpacing(0)
+        tip = QLabel("当前文件有未保存的修改，请选择：")
+        tip.setStyleSheet("font: 12pt \"微软雅黑\";")
+        tip.setAlignment(Qt.AlignCenter)
+        root.addSpacing(20)
+        root.addWidget(tip)
+        root.addSpacing(28)
+
+        btn_row = QHBoxLayout()
+        discard_btn = QPushButton("取消修改")
+        discard_btn.setFixedSize(120, 40)
+        discard_btn.setStyleSheet(
+            "background-color: rgb(255, 0, 0); color: rgb(255, 255, 255); font: 12pt \"微软雅黑\";")
+        save_btn = QPushButton("保存修改")
+        save_btn.setFixedSize(120, 40)
+        save_btn.setStyleSheet(
+            "background-color: rgb(57, 61, 255); color: rgb(255, 255, 255); font: 12pt \"微软雅黑\";")
+        btn_row.addWidget(discard_btn)
+        btn_row.addStretch(1)
+        btn_row.addWidget(save_btn)
+        root.addLayout(btn_row)
+
+        result = ["cancel"]
+        discard_btn.clicked.connect(lambda: (result.__setitem__(0, "discard"), dialog.accept()))
+        save_btn.clicked.connect(lambda: (result.__setitem__(0, "save"), dialog.accept()))
+        dialog.exec_()
+        return result[0]
+
+    def ensure_unsaved_handled(self):
+        """处理未保存修改。保存/取消修改后停留在当前界面，不继续切换。
+        返回 True 表示无未保存修改可继续切换，False 表示已处理或中止、勿切换。"""
+        if not self.has_unsaved_changes():
+            return True
+        choice = self.confirm_unsaved_changes()
+        if choice == "save":
+            self.save_gift_wall_file(show_tip=False)
+        elif choice == "discard":
+            # 放弃修改：重新加载当前文件，留在当前界面
+            self.load_outputs_xml_file()
+        return False
+
+    def _revert_mode_radio(self):
+        self.ui.edit_gift_wall_mode.blockSignals(True)
+        self.ui.check_outputs_mode.blockSignals(True)
+        if select_mode_type == 0:
+            self.ui.edit_gift_wall_mode.setChecked(True)
+            self.ui.check_outputs_mode.setChecked(False)
+        else:
+            self.ui.edit_gift_wall_mode.setChecked(False)
+            self.ui.check_outputs_mode.setChecked(True)
+        self.ui.edit_gift_wall_mode.blockSignals(False)
+        self.ui.check_outputs_mode.blockSignals(False)
+
+    def save_gift_wall_file(self, show_tip=True):
         if not self.edit_language.ui.file_name.text():
             QMessageBox.information(self, '提示', '输出文件名为空!')
-            return
+            return False
         if not self.edit_language.ui.language.text():
             QMessageBox.information(self, '提示', '输出地区为空!')
-            return
+            return False
         if not add_gift_item_list:
             QMessageBox.information(self, '提示', '数据为空!')
-            return
+            return False
         if not self.get_gift_config_list():
             QMessageBox.information(self, '提示', 'GiftWall配置输入不正确!')
-            return
+            return False
         xml_pro.create_gift_wall_files(self.edit_language.ui.file_name.text(),
                                       self.edit_language.ui.language.text().split(","),
                                       add_gift_config_list, add_gift_item_list)
         # 每次生成文件后，更新输出文件夹中的文件夹集合
         self.check_language.set_radio_button_color()
-        QMessageBox.information(self, '提示', '生成GiftWall配置表成功!')
+        self.mark_saved_state()
+        if show_tip:
+            QMessageBox.information(self, '提示', '生成GiftWall配置表成功!')
+        return True
 
     def get_gift_config_list(self):
         if not self.is_gift_config_valid():
@@ -252,12 +350,18 @@ class QEditGiftWidget(QWidget):
         mode = 0 if self.ui.edit_gift_wall_mode.isChecked() else 1
         if select_mode_type == mode:
             return
+        # 检查模式下有未保存修改时，切换模式需先确认
+        if select_mode_type == 1 and not self.ensure_unsaved_handled():
+            self._revert_mode_radio()
+            return
         select_mode_type = mode
         self.reset_ui()
         self.set_select_mode()
         # 切换到检查模式时，如果有选中文件，则加载
         if select_mode_type == 1:
             self.load_outputs_xml_file()
+        else:
+            self.mark_saved_state()
 
     def switch_server_url(self):
         if self.ui.server_url_1.isChecked():
@@ -291,6 +395,7 @@ class QEditGiftWidget(QWidget):
         add_gift_config_list = deepcopy(DEFAULT_GIFT_CONFIG_LIST)
         self.content.set_table_widget()
         self.set_gift_config_view()
+        self.mark_saved_state()
 
     def show_progress_dialog(self, title="为便捷而生", message="正在下载，请稍等..."):
         self.progress_dialog.setWindowTitle(title)
@@ -339,8 +444,48 @@ class QEditGiftWidget(QWidget):
         y = int((rect.top() + rect.bottom() - dialog.height() - title_bar_height) / 2)
         dialog.move(x, y)
         dialog.set_add_single_gift_callback(callback=self.add_single_gift_callback)
+        dialog.set_add_multiple_gift_callback(callback=self.add_multiple_gift_callback)
         dialog.set_modify_gift_callback(callback=lambda: self.content.set_table_widget())
         dialog.exec()
+
+    def add_multiple_gift_callback(self, entity_list, file_names, languages):
+        if not entity_list or not file_names or not languages:
+            return
+        if not self.get_gift_config_list():
+            QMessageBox.information(self, '提示', 'GiftWall配置输入不正确!')
+            return
+
+        current_file = (self.edit_language.ui.file_name.text() or "").strip()
+        current_languages = [
+            part.strip() for part in (self.edit_language.ui.language.text() or "").split(",") if part.strip()
+        ]
+        current_in_targets = (
+            current_file in file_names
+            and any(language in languages for language in current_languages)
+        )
+        # 当前列表在目标中且有未保存修改时，先保存再追加，避免覆盖未保存内容
+        if current_in_targets and self.has_unsaved_changes():
+            if not self.save_gift_wall_file(show_tip=False):
+                return
+
+        xml_pro.append_gift_wall_files(file_names, languages, add_gift_config_list, entity_list)
+        self.check_language.set_radio_button_color()
+
+        added_count = 0
+        for entity_ in entity_list:
+            if utils.is_entity_added(entity_, add_gift_item_list):
+                continue
+            new_entity = deepcopy(entity_)
+            new_entity.show_target = None
+            add_gift_item_list.append(new_entity)
+            self.add_single_gift_callback(new_entity)
+            added_count += 1
+
+        if current_in_targets:
+            self.mark_saved_state()
+        QMessageBox.information(
+            self, '提示',
+            '已导出到所选文件\n主列表新增 %d 条（已存在的已跳过）' % added_count)
 
     def load_signal_xml_file(self, path, tip_enable=True):
         if path:
@@ -355,7 +500,9 @@ class QEditGiftWidget(QWidget):
                         for item1 in gift_entity.item_list:
                             for item2 in download.overall_gift_entity.item_list:
                                 if utils.compare_entity(item1, item2):
-                                    add_gift_item_list.append(item2)
+                                    item = deepcopy(item2)
+                                    item.show_target = item1.show_target
+                                    add_gift_item_list.append(item)
                                     break
                     if gift_entity.config_list:
                         add_gift_config_list = deepcopy(gift_entity.config_list)
@@ -370,6 +517,7 @@ class QEditGiftWidget(QWidget):
                 self.content.set_table_widget()
                 self.set_gift_config_view()
                 QMessageBox.information(self, '提示', '总表数据为空!')
+            self.mark_saved_state()
 
     def load_outputs_xml_file(self):
         if select_mode_type == 1:
@@ -403,8 +551,9 @@ class QKevinTableWidget(QWidget):
         self.ui.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        self.ui.tableWidget.setColumnCount(6)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['序号', '图标', '项目名', '产品名 类型', '包名', '推广图'])
+        self.ui.tableWidget.setColumnCount(8)
+        self.ui.tableWidget.setHorizontalHeaderLabels(
+            ['序号', '图标', '项目名', '产品名 类型', '包名', 'showTarget', '推广图', '操作'])
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWidget.setIconSize(QSize(48, 48))
         self.ui.tableWidget.setColumnWidth(0, 60)
@@ -412,7 +561,9 @@ class QKevinTableWidget(QWidget):
         self.ui.tableWidget.setColumnWidth(2, 200)
         self.ui.tableWidget.setColumnWidth(3, 200)
         self.ui.tableWidget.setColumnWidth(4, 270)
-        self.ui.tableWidget.setColumnWidth(5, 60)
+        self.ui.tableWidget.setColumnWidth(5, 120)
+        self.ui.tableWidget.setColumnWidth(6, 60)
+        self.ui.tableWidget.setColumnWidth(7, 80)
 
     def set_table_widget(self):
         if add_gift_item_list:
@@ -455,49 +606,102 @@ class QKevinTableWidget(QWidget):
         item.setText(entity_.package_name)
         self.ui.tableWidget.setItem(index, 4, item)
 
+        item = QTableWidgetItem()
+        item.setFont(QFont('微软雅黑', 10))
+        item.setForeground(QBrush(QColor(57, 61, 255)))
+        item.setText(entity_.show_target if entity_.show_target else "")
+        item.setTextAlignment(Qt.AlignCenter)
+        self.ui.tableWidget.setItem(index, 5, item)
+
         item = None
         if entity_.poster_path:
             item = QTableWidgetItem()
             icon_ = QIcon(path_pro.get_download() + entity_.poster_path)
             item.setIcon(QIcon(icon_))
-        self.ui.tableWidget.setItem(index, 5, item)
+        self.ui.tableWidget.setItem(index, 6, item)
+
+        delete_button = QPushButton("删除")
+        delete_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        delete_button.setStyleSheet(
+            "background-color: rgb(220, 53, 69);\n"
+            "color: rgb(255, 255, 255);\n"
+            "font: 9pt \"微软雅黑\";")
+        delete_button.clicked.connect(lambda checked=False, row=index: self.__delete_row(row))
+        delete_widget = QWidget()
+        delete_layout = QHBoxLayout(delete_widget)
+        delete_layout.setContentsMargins(4, 8, 4, 8)
+        delete_layout.setSpacing(0)
+        delete_layout.addWidget(delete_button)
+        self.ui.tableWidget.setCellWidget(index, 7, delete_widget)
+
+    def __delete_row(self, row):
+        if not (0 <= row < len(add_gift_item_list)):
+            return
+        add_gift_item_list.pop(row)
+        self.set_table_widget()
+        self.ui.tableWidget.clearSelection()
 
     def __table_widget_item_click(self):
-        print(self.ui.tableWidget.currentItem().text())
+        current_item = self.ui.tableWidget.currentItem()
+        if not current_item:
+            return
+        row = current_item.row()
+        if not (0 <= row < len(add_gift_item_list)):
+            return
+        entity_ = add_gift_item_list[row]
+        column = current_item.column()
+        if column == 2:
+            text = entity_.project_name or ""
+            if text:
+                QApplication.clipboard().setText(text)
+                print("已复制项目名: %s" % text)
+        elif column == 3:
+            text = "产品名: " + (entity_.title if entity_.title else "") + \
+                   "\n类   型: " + (entity_.app_type if entity_.app_type else "")
+            QApplication.clipboard().setText(text)
+            print("已复制产品名和类型: %s" % text.replace("\n", " / "))
+        elif column == 4:
+            text = entity_.package_name or ""
+            if text:
+                QApplication.clipboard().setText(text)
+                print("已复制包名: %s" % text)
+        elif column == 5:
+            QShowTargetDialog(self.__view, row)
+        elif column == 6:
+            self.__show_poster_dialog(entity_)
+
+    def __show_poster_dialog(self, entity_):
+        if not entity_ or not entity_.poster_path:
+            return
+        dialog = QSeeImageDialog(self.__view)
+        if entity_.icon_image_path:
+            icon_pixmap = QPixmap(path_pro.get_download() + entity_.icon_image_path)
+            dialog.icon.setPixmap(
+                icon_pixmap.scaled(dialog.icon.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        poster_pixmap = QPixmap(path_pro.get_download() + entity_.poster_path)
+        dialog.poster.setPixmap(
+            poster_pixmap.scaled(dialog.poster.maximumSize(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        dialog.setWindowTitle("推广图")
+        dialog.exec_()
 
     def __table_widget_item_double_click(self):
         row = self.ui.tableWidget.currentItem().row()
-        image_dialog = QSeeImageDialog(self.__view)
-        image_dialog.setWindowTitle("为便捷而生")
-        image_dialog.setWindowIcon(icon.get_logo())
-        if add_gift_item_list[row].icon_image_path:
-            icon_image_path = path_pro.get_download() + add_gift_item_list[row].icon_image_path
-            if os.path.exists(icon_image_path):
-                pix_map = QPixmap(icon_image_path)
-                if pix_map.width() >= 180:
-                    pix_map = pix_map.scaled(160, 160, Qt.KeepAspectRatio | Qt.SmoothTransformation)
-                image_dialog.icon.setPixmap(pix_map)
-        if add_gift_item_list[row].poster_path:
-            poster_path = path_pro.get_download() + add_gift_item_list[row].poster_path
-            if os.path.exists(poster_path):
-                pix_map = QPixmap(poster_path)
-                if pix_map.height() >= 800:
-                    pix_map = pix_map.scaled(720, 720, Qt.KeepAspectRatio | Qt.SmoothTransformation)
-                image_dialog.poster.setPixmap(pix_map)
-        image_dialog.show()
-        rect = self.__view.frameGeometry()
-        x = rect.right() - image_dialog.width() - 10
-        title_bar_height = image_dialog.style().pixelMetric(QStyle.PM_TitleBarHeight)
-        y = int((rect.top() + rect.bottom() - image_dialog.height() - title_bar_height) / 2)
-        image_dialog.move(x, y)
+        package_name = add_gift_item_list[row].package_name
+        if not package_name:
+            return
+        url = "https://play.google.com/store/apps/details?id=" + package_name
+        QDesktopServices.openUrl(QUrl(url))
 
     def __key_press_event(self, event):
         if event.key() == QtCore.Qt.Key_Delete or event.key() == QtCore.Qt.Key_D:
-            while self.ui.tableWidget.selectedItems():
-                row = self.ui.tableWidget.selectedItems()[0].row()
-                self.ui.tableWidget.removeRow(row)
-                add_gift_item_list.remove(add_gift_item_list[row])
-            self.set_table_widget()
+            selected_rows = sorted(
+                {item.row() for item in self.ui.tableWidget.selectedItems()}, reverse=True)
+            for row in selected_rows:
+                if 0 <= row < len(add_gift_item_list):
+                    add_gift_item_list.pop(row)
+            if selected_rows:
+                self.set_table_widget()
+                self.ui.tableWidget.clearSelection()
         elif event.key() == QtCore.Qt.Key_Up:
             self.__move_table_widget_item(True)
         elif event.key() == QtCore.Qt.Key_Down:
@@ -588,36 +792,58 @@ class QCheckLanguage(QWidget):
 
     def __init_radio_button(self, label, radio_list, string_list):
         _translate = QtCore.QCoreApplication.translate
-        for i in range(len(string_list)):
-            utils.set_radio_button_style_8pt(radio_list[i], False)
-            radio_list[i].setText(_translate("Form", string_list[i]))
-            if radio_list[i].isChecked():
-                label.setText(radio_list[i].text())
-            radio_list[i].toggled.connect(
-                lambda: self.__radio_button_click(label, radio_list))
-        # 隐藏多出来的按钮
-        for i in range(len(string_list)):
-            if not string_list[i]:
+        for i in range(len(radio_list)):
+            if i < len(string_list) and string_list[i]:
+                utils.set_radio_button_style_8pt(radio_list[i], False)
+                radio_list[i].setText(_translate("Form", string_list[i]))
+                if radio_list[i].isChecked():
+                    label.setText(radio_list[i].text())
+                radio_list[i].toggled.connect(
+                    lambda: self.__radio_button_click(label, radio_list))
+            else:
+                # 隐藏无配置或多余的按钮
+                radio_list[i].setText("")
                 radio_list[i].hide()
 
+    def __restore_radio_selection(self, label, radio_button_list):
+        for radio_button in radio_button_list:
+            radio_button.blockSignals(True)
+        for radio_button in radio_button_list:
+            radio_button.setChecked(radio_button.text() == label.text())
+        for radio_button in radio_button_list:
+            radio_button.blockSignals(False)
+
     def __radio_button_click(self, label, radio_button_list):
+        new_text = None
         if radio_button_list:
             for radio_button in radio_button_list:
                 if radio_button.isChecked():
-                    if label.text() == radio_button.text():
-                        return
-                    label.setText(radio_button.text())
+                    new_text = radio_button.text()
+                    break
+        if not new_text or label.text() == new_text:
+            return
+
+        global select_mode_type
+        if select_mode_type == 1 and self.__view.has_unsaved_changes():
+            if not self.__view.ensure_unsaved_handled():
+                self.__restore_radio_selection(label, radio_button_list)
+                return
+
+        label.setText(new_text)
         self.set_radio_button_color()
         # 检查模式时，选取了文件名或者地区后，加载对应的配置文件
-        global select_mode_type
         if select_mode_type == 1:
             self.__view.load_outputs_xml_file()
 
     def set_radio_button_color(self):
         outputs_dir_list = utils.get_outputs_dir_list()
         for radio in self.language_radio_list:
+            if not radio.text():
+                continue
             utils.set_radio_button_style_8pt(radio, radio.text() not in outputs_dir_list)
         for radio in self.file_name_radio_list:
+            if not radio.text():
+                continue
             language = self.__view.edit_language.ui.language.text()
             dir_name = language if language != urls.LANGUAGE_LIST[0] else ""
             utils.set_radio_button_style_8pt(
@@ -703,6 +929,74 @@ class QCheckOperation(QWidget):
             self.__view, '放弃修改', '确定放弃修改吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.__view.load_outputs_xml_file()
+
+
+class QShowTargetDialog:
+    def __init__(self, view_: QEditGiftWidget, row):
+        self.__view = view_
+        self.__row = row
+        if not (0 <= row < len(add_gift_item_list)):
+            return
+        show_target_list = xml_pro.SHOW_TARGET_LIST
+        if not show_target_list:
+            QMessageBox.information(self.__view, '提示', '未配置showTarget可选值!')
+            return
+
+        dialog = QSingleSelectDialog(self.__view)
+        dialog.setWindowTitle("选择showTarget")
+        dialog.setWindowIcon(icon.get_logo())
+
+        radio_button_list = [
+            dialog.radioButton,
+            dialog.radioButton_2,
+            dialog.radioButton_3,
+            dialog.radioButton_4,
+            dialog.radioButton_5,
+            dialog.radioButton_6,
+            dialog.radioButton_7,
+            dialog.radioButton_8,
+            dialog.radioButton_9,
+            dialog.radioButton_10,
+            dialog.radioButton_11,
+            dialog.radioButton_12,
+            dialog.radioButton_13,
+            dialog.radioButton_14,
+            dialog.radioButton_15,
+            dialog.radioButton_16,
+            dialog.radioButton_17,
+            dialog.radioButton_18,
+        ]
+        current_show_target = add_gift_item_list[row].show_target or ""
+        _translate = QtCore.QCoreApplication.translate
+        for i in range(len(show_target_list)):
+            if i >= len(radio_button_list):
+                break
+            utils.set_radio_button_style_10pt(radio_button_list[i], False)
+            display_text = "空" if show_target_list[i] == "" else show_target_list[i]
+            radio_button_list[i].setText(_translate("Form", display_text))
+            radio_button_list[i].setChecked(current_show_target == show_target_list[i])
+            radio_button_list[i].toggled.connect(
+                lambda: self.__set_show_target(dialog, radio_button_list, show_target_list))
+        for i in range(len(radio_button_list)):
+            if i >= len(show_target_list):
+                radio_button_list[i].hide()
+        dialog.exec()
+
+    def __set_show_target(self, dialog, radio_button_list, show_target_list):
+        if not (0 <= self.__row < len(add_gift_item_list)):
+            return
+        for i, radio_button in enumerate(radio_button_list):
+            if i >= len(show_target_list):
+                break
+            if radio_button.isChecked():
+                show_target = show_target_list[i] or None
+                if (add_gift_item_list[self.__row].show_target or None) == show_target:
+                    return
+                add_gift_item_list[self.__row].show_target = show_target
+                self.__view.content.set_table_widget_item(self.__row, add_gift_item_list[self.__row])
+                self.__view.content.ui.tableWidget.selectRow(self.__row)
+                dialog.hide()
+                return
 
 
 class QOutFileDialog:
