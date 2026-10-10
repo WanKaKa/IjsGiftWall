@@ -14,11 +14,13 @@ import main_window_ui
 
 def set_menu_item_enable(enable, menu_layout, menu_title):
     if enable:
-        menu_layout.setStyleSheet("background-color: rgb(247, 247, 247);")
-        menu_title.setStyleSheet("color: rgb(0, 0, 0);\n""font: 8pt \"微软雅黑\";")
-    else:
-        menu_layout.setStyleSheet("background-color: rgb(57, 61, 255);")
+        menu_layout.setStyleSheet(
+            "background-color: rgb(57, 61, 255); border: none; border-radius: 10px;")
         menu_title.setStyleSheet("color: rgb(255, 255, 255);\n""font: 8pt \"微软雅黑\";")
+    else:
+        menu_layout.setStyleSheet(
+            "background-color: rgb(247, 247, 247); border: none; border-radius: 10px;")
+        menu_title.setStyleSheet("color: rgb(0, 0, 0);\n""font: 8pt \"微软雅黑\";")
 
 
 class QKevinMainWindow(QWidget):
@@ -62,13 +64,13 @@ class QKevinMainWindow(QWidget):
         if index == 0:
             set_menu_item_enable(True, self.ui.menu_layout_1, self.ui.menu_title_1)
             set_menu_item_enable(False, self.ui.menu_layout_2, self.ui.menu_title_2)
-            self.ui.menu_icon_1.setPixmap(self.icon_edit_gift_black)
-            self.ui.menu_icon_2.setPixmap(self.icon_app_update_white)
+            self.ui.menu_icon_1.setPixmap(self.icon_edit_gift_white)
+            self.ui.menu_icon_2.setPixmap(self.icon_app_update_black)
         elif index == 1:
             set_menu_item_enable(False, self.ui.menu_layout_1, self.ui.menu_title_1)
             set_menu_item_enable(True, self.ui.menu_layout_2, self.ui.menu_title_2)
-            self.ui.menu_icon_1.setPixmap(self.icon_edit_gift_white)
-            self.ui.menu_icon_2.setPixmap(self.icon_app_update_black)
+            self.ui.menu_icon_1.setPixmap(self.icon_edit_gift_black)
+            self.ui.menu_icon_2.setPixmap(self.icon_app_update_white)
 
     def show_edit_gift(self):
         self.select_menu(0)

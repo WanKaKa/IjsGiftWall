@@ -25,7 +25,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
 
         # 获取屏幕的高度；加宽以完整显示 showTarget / 添加状态列
         screen = QApplication.primaryScreen()
-        self.resize(1360, screen.availableGeometry().height() - 64)
+        self.resize(1360, screen.availableGeometry().height() - 128)
 
         self.add_gift_item_list = add_gift_item_list
         self.add_single_gift_callback = None
@@ -127,6 +127,25 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         self.tableWidget.setColumnCount(8)
         self.tableWidget.setHorizontalHeaderLabels(
             ['序号', '图标', '项目名', '产品名 类型', '包名', 'showTarget', '推广图', "添加状态"])
+        header_font = QFont('微软雅黑')
+        header_font.setPixelSize(14)
+        header = self.tableWidget.horizontalHeader()
+        header.setFont(header_font)
+        header.setFixedHeight(36)
+        for col in range(self.tableWidget.columnCount()):
+            item = self.tableWidget.horizontalHeaderItem(col)
+            if item is not None:
+                item.setFont(header_font)
+        self.tableWidget.setStyleSheet(
+            (self.tableWidget.styleSheet() or "") +
+            """
+            QHeaderView::section {
+                font-family: "微软雅黑";
+                font-size: 14px;
+                padding: 4px;
+            }
+            """
+        )
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.setIconSize(QSize(36, 36))
         self.tableWidget.setColumnWidth(0, 60)

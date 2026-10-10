@@ -7,6 +7,8 @@ def _configure_high_dpi():
     # 界面按固定像素设计；固定 100% 布局缩放（可用环境变量 QT_SCALE_FACTOR 覆盖）
     os.environ.setdefault("QT_SCALE_FACTOR", "1")
     os.environ.setdefault("QT_AUTO_SCREEN_SCALE_FACTOR", "0")
+    # 字体也不跟随系统缩放（pt 按 96 DPI 计算，与 100% 显示一致）
+    os.environ.setdefault("QT_FONT_DPI", "96")
 
 
 from PyQt5.QtWidgets import QApplication

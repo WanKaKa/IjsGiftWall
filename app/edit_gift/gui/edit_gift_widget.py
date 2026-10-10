@@ -554,6 +554,7 @@ class QKevinTableWidget(QWidget):
         self.ui.tableWidget.setColumnCount(8)
         self.ui.tableWidget.setHorizontalHeaderLabels(
             ['序号', '图标', '项目名', '产品名 类型', '包名', 'showTarget', '推广图', '操作'])
+        self._apply_table_header_style(self.ui.tableWidget)
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWidget.setIconSize(QSize(48, 48))
         self.ui.tableWidget.setColumnWidth(0, 60)
@@ -564,6 +565,29 @@ class QKevinTableWidget(QWidget):
         self.ui.tableWidget.setColumnWidth(5, 120)
         self.ui.tableWidget.setColumnWidth(6, 60)
         self.ui.tableWidget.setColumnWidth(7, 80)
+
+    @staticmethod
+    def _apply_table_header_style(table_widget):
+        """表头字号用 px + 样式表强制生效（setFont 在部分样式下无效）。"""
+        header_font = QFont('微软雅黑')
+        header_font.setPixelSize(14)
+        header = table_widget.horizontalHeader()
+        header.setFont(header_font)
+        header.setFixedHeight(36)
+        for col in range(table_widget.columnCount()):
+            item = table_widget.horizontalHeaderItem(col)
+            if item is not None:
+                item.setFont(header_font)
+        table_widget.setStyleSheet(
+            (table_widget.styleSheet() or "") +
+            """
+            QHeaderView::section {
+                font-family: "微软雅黑";
+                font-size: 14px;
+                padding: 4px;
+            }
+            """
+        )
 
     def set_table_widget(self):
         if add_gift_item_list:
