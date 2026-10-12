@@ -90,20 +90,21 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
 
     def __init_radio_button(self, type_value, radio_list, string_list):
         _translate = QtCore.QCoreApplication.translate
-        for i in range(len(string_list)):
-            utils.set_radio_button_style_8pt(radio_list[i], False)
-            radio_list[i].setText(_translate("Form", string_list[i]))
-            if type_value == 0:
-                if self.__select_language == radio_list[i].text():
-                    radio_list[i].setChecked(True)
+        for i in range(len(radio_list)):
+            if i < len(string_list) and string_list[i]:
+                utils.set_radio_button_style_8pt(radio_list[i], False)
+                radio_list[i].setText(_translate("Form", string_list[i]))
+                if type_value == 0:
+                    if self.__select_language == radio_list[i].text():
+                        radio_list[i].setChecked(True)
+                else:
+                    if self.__select_gift_name == radio_list[i].text():
+                        radio_list[i].setChecked(True)
+                radio_list[i].toggled.connect(
+                    lambda: self.__radio_button_click(type_value, radio_list))
             else:
-                if self.__select_gift_name == radio_list[i].text():
-                    radio_list[i].setChecked(True)
-            radio_list[i].toggled.connect(
-                lambda: self.__radio_button_click(type_value, radio_list))
-        # 隐藏多出来的按钮
-        for i in range(len(string_list)):
-            if not string_list[i]:
+                # 隐藏无配置或多余的按钮（与主界面一致）
+                radio_list[i].setText("")
                 radio_list[i].hide()
 
     def __radio_button_click(self, type_value, radio_button_list):

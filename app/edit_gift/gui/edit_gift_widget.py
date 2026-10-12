@@ -8,7 +8,7 @@ from PyQt5.QtGui import QFont, QBrush, QColor, QDesktopServices
 from PyQt5.QtWidgets import (
     QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog,
     QApplication, QPushButton, QHBoxLayout, QVBoxLayout, QSizePolicy, QDialog, QLabel,
-    QStyle,
+    QStyle, QMenu, QAction,
 )
 from PyQt5 import QtCore
 
@@ -757,9 +757,54 @@ class QKevinTableWidget(QWidget):
                 QApplication.clipboard().setText(text)
                 print("已复制包名: %s" % text)
         elif column == 5:
-            QShowTargetDialog(self.__view, row)
+            self.__show_show_target_menu(row)
         elif column == 6:
             self.__show_poster_dialog(entity_)
+
+    def __show_show_target_menu(self, row):
+        if not (0 <= row < len(add_gift_item_list)):
+            return
+        show_target_list = xml_pro.SHOW_TARGET_LIST
+        if not show_target_list:
+            QMessageBox.information(self.__view, '提示', '未配置showTarget可选值!')
+            return
+
+        menu = QMenu(self.__view)
+        menu.setStyleSheet(ui_scale.scale_stylesheet(
+            "QMenu {"
+            "  font: 12pt \"微软雅黑\";"
+            "  padding: 4px;"
+            "}"
+            "QMenu::item {"
+            "  padding: 8px 28px 8px 24px;"
+            "  color: rgb(33, 37, 41);"
+            "}"
+            "QMenu::item:selected {"
+            "  color: rgb(57, 61, 255);"
+            "  background-color: rgb(232, 234, 255);"
+            "}"
+        ))
+        current = add_gift_item_list[row].show_target or ""
+        for value in show_target_list:
+            display = "空" if value == "" else value
+            action = QAction(display, menu)
+            action.setCheckable(True)
+            action.setChecked(current == value)
+            action.setData(value)
+            menu.addAction(action)
+
+        table = self.ui.tableWidget
+        rect = table.visualItemRect(table.item(row, 5))
+        pos = table.viewport().mapToGlobal(rect.bottomLeft())
+        chosen = menu.exec_(pos)
+        if chosen is None:
+            return
+        show_target = chosen.data() or None
+        if (add_gift_item_list[row].show_target or None) == show_target:
+            return
+        add_gift_item_list[row].show_target = show_target
+        self.set_table_widget_item(row, add_gift_item_list[row])
+        table.selectRow(row)
 
     def __show_poster_dialog(self, entity_):
         if not entity_ or not entity_.poster_path:
@@ -1037,74 +1082,6 @@ class QCheckOperation(QWidget):
             self.__view, '放弃修改', '确定放弃修改吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.__view.load_outputs_xml_file()
-
-
-class QShowTargetDialog:
-    def __init__(self, view_: QEditGiftWidget, row):
-        self.__view = view_
-        self.__row = row
-        if not (0 <= row < len(add_gift_item_list)):
-            return
-        show_target_list = xml_pro.SHOW_TARGET_LIST
-        if not show_target_list:
-            QMessageBox.information(self.__view, '提示', '未配置showTarget可选值!')
-            return
-
-        dialog = QSingleSelectDialog(self.__view)
-        dialog.setWindowTitle("选择showTarget")
-        dialog.setWindowIcon(icon.get_logo())
-
-        radio_button_list = [
-            dialog.radioButton,
-            dialog.radioButton_2,
-            dialog.radioButton_3,
-            dialog.radioButton_4,
-            dialog.radioButton_5,
-            dialog.radioButton_6,
-            dialog.radioButton_7,
-            dialog.radioButton_8,
-            dialog.radioButton_9,
-            dialog.radioButton_10,
-            dialog.radioButton_11,
-            dialog.radioButton_12,
-            dialog.radioButton_13,
-            dialog.radioButton_14,
-            dialog.radioButton_15,
-            dialog.radioButton_16,
-            dialog.radioButton_17,
-            dialog.radioButton_18,
-        ]
-        current_show_target = add_gift_item_list[row].show_target or ""
-        _translate = QtCore.QCoreApplication.translate
-        for i in range(len(show_target_list)):
-            if i >= len(radio_button_list):
-                break
-            utils.set_radio_button_style_10pt(radio_button_list[i], False)
-            display_text = "空" if show_target_list[i] == "" else show_target_list[i]
-            radio_button_list[i].setText(_translate("Form", display_text))
-            radio_button_list[i].setChecked(current_show_target == show_target_list[i])
-            radio_button_list[i].toggled.connect(
-                lambda: self.__set_show_target(dialog, radio_button_list, show_target_list))
-        for i in range(len(radio_button_list)):
-            if i >= len(show_target_list):
-                radio_button_list[i].hide()
-        dialog.exec()
-
-    def __set_show_target(self, dialog, radio_button_list, show_target_list):
-        if not (0 <= self.__row < len(add_gift_item_list)):
-            return
-        for i, radio_button in enumerate(radio_button_list):
-            if i >= len(show_target_list):
-                break
-            if radio_button.isChecked():
-                show_target = show_target_list[i] or None
-                if (add_gift_item_list[self.__row].show_target or None) == show_target:
-                    return
-                add_gift_item_list[self.__row].show_target = show_target
-                self.__view.content.set_table_widget_item(self.__row, add_gift_item_list[self.__row])
-                self.__view.content.ui.tableWidget.selectRow(self.__row)
-                dialog.hide()
-                return
 
 
 class QOutFileDialog:
