@@ -334,6 +334,8 @@ def _ensure_widget_original(widget):
             vheader = widget.verticalHeader() if hasattr(widget, "verticalHeader") else None
             if vheader is not None:
                 data["row_h"] = vheader.defaultSectionSize()
+                # setIconSize 会抬高 minimumSectionSize；必须记住设计值以便缩放时写回
+                data["min_section"] = vheader.minimumSectionSize()
     except Exception:
         pass
     return _track_original(_widget_originals, widget, data)
@@ -426,10 +428,15 @@ def _apply_one_widget(widget, scale):
             for i, width in enumerate(orig["col_widths"]):
                 if width > 0:
                     widget.setColumnWidth(i, max(1, int(round(width * scale))))
-        if "row_h" in orig and orig["row_h"] > 0:
-            vheader = widget.verticalHeader()
-            if vheader is not None:
-                vheader.setDefaultSectionSize(max(1, int(round(orig["row_h"] * scale))))
+        vheader = widget.verticalHeader() if hasattr(widget, "verticalHeader") else None
+        if vheader is not None:
+            # setIconSize 会抬高 minimumSectionSize，若不按设计值写回，行高会随反复调比例只增不减
+            if "min_section" in orig and orig["min_section"] > 0:
+                vheader.setMinimumSectionSize(
+                    max(1, int(round(orig["min_section"] * scale))))
+            if "row_h" in orig and orig["row_h"] > 0:
+                vheader.setDefaultSectionSize(
+                    max(1, int(round(orig["row_h"] * scale))))
 
 
 def _apply_one_layout(layout, scale):
@@ -445,9 +452,12 @@ def _apply_one_layout(layout, scale):
 
 
 def _walk_apply(widget, scale, seen_layouts):
-    from PyQt5.QtWidgets import QWidget, QLayout
+    from PyQt5.QtWidgets import QWidget, QLayout, QHeaderView, QAbstractItemView
 
     if widget is None:
+        return
+    # 表头由所属 ItemView 统一处理，单独缩放会二次放大固定高度/字号
+    if isinstance(widget, QHeaderView):
         return
     _apply_one_widget(widget, scale)
     layout = widget.layout()
@@ -455,8 +465,15 @@ def _walk_apply(widget, scale, seen_layouts):
         seen_layouts.add(id(layout))
         _apply_one_layout(layout, scale)
     for child in widget.children():
-        if isinstance(child, QWidget):
-            _walk_apply(child, scale, seen_layouts)
+        if not isinstance(child, QWidget):
+            continue
+        if isinstance(widget, QAbstractItemView):
+            # 跳过表头与 viewport（含 cell widget），避免动态单元格按已缩放尺寸再累乘
+            if isinstance(child, QHeaderView):
+                continue
+            if child is widget.viewport():
+                continue
+        _walk_apply(child, scale, seen_layouts)
 
 
 def apply_ui_scale(root, scale=None, bump_generation=True):

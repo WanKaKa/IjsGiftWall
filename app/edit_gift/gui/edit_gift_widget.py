@@ -449,6 +449,9 @@ class QEditGiftWidget(QWidget):
         dialog = QAddGiftDialog(self, add_gift_item_list=add_gift_item_list)
         dialog.setWindowTitle("添加GiftWall")
         dialog.setWindowIcon(icon.get_logo())
+        # 先按当前比例抛光，再用缩放后的宽高定位
+        ui_scale.polish_window(dialog)
+        dialog.refresh_after_ui_scale()
         rect = self.frameGeometry()
         x = rect.right() - dialog.width() - 10
         title_bar_height = dialog.style().pixelMetric(QStyle.PM_TitleBarHeight)
@@ -457,7 +460,7 @@ class QEditGiftWidget(QWidget):
         dialog.set_add_single_gift_callback(callback=self.add_single_gift_callback)
         dialog.set_add_multiple_gift_callback(callback=self.add_multiple_gift_callback)
         dialog.set_modify_gift_callback(callback=lambda: self.content.set_table_widget())
-        dialog.exec()
+        dialog.exec_()
 
     def add_multiple_gift_callback(self, entity_list, file_names, languages):
         if not entity_list or not file_names or not languages:

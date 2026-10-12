@@ -447,6 +447,10 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
                         languages.append(language)
         return file_names, languages
 
+    def refresh_after_ui_scale(self):
+        """比例抛光后按新的 iconSize/列宽重绘表格内容。"""
+        self.__set_table_widget()
+
     def set_add_single_gift_callback(self, callback=None):
         self.add_single_gift_callback = callback
 

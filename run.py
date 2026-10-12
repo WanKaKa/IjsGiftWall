@@ -24,7 +24,9 @@ def _install_dialog_scale_polish():
 
         return wrapped
 
+    # PyQt5 中 exec 与 exec_ 不是同一函数，两处都要包，否则 dialog.exec() 不会抛光
     QDialog.exec_ = _wrap(QDialog.exec_)
+    QDialog.exec = _wrap(QDialog.exec)
     QDialog.open = _wrap(QDialog.open)
     QDialog.show = _wrap(QDialog.show)
 
