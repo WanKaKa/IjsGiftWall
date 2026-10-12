@@ -1,0 +1,5 @@
+VERSION = 163
+APP_VERSION = '1.6.3'
+RELEASE_EXE_NAME = '广告工具1.6.2'
+APP_EXE_NAME = 'gift_wall_app'
+CACHE_DIR_NAME = '广告工具'
