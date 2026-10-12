@@ -8,6 +8,7 @@ from PyQt5.QtGui import QFont, QBrush, QColor, QDesktopServices
 from PyQt5.QtWidgets import (
     QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog,
     QApplication, QPushButton, QHBoxLayout, QVBoxLayout, QSizePolicy, QDialog, QLabel,
+    QStyle,
 )
 from PyQt5 import QtCore
 
@@ -560,6 +561,7 @@ class QKevinTableWidget(QWidget):
     def __init_table_widget(self):
         self.ui.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.ui.tableWidget.verticalHeader().setVisible(False)
 
         self.ui.tableWidget.setColumnCount(8)
         self.ui.tableWidget.setHorizontalHeaderLabels(

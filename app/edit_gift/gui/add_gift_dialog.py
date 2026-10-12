@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QFont, QBrush, QColor
+from PyQt5.QtGui import QFont, QFontMetrics, QBrush, QColor
 from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog, QApplication, QMessageBox
 from PyQt5 import QtCore
 
@@ -123,6 +123,10 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
     def __init_table_widget(self):
         self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableWidget.verticalHeader().setVisible(False)
+        # 项目名 / 包名过长时换行，不显示省略号
+        self.tableWidget.setWordWrap(True)
+        self.tableWidget.setTextElideMode(Qt.ElideNone)
 
         self.tableWidget.setColumnCount(8)
         self.tableWidget.setHorizontalHeaderLabels(
@@ -178,12 +182,43 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
             self.tableWidget.setRowCount(len(self.__show_gift_item_list))
             for i in range(len(self.__show_gift_item_list)):
                 self.__set_table_widget_item(i, self.__show_gift_item_list[i])
+            self.__fit_table_row_heights()
         else:
             self.tableWidget.setRowCount(0)
 
-    def __set_table_widget_item(self, index, entity_):
-        self.tableWidget.setRowHeight(index, ui_scale.scaled_px(40))
+    def __fit_table_row_heights(self):
+        """按换行内容自适应行高，且不低于图标所需高度。"""
+        min_h = max(
+            ui_scale.scaled_px(40),
+            self.tableWidget.iconSize().height() + ui_scale.scaled_px(8),
+        )
+        for row in range(self.tableWidget.rowCount()):
+            self.tableWidget.resizeRowToContents(row)
+            if self.tableWidget.rowHeight(row) < min_h:
+                self.tableWidget.setRowHeight(row, min_h)
 
+    def __wrap_text_for_column(self, text, column, font):
+        """按列宽插入换行，避免长项目名/包名显示省略号或被裁切。"""
+        text = text or ""
+        if not text:
+            return text
+        # 预留单元格左右内边距
+        max_width = max(20, self.tableWidget.columnWidth(column) - ui_scale.scaled_px(12))
+        metrics = QFontMetrics(font)
+        lines = []
+        current = ""
+        for ch in text:
+            trial = current + ch
+            if current and metrics.horizontalAdvance(trial) > max_width:
+                lines.append(current)
+                current = ch
+            else:
+                current = trial
+        if current:
+            lines.append(current)
+        return "\n".join(lines)
+
+    def __set_table_widget_item(self, index, entity_):
         item = QTableWidgetItem()
         item.setFont(ui_scale.make_font('微软雅黑', 18))
         item.setForeground(QBrush(QColor(57, 61, 255)))
@@ -201,10 +236,12 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         item.setIcon(icon_)
         self.tableWidget.setItem(index, 1, item)
 
+        name_font = ui_scale.make_font('微软雅黑', 10)
         item = QTableWidgetItem()
-        item.setFont(ui_scale.make_font('微软雅黑', 10))
+        item.setFont(name_font)
         item.setForeground(QBrush(QColor(57, 61, 255)))
-        item.setText(entity_.project_name)
+        item.setText(self.__wrap_text_for_column(entity_.project_name, 2, name_font))
+        item.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.tableWidget.setItem(index, 2, item)
 
         item = QTableWidgetItem()
@@ -214,8 +251,9 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         self.tableWidget.setItem(index, 3, item)
 
         item = QTableWidgetItem()
-        item.setFont(ui_scale.make_font('微软雅黑', 10))
-        item.setText(entity_.package_name)
+        item.setFont(name_font)
+        item.setText(self.__wrap_text_for_column(entity_.package_name, 4, name_font))
+        item.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.tableWidget.setItem(index, 4, item)
 
         item = QTableWidgetItem()

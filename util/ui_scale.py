@@ -314,7 +314,7 @@ def _ensure_widget_original(widget):
         "has_fixed_h": min_size.height() == max_size.height() and 0 < min_size.height() < _QWIDGETSIZE_MAX,
     }
     try:
-        from PyQt5.QtWidgets import QAbstractItemView, QTableView, QTreeView, QListView
+        from PyQt5.QtWidgets import QAbstractItemView, QTableView, QTreeView, QListView, QTableWidget
         if isinstance(widget, QAbstractItemView):
             icon = widget.iconSize()
             data["icon_w"] = icon.width()
@@ -323,6 +323,17 @@ def _ensure_widget_original(widget):
             header = widget.horizontalHeader() if hasattr(widget, "horizontalHeader") else None
             if header is not None:
                 data["header_h"] = header.height()
+            # 列宽需与 iconSize 同步缩放，否则放大后表格图标会被裁切
+            col_count = 0
+            if isinstance(widget, QTableWidget):
+                col_count = widget.columnCount()
+            elif widget.model() is not None:
+                col_count = widget.model().columnCount()
+            if col_count > 0:
+                data["col_widths"] = [widget.columnWidth(i) for i in range(col_count)]
+            vheader = widget.verticalHeader() if hasattr(widget, "verticalHeader") else None
+            if vheader is not None:
+                data["row_h"] = vheader.defaultSectionSize()
     except Exception:
         pass
     return _track_original(_widget_originals, widget, data)
@@ -406,10 +417,19 @@ def _apply_one_widget(widget, scale):
             max(1, int(round(orig["icon_w"] * scale))),
             max(1, int(round(orig["icon_h"] * scale))),
         ))
-    if isinstance(widget, (QTableView, QTreeView, QListView)) and "header_h" in orig:
-        header = widget.horizontalHeader()
-        if header is not None and orig["header_h"] > 0:
-            header.setFixedHeight(max(1, int(round(orig["header_h"] * scale))))
+    if isinstance(widget, (QTableView, QTreeView, QListView)):
+        if "header_h" in orig:
+            header = widget.horizontalHeader()
+            if header is not None and orig["header_h"] > 0:
+                header.setFixedHeight(max(1, int(round(orig["header_h"] * scale))))
+        if "col_widths" in orig:
+            for i, width in enumerate(orig["col_widths"]):
+                if width > 0:
+                    widget.setColumnWidth(i, max(1, int(round(width * scale))))
+        if "row_h" in orig and orig["row_h"] > 0:
+            vheader = widget.verticalHeader()
+            if vheader is not None:
+                vheader.setDefaultSectionSize(max(1, int(round(orig["row_h"] * scale))))
 
 
 def _apply_one_layout(layout, scale):
