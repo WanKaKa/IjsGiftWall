@@ -18,13 +18,16 @@ class Ui_Dialog(object):
         Dialog.setMinimumSize(QtCore.QSize(400, 240))
         Dialog.setMaximumSize(QtCore.QSize(400, 240))
         self.progressBar = QtWidgets.QProgressBar(Dialog)
-        self.progressBar.setGeometry(QtCore.QRect(50, 120, 300, 20))
+        self.progressBar.setGeometry(QtCore.QRect(30, 150, 340, 20))
         self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName("progressBar")
         self.label = QtWidgets.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(50, 70, 300, 30))
+        self.label.setGeometry(QtCore.QRect(30, 50, 340, 90))
         self.label.setStyleSheet("font: 14pt \"微软雅黑\";\n"
 "color: rgb(57, 61, 255);")
+        self.label.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+        self.label.setWordWrap(True)
+        self.label.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.label.setObjectName("label")
 
         self.retranslateUi(Dialog)
@@ -33,4 +36,4 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "正在更新数据，请稍等..."))
+        self.label.setText(_translate("Dialog", "正在更新数据，请稍等"))

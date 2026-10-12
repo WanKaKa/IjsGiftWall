@@ -415,42 +415,73 @@ class QEditGiftWidget(QWidget):
         self.set_gift_config_view()
         self.mark_saved_state()
 
-    def show_progress_dialog(self, title="为便捷而生", message="正在下载，请稍等..."):
+    def show_progress_dialog(self, title="为便捷而生", message="正在下载，请稍等",
+                             busy=False):
         self.progress_dialog.setWindowTitle(title)
         self.progress_dialog.setWindowIcon(icon.get_logo())
+        self.progress_dialog.label.setWordWrap(True)
         self.progress_dialog.label.setText(message)
-        self.progress_dialog.progressBar.setProperty("value", 0)
+        bar = self.progress_dialog.progressBar
+        if busy:
+            # 不确定进度：解析/建目录时滚动，避免长时间停在 0
+            bar.setRange(0, 0)
+        else:
+            bar.setRange(0, 100)
+            bar.setValue(0)
         self.progress_dialog.show()
 
     def hide_progress_dialog(self):
+        bar = self.progress_dialog.progressBar
+        bar.setRange(0, 100)
+        bar.setValue(0)
         self.progress_dialog.hide()
 
     # 下载弹框进度条更新UI
     def progress_callback(self, value):
-        if self.progress_dialog:
-            # print("正在刷新下载进度条 线程名称 = %s" % threading.currentThread().name)
-            self.progress_dialog.progressBar.setProperty("value", value["value"])
-            if value["value"] == 100:
-                # 配置表下载完成
-                if value["type"] == "config":
-                    if value["success"]:
-                        print("配置表下载完成 线程名称 = %s 时间 = %f" %
-                              (threading.currentThread().name, time.time() - self.download_start_time))
-                        json_pro.put_config_download_time(time.time())
-                        download.analysis_gift_data()
-                        download.DownloadIcon(self)
-                    else:
-                        self.hide_progress_dialog()
-                        # 开始下载之前下载失败的文件
-                        DownloadConfig(self, value["error_list"])
+        if not self.progress_dialog:
+            return
+        bar = self.progress_dialog.progressBar
+        if value.get("message"):
+            self.progress_dialog.label.setText(value["message"])
+        if value.get("busy"):
+            bar.setRange(0, 0)
+            return
 
-                # 图标下载完成
-                if value["type"] == "icon":
-                    self.hide_progress_dialog()
-                    if value["success"]:
-                        print("图标下载完成 线程名称 = %s 时间 = %f" %
-                              (threading.currentThread().name, time.time() - self.download_start_time))
-                    json_pro.put_icon_download_time(time.time())
+        total = value.get("total") or 0
+        count = value.get("count")
+        if total > 0 and count is not None:
+            # 按文件个数推进，第 1 个完成就能看见进度
+            bar.setRange(0, total)
+            bar.setValue(count)
+        else:
+            bar.setRange(0, 100)
+            bar.setValue(int(value.get("value") or 0))
+
+        done = value.get("value") == 100 or (
+            total > 0 and count is not None and count >= total)
+        if not done:
+            return
+
+        # 配置表下载完成
+        if value["type"] == "config":
+            if value["success"]:
+                print("配置表下载完成 线程名称 = %s 时间 = %f" %
+                      (threading.currentThread().name, time.time() - self.download_start_time))
+                json_pro.put_config_download_time(time.time())
+                download.analysis_gift_data_async(
+                    self, force=getattr(self, "download_force", False))
+            else:
+                self.hide_progress_dialog()
+                # 失败文件必须重新拉取，不能跳过本地残留
+                DownloadConfig(self, value["error_list"], force=True)
+
+        # 图标下载完成
+        if value["type"] == "icon":
+            self.hide_progress_dialog()
+            if value["success"]:
+                print("图标下载完成 线程名称 = %s 时间 = %f" %
+                      (threading.currentThread().name, time.time() - self.download_start_time))
+            json_pro.put_icon_download_time(time.time())
 
     def show_add_gift_wall_dialog(self):
         dialog = QAddGiftDialog(self, add_gift_item_list=add_gift_item_list)
@@ -942,7 +973,7 @@ class QEditOperation(QWidget):
         self.ui.import_gift_wall.clicked.connect(self.__import_gift_wall)
         self.ui.create_gift_wall_file.clicked.connect(self.__save_gift_wall_file)
 
-        self.ui.open_outputs.clicked.connect(lambda: os.system("start " + path_pro.get_outputs()))
+        self.ui.open_outputs.clicked.connect(lambda: os.startfile(path_pro.get_outputs()))
         self.ui.clear_outputs.clicked.connect(self.__view.delete_dir)
 
     def __reload_data_config(self):
@@ -950,7 +981,7 @@ class QEditOperation(QWidget):
             self.__view, '重新下载', '确认重新下载服务器配置表吗?', QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
             json_pro.put_config_download_time(0)
-            download.init_gift_data(self.__view)
+            download.init_gift_data(self.__view, force=True)
 
     def __reload_data(self):
         reply = QMessageBox.question(
@@ -958,7 +989,7 @@ class QEditOperation(QWidget):
         if reply == QMessageBox.Yes:
             json_pro.put_config_download_time(0)
             json_pro.put_icon_download_time(0)
-            download.init_gift_data(self.__view)
+            download.init_gift_data(self.__view, force=True)
 
     def __import_gift_wall(self):
         file_name, file_type = QFileDialog.getOpenFileName(self.__view, "选取文件", path_pro.get_outputs())
@@ -979,7 +1010,7 @@ class QCheckOperation(QWidget):
         self.__view = parent
         self.setMinimumSize(400, 110)
 
-        self.ui.open_outputs_2.clicked.connect(lambda: os.system("start " + path_pro.get_outputs()))
+        self.ui.open_outputs_2.clicked.connect(lambda: os.startfile(path_pro.get_outputs()))
         self.ui.clear_outputs_2.clicked.connect(self.__view.delete_dir)
 
         self.ui.save.clicked.connect(self.__view.save_gift_wall_file)

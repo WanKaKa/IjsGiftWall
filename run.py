@@ -42,7 +42,7 @@ if __name__ == '__main__':
     main_window = QKevinMainWindow()
     ui_scale.apply_ui_scale(main_window, ui_scale.resolve_scale_factor())
     main_window.refresh_after_ui_scale()
-    main_window.showMaximized()
+    main_window.show()
 
     # 拷贝资源(图片资源放在exe文件中读取不到)
     util.utils.copy_res()
