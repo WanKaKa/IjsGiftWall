@@ -4,17 +4,17 @@ import time
 
 from copy import deepcopy
 from PyQt5.QtCore import QSize, Qt, QUrl
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap, QDesktopServices
+from PyQt5.QtGui import QFont, QBrush, QColor, QDesktopServices
 from PyQt5.QtWidgets import (
-    QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QStyle, QFileDialog,
-    QApplication, QPushButton, QHBoxLayout, QVBoxLayout, QSizePolicy, QDialog, QLabel
+    QWidget, QAbstractItemView, QTableWidgetItem, QMessageBox, QFileDialog,
+    QApplication, QPushButton, QHBoxLayout, QVBoxLayout, QSizePolicy, QDialog, QLabel,
 )
 from PyQt5 import QtCore
 
 from app.edit_gift.core.download import DownloadConfig
 from database import json_pro
 from app.edit_gift.core import entity, download, urls, xml_pro
-from util import path_pro, icon, utils
+from util import path_pro, icon, utils, ui_scale
 
 from app.edit_gift.gui.add_gift_dialog import QAddGiftDialog
 from app.edit_gift.gui.progress_dialog import QProgressDialog
@@ -49,12 +49,13 @@ class QEditGiftWidget(QWidget):
         self.ui = edit_gift_ui.Ui_Form()
         self.ui.setupUi(self)
 
-        self.setWindowState(Qt.WindowMaximized)
         self.progress_dialog = QProgressDialog(self)
 
-        # 设置公司Logo
-        pix_map = QPixmap(icon.resource_path(os.path.join("ico", "logo_big.png")))
-        self.ui.ijoysoft_icon.setPixmap(pix_map)
+        # 设置公司Logo（按 DPR 缩放，避免放大比例后发糊）
+        ui_scale.set_label_pixmap(
+            self.ui.ijoysoft_icon,
+            icon.resource_path(os.path.join("ico", "logo_big.png")),
+        )
 
         utils.set_radio_button_style_10pt(self.ui.edit_gift_wall_mode, False)
         utils.set_radio_button_style_10pt(self.ui.check_outputs_mode, False)
@@ -91,6 +92,15 @@ class QEditGiftWidget(QWidget):
 
         # 用于判断检查模式下是否有未保存修改
         self._saved_state = None
+
+    def refresh_after_ui_scale(self):
+        """比例变更后刷新 Logo 与列表图标。"""
+        ui_scale.set_label_pixmap(
+            self.ui.ijoysoft_icon,
+            icon.resource_path(os.path.join("ico", "logo_big.png")),
+        )
+        if hasattr(self, "content") and self.content is not None:
+            self.content.set_table_widget()
 
     def init_view(self):
         self.content.set_table_widget()
@@ -598,10 +608,10 @@ class QKevinTableWidget(QWidget):
             self.ui.tableWidget.setRowCount(0)
 
     def set_table_widget_item(self, index, entity_):
-        self.ui.tableWidget.setRowHeight(index, 50)
+        self.ui.tableWidget.setRowHeight(index, ui_scale.scaled_px(50))
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 18))
+        item.setFont(ui_scale.make_font('微软雅黑', 18))
         item.setForeground(QBrush(QColor(57, 61, 255)))
         entity_.id = str(index + 1)
         item.setText(entity_.id)
@@ -609,29 +619,34 @@ class QKevinTableWidget(QWidget):
         self.ui.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon_ = QIcon(path_pro.get_download() + entity_.icon_image_path)
+        icon_size = self.ui.tableWidget.iconSize()
+        icon_ = ui_scale.scaled_icon(
+            path_pro.get_download() + entity_.icon_image_path,
+            icon_size,
+            widget=self.ui.tableWidget,
+        )
         item.setIcon(icon_)
         self.ui.tableWidget.setItem(index, 1, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 12))
+        item.setFont(ui_scale.make_font('微软雅黑', 12))
         item.setForeground(QBrush(QColor(57, 61, 255)))
         item.setText(entity_.project_name)
         self.ui.tableWidget.setItem(index, 2, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 8))
+        item.setFont(ui_scale.make_font('微软雅黑', 8))
         item.setText("产品名: " + (entity_.title if entity_.title else "") +
                      "\n类   型: " + (entity_.app_type if entity_.app_type else ""))
         self.ui.tableWidget.setItem(index, 3, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 8))
+        item.setFont(ui_scale.make_font('微软雅黑', 8))
         item.setText(entity_.package_name)
         self.ui.tableWidget.setItem(index, 4, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 10))
+        item.setFont(ui_scale.make_font('微软雅黑', 10))
         item.setForeground(QBrush(QColor(57, 61, 255)))
         item.setText(entity_.show_target if entity_.show_target else "")
         item.setTextAlignment(Qt.AlignCenter)
@@ -640,20 +655,27 @@ class QKevinTableWidget(QWidget):
         item = None
         if entity_.poster_path:
             item = QTableWidgetItem()
-            icon_ = QIcon(path_pro.get_download() + entity_.poster_path)
-            item.setIcon(QIcon(icon_))
+            icon_size = self.ui.tableWidget.iconSize()
+            icon_ = ui_scale.scaled_icon(
+                path_pro.get_download() + entity_.poster_path,
+                icon_size,
+                widget=self.ui.tableWidget,
+            )
+            item.setIcon(icon_)
         self.ui.tableWidget.setItem(index, 6, item)
 
         delete_button = QPushButton("删除")
         delete_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        delete_button.setStyleSheet(
+        delete_button.setStyleSheet(ui_scale.scale_stylesheet(
             "background-color: rgb(220, 53, 69);\n"
             "color: rgb(255, 255, 255);\n"
-            "font: 9pt \"微软雅黑\";")
+            "font: 9pt \"微软雅黑\";"))
         delete_button.clicked.connect(lambda checked=False, row=index: self.__delete_row(row))
         delete_widget = QWidget()
         delete_layout = QHBoxLayout(delete_widget)
-        delete_layout.setContentsMargins(4, 8, 4, 8)
+        delete_layout.setContentsMargins(
+            ui_scale.scaled_px(4), ui_scale.scaled_px(8),
+            ui_scale.scaled_px(4), ui_scale.scaled_px(8))
         delete_layout.setSpacing(0)
         delete_layout.addWidget(delete_button)
         self.ui.tableWidget.setCellWidget(index, 7, delete_widget)
@@ -699,12 +721,14 @@ class QKevinTableWidget(QWidget):
             return
         dialog = QSeeImageDialog(self.__view)
         if entity_.icon_image_path:
-            icon_pixmap = QPixmap(path_pro.get_download() + entity_.icon_image_path)
-            dialog.icon.setPixmap(
-                icon_pixmap.scaled(dialog.icon.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
-        poster_pixmap = QPixmap(path_pro.get_download() + entity_.poster_path)
-        dialog.poster.setPixmap(
-            poster_pixmap.scaled(dialog.poster.maximumSize(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            ui_scale.set_label_pixmap(
+                dialog.icon, path_pro.get_download() + entity_.icon_image_path)
+        ui_scale.set_label_pixmap(
+            dialog.poster,
+            path_pro.get_download() + entity_.poster_path,
+            dialog.poster.maximumSize().width(),
+            dialog.poster.maximumSize().height(),
+        )
         dialog.setWindowTitle("推广图")
         dialog.exec_()
 

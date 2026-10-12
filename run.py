@@ -1,30 +1,44 @@
 import sys
-import os
 
+from util import ui_scale
 
-def _configure_high_dpi():
-    """高分屏适配：不跟随系统 150%/200% 放大，避免字过大、界面显示不全。"""
-    # 界面按固定像素设计；固定 100% 布局缩放（可用环境变量 QT_SCALE_FACTOR 覆盖）
-    os.environ.setdefault("QT_SCALE_FACTOR", "1")
-    os.environ.setdefault("QT_AUTO_SCREEN_SCALE_FACTOR", "0")
-    # 字体也不跟随系统缩放（pt 按 96 DPI 计算，与 100% 显示一致）
-    os.environ.setdefault("QT_FONT_DPI", "96")
+# 须在创建 QApplication 之前：关闭系统自动缩放（用户比例运行时应用）
+ui_scale.apply_scale_env()
 
-
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtCore import QCoreApplication, Qt
 from main_window_widget import QKevinMainWindow
 
 import util.utils
 
+
+def _install_dialog_scale_polish():
+    """对话框显示前按当前比例抛光（不子类化 Qt，避免 sip DeprecationWarning）。"""
+
+    def _wrap(method):
+        def wrapped(self, *args, **kwargs):
+            flags = self.windowFlags()
+            if not (flags & (Qt.ToolTip | Qt.Popup | Qt.SplashScreen)):
+                ui_scale.polish_window(self)
+            return method(self, *args, **kwargs)
+
+        return wrapped
+
+    QDialog.exec_ = _wrap(QDialog.exec_)
+    QDialog.open = _wrap(QDialog.open)
+    QDialog.show = _wrap(QDialog.show)
+
+
 if __name__ == '__main__':
-    _configure_high_dpi()
     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
     app = QApplication(sys.argv)
+    _install_dialog_scale_polish()
 
     main_window = QKevinMainWindow()
-    main_window.show()
+    ui_scale.apply_ui_scale(main_window, ui_scale.resolve_scale_factor())
+    main_window.refresh_after_ui_scale()
+    main_window.showMaximized()
 
     # 拷贝资源(图片资源放在exe文件中读取不到)
     util.utils.copy_res()

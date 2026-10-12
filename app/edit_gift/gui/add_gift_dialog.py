@@ -1,12 +1,12 @@
 from copy import deepcopy
 
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor, QPixmap
+from PyQt5.QtGui import QFont, QBrush, QColor
 from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog, QApplication, QMessageBox
 from PyQt5 import QtCore
 
 from app.edit_gift.core import download, urls
-from util import path_pro, utils, icon
+from util import path_pro, utils, icon, ui_scale
 
 from app.edit_gift.gui.qt5.dialog import add_gift_ui
 from app.edit_gift.gui.see_image_dialog import QSeeImageDialog
@@ -182,39 +182,44 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
             self.tableWidget.setRowCount(0)
 
     def __set_table_widget_item(self, index, entity_):
-        self.tableWidget.setRowHeight(index, 40)
+        self.tableWidget.setRowHeight(index, ui_scale.scaled_px(40))
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 18))
+        item.setFont(ui_scale.make_font('微软雅黑', 18))
         item.setForeground(QBrush(QColor(57, 61, 255)))
         item.setText(str(index + 1))
         item.setTextAlignment(Qt.AlignCenter)
         self.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon_ = QIcon(path_pro.get_download() + entity_.icon_image_path)
+        icon_size = self.tableWidget.iconSize()
+        icon_ = ui_scale.scaled_icon(
+            path_pro.get_download() + entity_.icon_image_path,
+            icon_size,
+            widget=self.tableWidget,
+        )
         item.setIcon(icon_)
         self.tableWidget.setItem(index, 1, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 10))
+        item.setFont(ui_scale.make_font('微软雅黑', 10))
         item.setForeground(QBrush(QColor(57, 61, 255)))
         item.setText(entity_.project_name)
         self.tableWidget.setItem(index, 2, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 10))
+        item.setFont(ui_scale.make_font('微软雅黑', 10))
         item.setText("产品名: " + (entity_.title if entity_.title else "") +
                      "\n类   型: " + (entity_.app_type if entity_.app_type else ""))
         self.tableWidget.setItem(index, 3, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 10))
+        item.setFont(ui_scale.make_font('微软雅黑', 10))
         item.setText(entity_.package_name)
         self.tableWidget.setItem(index, 4, item)
 
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 10))
+        item.setFont(ui_scale.make_font('微软雅黑', 10))
         item.setForeground(QBrush(QColor(57, 61, 255)))
         item.setText(entity_.show_target if entity_.show_target else "")
         item.setTextAlignment(Qt.AlignCenter)
@@ -223,15 +228,20 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         item = None
         if entity_.poster_path:
             item = QTableWidgetItem()
-            icon_ = QIcon(path_pro.get_download() + entity_.poster_path)
-            item.setIcon(QIcon(icon_))
+            icon_size = self.tableWidget.iconSize()
+            icon_ = ui_scale.scaled_icon(
+                path_pro.get_download() + entity_.poster_path,
+                icon_size,
+                widget=self.tableWidget,
+            )
+            item.setIcon(icon_)
         self.tableWidget.setItem(index, 6, item)
 
         self.__set_table_widget_item_state(index, utils.is_entity_added(entity_, self.add_gift_item_list))
 
     def __set_table_widget_item_state(self, index, state):
         item = QTableWidgetItem()
-        item.setFont(QFont('微软雅黑', 12))
+        item.setFont(ui_scale.make_font('微软雅黑', 12))
         item.setForeground(QBrush(QColor(255, 0, 0)))
         item.setText("已添加" if state else "")
         item.setTextAlignment(Qt.AlignCenter)
@@ -295,12 +305,14 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
             return
         dialog = QSeeImageDialog(self)
         if entity_.icon_image_path:
-            icon_pixmap = QPixmap(path_pro.get_download() + entity_.icon_image_path)
-            dialog.icon.setPixmap(
-                icon_pixmap.scaled(dialog.icon.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
-        poster_pixmap = QPixmap(path_pro.get_download() + entity_.poster_path)
-        dialog.poster.setPixmap(
-            poster_pixmap.scaled(dialog.poster.maximumSize(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            ui_scale.set_label_pixmap(
+                dialog.icon, path_pro.get_download() + entity_.icon_image_path)
+        ui_scale.set_label_pixmap(
+            dialog.poster,
+            path_pro.get_download() + entity_.poster_path,
+            dialog.poster.maximumSize().width(),
+            dialog.poster.maximumSize().height(),
+        )
         dialog.setWindowTitle("推广图")
         dialog.exec_()
 

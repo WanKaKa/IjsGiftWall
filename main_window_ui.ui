@@ -221,6 +221,64 @@ font: 12pt &quot;微软雅黑&quot;;</string>
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
+       <widget class="QFrame" name="menu_layout_settings">
+        <property name="geometry">
+         <rect>
+          <x>4</x>
+          <y>620</y>
+          <width>72</width>
+          <height>72</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(247, 247, 247); border: none; border-radius: 10px;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QLabel" name="menu_icon_settings">
+         <property name="geometry">
+          <rect>
+           <x>22</x>
+           <y>10</y>
+           <width>28</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>2</string>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="menu_title_settings">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>44</y>
+           <width>72</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);
+font: 8pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>设置</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
       </widget>
      </item>
      <item>
