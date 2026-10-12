@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QCheckBox, QRadioButton
 import release
 from database import json_pro
 from app.edit_gift.core import urls
-from util import path_pro, icon
+from util import path_pro, icon, ui_scale
 
 
 def delete_dir(dir_path):
@@ -80,7 +80,7 @@ QCheckBox::indicator:checked {
 
 def set_check_box_style(check_box):
     if isinstance(check_box, QCheckBox):
-        check_box.setStyleSheet(CHECK_BOX_STYLE)
+        ui_scale.set_design_stylesheet(check_box, CHECK_BOX_STYLE)
 
 
 RADIO_BUTTON_STYLE_RED_8PT = """
@@ -170,15 +170,11 @@ QRadioButton::indicator:checked {
 
 def set_radio_button_style_8pt(check_box, error):
     if isinstance(check_box, QRadioButton):
-        if error:
-            check_box.setStyleSheet(RADIO_BUTTON_STYLE_RED_8PT)
-        else:
-            check_box.setStyleSheet(RADIO_BUTTON_STYLE_BLACK_8PT)
+        css = RADIO_BUTTON_STYLE_RED_8PT if error else RADIO_BUTTON_STYLE_BLACK_8PT
+        ui_scale.set_design_stylesheet(check_box, css)
 
 
 def set_radio_button_style_10pt(check_box, error):
     if isinstance(check_box, QRadioButton):
-        if error:
-            check_box.setStyleSheet(RADIO_BUTTON_STYLE_RED_10PT)
-        else:
-            check_box.setStyleSheet(RADIO_BUTTON_STYLE_BLACK_10PT)
+        css = RADIO_BUTTON_STYLE_RED_10PT if error else RADIO_BUTTON_STYLE_BLACK_10PT
+        ui_scale.set_design_stylesheet(check_box, css)

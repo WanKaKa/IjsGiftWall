@@ -90,7 +90,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
     def __init_radio_button(self, type_value, radio_list, string_list):
         _translate = QtCore.QCoreApplication.translate
         for i in range(len(string_list)):
-            utils.set_radio_button_style_10pt(radio_list[i], False)
+            utils.set_radio_button_style_8pt(radio_list[i], False)
             radio_list[i].setText(_translate("Form", string_list[i]))
             if type_value == 0:
                 if self.__select_language == radio_list[i].text():
@@ -227,13 +227,14 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         self.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon_size = self.tableWidget.iconSize()
-        icon_ = ui_scale.scaled_icon(
-            path_pro.get_download() + entity_.icon_image_path,
-            icon_size,
-            widget=self.tableWidget,
-        )
-        item.setIcon(icon_)
+        if entity_.icon_image_path:
+            icon_size = self.tableWidget.iconSize()
+            icon_ = ui_scale.scaled_icon(
+                path_pro.get_download() + entity_.icon_image_path,
+                icon_size,
+                widget=self.tableWidget,
+            )
+            item.setIcon(icon_)
         self.tableWidget.setItem(index, 1, item)
 
         name_font = ui_scale.make_font('微软雅黑', 10)
@@ -289,23 +290,33 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
         if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_A:
             self.tableWidget.selectAll()
         elif event.key() == QtCore.Qt.Key_Delete or event.key() == QtCore.Qt.Key_D:
-            selected_rows = []
-            for item in self.tableWidget.selectedItems():
-                if item.row() not in selected_rows:
-                    selected_rows.append(item.row())
+            selected_rows = sorted({item.row() for item in self.tableWidget.selectedItems()})
+            removed = False
             for row in selected_rows:
+                if not (0 <= row < len(self.__show_gift_item_list)):
+                    continue
                 state_item = self.tableWidget.item(row, 7)
-                if state_item and state_item.text():
-                    delete_entity = None
-                    for entity_ in self.add_gift_item_list:
-                        if utils.compare_entity(entity_, self.__show_gift_item_list[row]):
-                            delete_entity = entity_
-                            break
-                    self.add_gift_item_list.remove(delete_entity)
-                    self.__set_table_widget_item_state(row, False)
+                if not (state_item and state_item.text()):
+                    continue
+                show_entity = self.__show_gift_item_list[row]
+                delete_entity = None
+                for entity_ in self.add_gift_item_list:
+                    if utils.compare_entity(entity_, show_entity):
+                        delete_entity = entity_
+                        break
+                if delete_entity is None:
+                    continue
+                self.add_gift_item_list.remove(delete_entity)
+                removed = True
+            if removed:
+                # 同一应用可能对应多行“已添加”，需整体刷新状态，避免再次按 D 时 remove(None)
+                for i in range(len(self.__show_gift_item_list)):
+                    self.__set_table_widget_item_state(
+                        i, utils.is_entity_added(
+                            self.__show_gift_item_list[i], self.add_gift_item_list))
+                if self.modify_gift_callback:
+                    self.modify_gift_callback()
             self.tableWidget.clearSelection()
-            if self.modify_gift_callback:
-                self.modify_gift_callback()
         elif event.key() == QtCore.Qt.Key_Enter or event.key() == QtCore.Qt.Key_Return:
             self.__add_gift_wall()
         else:

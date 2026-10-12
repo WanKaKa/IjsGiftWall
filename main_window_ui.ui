@@ -69,27 +69,46 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QLabel" name="icon">
+       <widget class="QFrame" name="logo_layout">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>4</x>
           <y>10</y>
-          <width>60</width>
-          <height>60</height>
+          <width>72</width>
+          <height>72</height>
          </rect>
         </property>
-        <property name="text">
-         <string>1</string>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255); border: none; border-radius: 10px;</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
         </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QLabel" name="icon">
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>12</y>
+           <width>48</width>
+           <height>48</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>1</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
        </widget>
        <widget class="QFrame" name="menu_layout_1">
         <property name="geometry">
          <rect>
           <x>4</x>
-          <y>140</y>
+          <y>94</y>
           <width>72</width>
           <height>72</height>
          </rect>
@@ -147,7 +166,7 @@ font: 8pt &quot;微软雅黑&quot;;</string>
         <property name="geometry">
          <rect>
           <x>4</x>
-          <y>224</y>
+          <y>178</y>
           <width>72</width>
           <height>72</height>
          </rect>
@@ -200,26 +219,6 @@ font: 8pt &quot;微软雅黑&quot;;</string>
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
-       </widget>
-       <widget class="QLabel" name="label">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>80</y>
-          <width>80</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(0, 0, 0);
-font: 12pt &quot;微软雅黑&quot;;</string>
-        </property>
-        <property name="text">
-         <string>iJoySoft</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
        </widget>
        <widget class="QFrame" name="menu_layout_settings">
         <property name="geometry">

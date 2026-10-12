@@ -14,13 +14,17 @@ import main_window_ui
 
 def set_menu_item_enable(enable, menu_layout, menu_title):
     if enable:
-        menu_layout.setStyleSheet(
+        ui_scale.set_design_stylesheet(
+            menu_layout,
             "background-color: rgb(57, 61, 255); border: none; border-radius: 10px;")
-        menu_title.setStyleSheet("color: rgb(255, 255, 255);\n""font: 8pt \"微软雅黑\";")
+        ui_scale.set_design_stylesheet(
+            menu_title, "color: rgb(255, 255, 255);\nfont: 8pt \"微软雅黑\";")
     else:
-        menu_layout.setStyleSheet(
+        ui_scale.set_design_stylesheet(
+            menu_layout,
             "background-color: rgb(247, 247, 247); border: none; border-radius: 10px;")
-        menu_title.setStyleSheet("color: rgb(0, 0, 0);\n""font: 8pt \"微软雅黑\";")
+        ui_scale.set_design_stylesheet(
+            menu_title, "color: rgb(0, 0, 0);\nfont: 8pt \"微软雅黑\";")
 
 
 class QKevinMainWindow(QWidget):

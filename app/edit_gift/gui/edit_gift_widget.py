@@ -95,13 +95,20 @@ class QEditGiftWidget(QWidget):
         self._saved_state = None
 
     def refresh_after_ui_scale(self):
-        """比例变更后刷新 Logo 与列表图标。"""
+        """比例变更后刷新 Logo、列表图标与检查模式单选样式。"""
         ui_scale.set_label_pixmap(
             self.ui.ijoysoft_icon,
             icon.resource_path(os.path.join("ico", "logo_big.png")),
         )
         if hasattr(self, "content") and self.content is not None:
             self.content.set_table_widget()
+        # 地区/文件名单选会写回样式表，需按当前比例重刷
+        if hasattr(self, "check_language") and self.check_language is not None:
+            self.check_language.set_radio_button_color()
+        utils.set_radio_button_style_10pt(self.ui.edit_gift_wall_mode, False)
+        utils.set_radio_button_style_10pt(self.ui.check_outputs_mode, False)
+        utils.set_radio_button_style_10pt(self.ui.server_url_1, False)
+        utils.set_radio_button_style_10pt(self.ui.server_url_2, False)
 
     def init_view(self):
         self.content.set_table_widget()
@@ -605,12 +612,13 @@ class QKevinTableWidget(QWidget):
         )
 
     def set_table_widget(self):
-        if add_gift_item_list:
-            self.ui.tableWidget.setRowCount(len(add_gift_item_list))
-            for i in range(len(add_gift_item_list)):
-                self.set_table_widget_item(i, add_gift_item_list[i])
-        else:
-            self.ui.tableWidget.setRowCount(0)
+        # 先清空再填充，避免反复 setCellWidget 残留旧按钮导致异常
+        self.ui.tableWidget.setRowCount(0)
+        if not add_gift_item_list:
+            return
+        self.ui.tableWidget.setRowCount(len(add_gift_item_list))
+        for i in range(len(add_gift_item_list)):
+            self.set_table_widget_item(i, add_gift_item_list[i])
 
     def set_table_widget_item(self, index, entity_):
         self.ui.tableWidget.setRowHeight(index, ui_scale.scaled_px(50))
@@ -624,13 +632,14 @@ class QKevinTableWidget(QWidget):
         self.ui.tableWidget.setItem(index, 0, item)
 
         item = QTableWidgetItem()
-        icon_size = self.ui.tableWidget.iconSize()
-        icon_ = ui_scale.scaled_icon(
-            path_pro.get_download() + entity_.icon_image_path,
-            icon_size,
-            widget=self.ui.tableWidget,
-        )
-        item.setIcon(icon_)
+        if entity_.icon_image_path:
+            icon_size = self.ui.tableWidget.iconSize()
+            icon_ = ui_scale.scaled_icon(
+                path_pro.get_download() + entity_.icon_image_path,
+                icon_size,
+                widget=self.ui.tableWidget,
+            )
+            item.setIcon(icon_)
         self.ui.tableWidget.setItem(index, 1, item)
 
         item = QTableWidgetItem()

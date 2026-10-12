@@ -17,8 +17,10 @@ def _install_dialog_scale_polish():
 
     def _wrap(method):
         def wrapped(self, *args, **kwargs):
-            flags = self.windowFlags()
-            if not (flags & (Qt.ToolTip | Qt.Popup | Qt.SplashScreen)):
+            # WindowType 是枚举值而非独立位标志：不能用 flags & Qt.ToolTip。
+            # Dialog(0x3) 与 ToolTip(0xd) 按位与非零，会导致设置等对话框永远跳过抛光，
+            # 表现为：滑块仍是已保存的 1.50，但控件几何停在设计稿 1.0。
+            if self.windowType() not in (Qt.ToolTip, Qt.Popup, Qt.SplashScreen):
                 ui_scale.polish_window(self)
             return method(self, *args, **kwargs)
 

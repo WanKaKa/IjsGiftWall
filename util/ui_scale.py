@@ -252,6 +252,22 @@ def device_pixel_ratio(widget=None):
     return max(1.0, reported)
 
 
+def set_design_stylesheet(widget, css):
+    """写入设计稿样式并按当前显示比例应用，同时更新 original 缓存。
+
+    业务代码若直接 setStyleSheet(设计稿) 会覆盖已缩放结果；重启后切到检查模式
+    再调 set_radio_button_color 就会字号变小。统一走此接口可避免二次放大或丢失缩放。
+    """
+    if widget is None:
+        return
+    css = css or ""
+    orig = _lookup_original(_widget_originals, widget)
+    if orig is None:
+        orig = _ensure_widget_original(widget)
+    orig["stylesheet"] = css
+    widget.setStyleSheet(scale_stylesheet(css, get_applied_scale()))
+
+
 def scale_stylesheet(css, scale=None):
     """按比例缩放样式表中的字号与常见 px 尺寸。"""
     if not css:
