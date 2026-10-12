@@ -1,6 +1,6 @@
 import os
 
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QLayout
 
 from app.app_update.app_update_widget import QKevinAppUpdate
@@ -141,16 +141,16 @@ class QKevinMainWindow(QWidget):
         self._relayout_settings_button()
         if not self._ensure_maximized_once:
             self._ensure_maximized_once = True
-            # 首帧显示后再最大化，避免缩放流程冲掉窗口状态
-            QTimer.singleShot(0, self._force_maximized)
+            # 同步确保最大化（勿 singleShot 到首帧之后，否则会闪一下设计稿尺寸）
+            self._force_maximized()
 
     def _force_maximized(self):
         if self.layout() is not None:
             self.layout().setSizeConstraint(QLayout.SetNoConstraint)
         self.setMinimumSize(0, 0)
         self.setMaximumSize(16777215, 16777215)
-        self.setWindowState(self.windowState() | Qt.WindowMaximized)
-        self.showMaximized()
+        if not (self.windowState() & Qt.WindowMaximized):
+            self.setWindowState(self.windowState() | Qt.WindowMaximized)
         self._relayout_settings_button()
 
     def refresh_after_ui_scale(self):

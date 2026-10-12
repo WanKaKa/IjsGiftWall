@@ -42,6 +42,11 @@ if __name__ == '__main__':
     main_window = QKevinMainWindow()
     ui_scale.apply_ui_scale(main_window, ui_scale.resolve_scale_factor())
     main_window.refresh_after_ui_scale()
+    # 显示前先铺满可用屏幕并标记最大化，避免首帧闪出设计稿尺寸（1400x720）
+    screen = app.primaryScreen()
+    if screen is not None:
+        main_window.setGeometry(screen.availableGeometry())
+    main_window.setWindowState(Qt.WindowMaximized)
     main_window.show()
 
     # 拷贝资源(图片资源放在exe文件中读取不到)

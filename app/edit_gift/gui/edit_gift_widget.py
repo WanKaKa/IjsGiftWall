@@ -942,8 +942,23 @@ class QCheckLanguage(QWidget):
             utils.set_radio_button_style_8pt(
                 radio, language and not os.path.exists(path_pro.get_outputs() + dir_name + "\\" + radio.text()))
 
+    def __ensure_default_radio_selection(self, radio_list):
+        """未选中时默认勾选第一项（有文本的有效选项）。"""
+        visible = [radio for radio in radio_list if radio.text()]
+        if not visible or any(radio.isChecked() for radio in visible):
+            return
+        for radio in radio_list:
+            radio.blockSignals(True)
+        visible[0].setChecked(True)
+        for radio in radio_list:
+            radio.blockSignals(False)
+
     def show(self):
         self.setVisible(True)
+
+        # 切换到检查模式时，地区/文件未选中则默认第一项
+        self.__ensure_default_radio_selection(self.language_radio_list)
+        self.__ensure_default_radio_selection(self.file_name_radio_list)
 
         for radio in self.language_radio_list:
             if radio.isChecked():

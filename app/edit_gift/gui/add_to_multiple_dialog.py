@@ -1,10 +1,11 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox, QPushButton,
-    QScrollArea, QWidget, QFrame
+    QScrollArea, QWidget, QFrame, QMessageBox
 )
 
 from app.edit_gift.core import urls
+from database import json_pro
 from util import utils
 
 
@@ -44,6 +45,12 @@ class QAddToMultipleDialog(QDialog):
         root.addLayout(columns, 1)
 
         bottom = QHBoxLayout()
+        apply_last_button = QPushButton("应用上次选择")
+        apply_last_button.setFixedSize(140, 40)
+        apply_last_button.setStyleSheet(
+            "background-color: rgb(57, 61, 255); color: rgb(255, 255, 255); font: 12pt \"微软雅黑\";")
+        apply_last_button.clicked.connect(self.__apply_last_selection)
+        bottom.addWidget(apply_last_button)
         bottom.addStretch(1)
         add_button = QPushButton("添加")
         add_button.setFixedSize(120, 40)
@@ -102,6 +109,18 @@ class QAddToMultipleDialog(QDialog):
     def __set_all_checked(check_box_list, checked):
         for check_box in check_box_list:
             check_box.setChecked(checked)
+
+    def __apply_last_selection(self):
+        file_names, languages = json_pro.get_last_multiple_selection()
+        if not file_names and not languages:
+            QMessageBox.information(self, '提示', '暂无上次选择!')
+            return
+        last_files = set(file_names)
+        last_languages = set(languages)
+        for check_box in self.__file_check_boxes:
+            check_box.setChecked(check_box.text().strip() in last_files)
+        for check_box in self.__language_check_boxes:
+            check_box.setChecked(check_box.text().strip() in last_languages)
 
     def get_selected_file_names(self):
         return [cb.text().strip() for cb in self.__file_check_boxes if cb.isChecked()]

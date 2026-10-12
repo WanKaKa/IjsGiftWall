@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QAbstractItemView, QTableWidgetItem, QDialog, QAppli
 from PyQt5 import QtCore
 
 from app.edit_gift.core import download, urls
+from database import json_pro
 from util import path_pro, utils, icon, ui_scale
 
 from app.edit_gift.gui.qt5.dialog import add_gift_ui
@@ -430,6 +431,7 @@ class QAddGiftDialog(QDialog, add_gift_ui.Ui_Dialog):
             QMessageBox.information(self, '提示', '没有可添加的数据!')
             return
 
+        json_pro.put_last_multiple_selection(file_names, languages)
         if self.add_multiple_gift_callback:
             self.add_multiple_gift_callback(entity_list, file_names, languages)
 

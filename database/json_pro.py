@@ -68,6 +68,34 @@ def put_selected_server_url(value):
     save("selected_server_url", value)
 
 
+# 添加到多个列表：上次勾选的文件名与地区
+KEY_LAST_MULTIPLE_SELECTION = "key_last_multiple_selection"
+
+
+def get_last_multiple_selection():
+    try:
+        data = get()
+        if data and KEY_LAST_MULTIPLE_SELECTION in data:
+            value = data[KEY_LAST_MULTIPLE_SELECTION]
+            if isinstance(value, dict):
+                file_names = value.get("file_names") or []
+                languages = value.get("languages") or []
+                return (
+                    [str(x) for x in file_names if x],
+                    [str(x) for x in languages if x],
+                )
+    except Exception as e:
+        print(e)
+    return [], []
+
+
+def put_last_multiple_selection(file_names, languages):
+    save(KEY_LAST_MULTIPLE_SELECTION, {
+        "file_names": list(file_names or []),
+        "languages": list(languages or []),
+    })
+
+
 def get():
     path = path_pro.get_database() + normal_json_name
     if not os.path.exists(path):
